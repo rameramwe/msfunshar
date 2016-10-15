@@ -1,0 +1,37 @@
+{
+  "name": "funshare",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start"
+  },
+  "dependencies": {
+    "base-64": "^0.1.0",
+    "firebase": "^3.1.0",
+    "react": "15.2.1",
+    "react-native": "0.29.1",
+    "react-native-accordion": "^1.0.1",
+    "react-native-bar-collapsible": "^1.4.0",
+    "react-native-cli": "^1.0.0",
+    "react-native-fbsdk": "^0.2.2",
+    "react-native-fbsdkcore": "0.0.8",
+    "react-native-fbsdklogin": "0.0.8",
+    "react-native-fbsdkshare": "0.0.8",
+    "react-native-fetch-blob": "^0.9.1",
+    "react-native-geocoder": "^0.4.5",
+    "react-native-gifted-spinner": "0.0.5",
+    "react-native-icon-badge": "^1.1.1",
+    "react-native-image-picker": "^0.21.1",
+    "react-native-image-zoom-viewer": "^1.2.21",
+    "react-native-menu": "^0.20.1",
+    "react-native-navbar": "^1.5.0",
+    "react-native-share": "^1.0.14",
+    "react-native-swipe-cards": "0.0.8",
+    "react-native-swiper": "^1.4.8",
+    "react-native-testkit": "^0.1.2",
+    "react-native-vector-icons": "^2.1.0",
+    "react-timer-mixin": "^0.13.3",
+    "reflux": "^0.4.1"
+  },
+  "devDependencies": {}
+}
