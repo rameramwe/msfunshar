@@ -21,6 +21,7 @@ import IcoButton from 'funshare/src/components/icobutton';
 import Swiper from 'react-native-swiper';
 import Routes from 'funshare/Routes';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import firebase from 'firebase';
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 var modalheight = Dimensions.get('window').height/2 ;
@@ -105,14 +106,15 @@ export default class details extends Component {
             var piclink = snapshot.val().itemPic;
             var desc = snapshot.val().description;
             var title = snapshot.val().title;
-            var id = snapshot.key;
-
+            var keyOfOfferedItem = snapshot.key;
+            var uidOfOfferingUser = snapshot.val().uid ;
+            
             images.push(
           <View >
                <TouchableOpacity
                activeOpacity={ 0.9 }
                style={ styles.item }
-                       //onPress={self.fuck.bind(this,desc,piclink,title)}
+                       onPress={self.addtooffereditems.bind(this,desc,piclink,title,uidOfOfferingUser,keyOfOfferedItem,self)}
                        >
 
                        <View>
@@ -170,11 +172,50 @@ _renderImage(){
       desc:this.props.desc,
       piclink:this.props.piclink,
       gback:this.props.gback,
+      uidOfLikedItem:this.props.uidOfLikedItem,
+      keyOfWantedItem:this.props.keyOfWantedItem,
+      
       modalVisible:false
      //profilePicture:"http://domaingang.com/wp-content/uploads/2012/02/example.png"
    }
+ 
    
  }
+addtooffereditems(desc,piclink,title,uidOfOfferingUser,keyOfOfferedItem,self){
+  console.log("uidOfLikedItem:",self.state.uidOfLikedItem);
+  console.log("keyOfWantedItem:",self.state.keyOfWantedItem);
+  console.log("uidOfOfferingUser",uidOfOfferingUser);
+  console.log("keyOfOfferedItem",keyOfOfferedItem);
+  var offerData = {
+            uidOfLikedItem: self.state.uidOfLikedItem,
+            keyOfWantedItem: self.state.keyOfWantedItem,
+            uidOfOfferingUser: uidOfOfferingUser,
+            keyOfOfferedItem: keyOfOfferedItem,
+            offerAccepted:0,
+            offerConfirmedByOfferingUser:0,
+            offerStatus:"pending approval"
+          };
+  var uploadTask1 = firebase.database()
+          .ref('Offers')
+          .child(uidOfOfferingUser);
+  var offerKey = uploadTask1.push(offerData).key ;
+  console.log("offer key :",offerKey)  ; 
+    var notificationData = {
+            uidOfLikedItem: self.state.uidOfLikedItem,
+            keyOfWantedItem: self.state.keyOfWantedItem,
+            uidOfOfferingUser: uidOfOfferingUser,
+            keyOfOfferedItem: keyOfOfferedItem,
+            offerAccepted:0,
+            offerConfirmedByOfferingUser:0,
+            offerStatus:"pending approval",
+            offerKey:offerKey
+          };
+  var uploadTask2 = firebase.database()
+          .ref('Notifications')
+          .child(self.state.uidOfLikedItem); 
+  var notificationKey = uploadTask2.push(notificationData).key;
+
+}
 
  setImage(){
   imagesViewer= []
@@ -259,13 +300,13 @@ renderImages(){
     animationType={'fade'}
     transparent={true}
     visible={this.state.modalVisible}
-    onRequestClose={() => {this._setModalVisible(false)}}
+    onRequestClose={() => {this._setModalVisible.bind(this, false)}}
     >
 
     <View style={ {flex:1 ,justifyContent:'flex-end' } }>
 
     <View style= {{height:modalheight , backgroundColor:   'rgba(0, 0, 0, 0.7)'}} >
-    <Text style={{color:'white', fontSize:16 , marginLeft:8}}>Meine Objekte</Text>
+    <Text style={{color:'white', fontSize:16 , marginLeft:8}}>Meine offered Objekte</Text>
 
     <View>
     <ScrollView
@@ -316,7 +357,7 @@ renderImages(){
       </Modal>
 
 
-      <Modal visible={this.state.visible}  onRequestClose={() => {this._setModalVisible(false)}} transparent={true}>
+      <Modal visible={this.state.visible}  onRequestClose={() =>{this._setModalVisible.bind(this, false)}} transparent={true}>
       <View style = {{ height:40,
        backgroundColor:   'rgba(0, 0, 0, 1)'}}>
        <View style= {{
@@ -329,8 +370,7 @@ renderImages(){
        onPress={()=>this.setImage()}
        icostyle={{width:25, height:25}}
        />
-       <Text style = {{ alignItems:'flex-start', color:'white', fontSize:15}} >{this.state.title}</Text>
-       </View>
+         </View>
        </View>
        <ImageViewer visible={true} imageUrls={imagesViewer}/>
 
@@ -350,14 +390,12 @@ renderImages(){
        </View>
 
        <View style= {{flex:.5}}>
-       <View style ={{flex:0.5 , flexDirection:'row' , marginTop:0 ,borderBottomWidth:1, borderColor:'#a9a9a9'}}>
+       <View style ={{flex:0.8 , flexDirection:'row' , marginTop:0 ,borderBottomWidth:1, borderColor:'#a9a9a9'}}>
        <TextInput
+       multiline={true}
+       numberOfLines = {2}
+       //value={this.state.desc}
        value={this.state.desc}
-       style={styles.textinput}
-       editable={false}
-       />
-       <TextInput
-       value={"9kM"}
        style={styles.textinput}
        editable={false}
        />

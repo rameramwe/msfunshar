@@ -26,7 +26,7 @@
   import Tinder from 'funshare/Tinder';
   var deviceWidth = Dimensions.get('window').width -6;
   var deviceheight = Dimensions.get('window').height -(deviceWidth/2) ;
-   var modalheight = Dimensions.get('window').height/2 ;
+  var modalheight = Dimensions.get('window').height/2 ;
   var piclinks=["fuck"];
   var image=[] ;
 
@@ -43,20 +43,20 @@
     },
     item: {
 
-    width:deviceWidth/4,
-    height: 80,
-    borderColor: '#efefef',
-    borderWidth: 1,
-    margin:8,
-    borderRadius:10,
+      width:deviceWidth/4,
+      height: 80,
+      borderColor: '#efefef',
+      borderWidth: 1,
+      margin:8,
+      borderRadius:10,
     },
-   image: {
-    flex:1,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius:10,
-    width:deviceWidth/4-2,
-    height: 78 ,
+    image: {
+      flex:1,
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius:10,
+      width:deviceWidth/4-2,
+      height: 78 ,
     },
     imageContainer:{
 
@@ -75,7 +75,7 @@
       margin: 15,
 
     },
- 
+
     button: { width: 256 }
   });
   export default class Home extends Component {
@@ -104,55 +104,53 @@
             var piclink = snapshot.val().itemPic;
             var desc = snapshot.val().description;
             var title = snapshot.val().title;
-            
+            var uidOfOfferingUser = snapshot.val().uid;
             piclinks.push(piclink);
             images.push(
-                          <View >
-                          <TouchableHighlight
-                          activeOpacity={ 0.75 }
-                          style={ styles.item }
-                          onPress={self.fuck.bind(this,desc,piclink,title)}
-                          >
-            
-                          <View>
-                          <Image
-                          resizeMode={Image.resizeMode.cover}
-                          style={ styles.image }
-                          source={{uri: piclink}}
-                          /> 
-                          </View>    
-                          
-                          </TouchableHighlight>
-                          </View> );
+              <View >
+              <TouchableHighlight
+              activeOpacity={ 0.75 }
+              style={ styles.item }
+              onPress={self.handleOffereditems.bind(this,desc,piclink,title,uidOfOfferingUser)}
+              >
 
-              i++;
-              if (i==num){
-              
+              <View>
+              <Image
+              resizeMode={Image.resizeMode.cover}
+              style={ styles.image }
+              source={{uri: piclink}}
+              /> 
+              </View>    
 
-                next(images);
-              }
+              </TouchableHighlight>
+              </View> );
 
-            });
-          })
-        });
-      }); 
+            i++;
+            if (i==num){
+
+
+              next(images);
+            }
+
+          });
+        })
+      });
+    }); 
+  }
+  
+  _renderImage(){
+
+
+   this.rami().then((images) => {
+    image = images;
+    if (!this.state.loaded1){
+      this.setState({
+        loaded1:true
+      });
+
     }
-    fuck( ){
 
-    }
-    _renderImage(){
-
-
-     this.rami().then((images) => {
-      image = images;
-      if (!this.state.loaded1){
-        this.setState({
-          loaded1:true
-        });
-
-      }
-
-    });
+  });
     //alert(image.length);
     return image;
 
@@ -177,13 +175,14 @@
  componentWillMount() {
 
   Actions.auth();
+
 }
- 
+
 
 componentDidMount() {
-      var self=this;
+  var self=this;
   BackAndroid.addEventListener('hardwareBackPress', () => {
-   
+
     self.props.replaceRoute(Routes.Home1());
     return true;
     
@@ -201,15 +200,22 @@ _setModalVisible = (visible) => {
 connfirm(){
 
 }
-    handleYup (card) {
-    
-  }
 
-  handleNope () {
-   Tinder._goToNextCard() 
-  }
-goToDetails(desc,piclink,title){
-  this.props.replaceRoute(Routes.details(desc ,piclink,title));
+handleOffereditems (desc,piclink,title,uidOfOfferingUser) {
+  alert(desc);
+  console.log(desc);
+  console.log(piclink);
+  console.log(title);
+  console.log(uidOfOfferingUser);
+
+}
+
+handleNope () {
+ Tinder._goToNextCard() 
+}
+goToDetails(desc,piclink,title,uidOfLikedItem ,keyOfWantedItem){
+  this.props.replaceRoute(Routes.details(desc ,piclink,title,uidOfLikedItem , keyOfWantedItem));
+  
 }
 
 render(){
@@ -222,55 +228,57 @@ render(){
 
   return (
 
-  <View style={{  flex:1 , width: null,height: null }}>
+    <View style={{  flex:1 , width: null,height: null }}>
 
-  
 
-   <View>
 
-   <Modal
-  animationType={this.state.animationType}
-  transparent={this.state.transparent}
-  visible={this.state.modalVisible}
-  onRequestClose={() => {this._setModalVisible(false)}}
-  >
-  
-  <View style={ {flex:1 ,justifyContent:'flex-end' } }>
+    <View>
 
-  <View style= {{height:modalheight , backgroundColor:   'rgba(0, 0, 0, 0.7)'}} >
-  <Text style={{color:'white', fontSize:16 , marginLeft:8}}>Meine Objekte</Text>
-  
+    <Modal
+    animationType={this.state.animationType}
+    transparent={this.state.transparent}
+    visible={this.state.modalVisible}
+    onRequestClose={() => {this._setModalVisible(false)}}
+    >
+
+    <View style={ {flex:1 ,justifyContent:'flex-end' } }>
+
+    <View style= {{height:modalheight , backgroundColor:   'rgba(0, 0, 0, 0.7)'}} >
+    <Text style={{color:'white', fontSize:16 , marginLeft:8}}>Etwas bieten ?</Text>
+
     <View>
     <ScrollView
     horizontal={true}
-     style= {{ height: 400}} >
+    style= {{ height: 400}} >
     
-    <View style = {{ flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: "center" }}>
-    {this._renderImage()}
-    </View>
-    </ScrollView>
-    </View>
+    <View
+    onPress={() => {this.handleOffereditems()}}
+    style = {{ flex: 1,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: "center" }}>
+      {this._renderImage()}
+      </View>
+      </ScrollView>
+      </View>
       <View style={{position:'absolute', bottom:3 ,flex:1,marginLeft:20,marginRight:20,flexDirection:'row',alignItems:'center', justifyContent:'center'}}>
-  
-  
-  <View style={{flex:0.25,alignItems:'center'}}>
-  </View>
-  
-  <View style={{flex:0.25,alignItems:'center'}}>
-  <IcoButton
-   onPress={this._setModalVisible.bind(this, false)}
-  source={require('funshare/src/img/dislike.png')}
-  icostyle={{width:60, height:60}}
-  />
-  </View>
- 
 
-  <View style={{flex:0.25,alignItems:'center'}}>
-  <IcoButton
-  source={require('funshare/src/img/like.png')}
+
+      <View style={{flex:0.25,alignItems:'center'}}>
+      </View>
+
+      <View style={{flex:0.25,alignItems:'center'}}>
+      <IcoButton
+      onPress={this._setModalVisible.bind(this, false)}
+      source={require('funshare/src/img/dislike.png')}
+      icostyle={{width:60, height:60}}
+      />
+      </View>
+
+
+      <View style={{flex:0.25,alignItems:'center'}}>
+      <IcoButton
+      source={require('funshare/src/img/like.png')}
   //onPress={this.props._setModalVisible}
   icostyle={{width:60, height:60}}
   />
@@ -278,13 +286,13 @@ render(){
   
   <View style={{flex:0.25,alignItems:'center'}}>
   </View>
- 
+
   </View>
 
   </View>
   </View>
   </Modal>
- 
+
   </View>
 
   <View style={{flex:1}}>
@@ -315,9 +323,9 @@ render(){
   </View>
   </View>
   <Tinder _setModalVisible={this._setModalVisible.bind(this, true)} goToDetails={this.goToDetails.bind(this)} />
- 
+
   </View>
-   
+
   </View>
   );
 }
@@ -343,11 +351,11 @@ logout(){
 
 }
 mystuff(){
-alert("hi")
- this.props.replaceRoute(Routes.addstuff());
+  alert("hi")
+  this.props.replaceRoute(Routes.addstuff());
 
 }
- 
+
 goToChat(){
  this.props.replaceRoute(Routes.fuck());
 }

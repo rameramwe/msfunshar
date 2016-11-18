@@ -18,7 +18,7 @@
   import Routes from 'funshare/Routes';
   import style from '../styles/common-styles.js';
   import IcoButton from 'funshare/src/components/icobutton';
-
+  import firebase from 'firebase';
   var deviceWidth = Dimensions.get('window').width -6;
   var deviceheight = Dimensions.get('window').height -(deviceWidth/2) ;
   var piclinks=["fuck"];
@@ -62,27 +62,28 @@
          firebase.database()
          .ref('items')
          .child(uid).child(childSnapshot.key).once('value').then(function(snapshot) {
-          var piclink = snapshot.val().itemPic;
-          var desc = snapshot.val().description;
-          var title = snapshot.val().title;  
-          var itemkey = snapshot.val().category;
-          var itemcategory = snapshot.val().category;
-
-          piclinks.push(piclink);
+          var iteminfo = {
+                     piclink: snapshot.val().itemPic ,
+                     desc: snapshot.val().description ,
+                     title: snapshot.val().title ,  
+                     itemkey: snapshot.key ,
+                     itemcategory: snapshot.val().category }
+         // alert(itemcategory)
+          piclinks.push(iteminfo);
           images.push(
             <View>
             <TouchableOpacity
 
             activeOpacity={ 0.75 }
-            onPress={self.fuck.bind(this,desc,piclink,title,itemkey, itemcategory)}
+            onPress={self.fuck.bind(this,iteminfo)}
             >
             <View>
             <Image
             style={ styles.image }
-            source={{uri: piclink}}
+            source={{uri: iteminfo.piclink}}
             /> 
 
-            <Text numberOfLines={1} style ={{margin:5 , marginLeft:10}}>{title}</Text>  
+            <Text numberOfLines={1} style ={{margin:5 , marginLeft:10}}>{iteminfo.title}</Text>  
             </View>
             </TouchableOpacity>
             </View>);

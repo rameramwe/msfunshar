@@ -1,6 +1,7 @@
 package com.funshare;
 import cl.json.RNSharePackage;
 import android.app.Application;
+import com.evollu.react.fcm.FIRMessagingPackage;
 import android.util.Log;
 import com.devfd.RNGeocoder.RNGeocoderPackage;
 import com.facebook.react.ReactApplication;
@@ -39,6 +40,7 @@ public class MainApplication extends Application implements ReactApplication {
           new RNSharePackage(),
            new RNFetchBlobPackage(),
            new MainReactPackage(),
+           new FIRMessagingPackage(),
            new RNGeocoderPackage(),
           new ImagePickerPackage(),
           new FBSDKPackage(mCallbackManager)

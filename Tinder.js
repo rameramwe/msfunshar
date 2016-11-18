@@ -36,7 +36,7 @@ export default React.createClass({
     <View style={styles.card}>
       <TouchableOpacity
       activeOpacity={ 0.7}
-      onPress={() => {this.props.goToDetails(x.description ,x.image,   x.title )}}
+      onPress={() => {this.props.goToDetails(x.description ,x.image,   x.title, x.uidOfLikedItem ,x.keyOfWantedItem )}}
       >
   
     <View style= {{width:deviceWidth, height:deviceheight-50 }} >
@@ -109,16 +109,18 @@ rami(){
             var piclink = snapshot.val().itemPic;
             var desc = snapshot.val().description;
             var title = snapshot.val().title;
-            var id = snapshot.key;
+            var keyOfWantedItem = snapshot.key;
+            var uidOfLikedItem=snapshot.val().uid;
+          // console.log(uidOfLikedItem);
             
 
          
-        var im = {image:piclink ,title:title , description:desc , location:'9'}
+        var im = {image:piclink ,title:title , description:desc , location:'9' , uidOfLikedItem:uidOfLikedItem,keyOfWantedItem:keyOfWantedItem }
         Cards.push(im);
       
             i++;
             if (i==num){
-              var rm = "i fucked my self";
+              var rm = "Rami function is finished";
               next(rm);
             }
 

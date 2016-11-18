@@ -49,28 +49,25 @@ class Routes {
       name: "chatscreen",
       
       component: chatscreen,
-      
-      hideNavigationBar: true,
-      statusBarStyle: "light-content"
+ 
     }
   }
   Home() {
     return {
       name: "Home",      
       component: Home,
-      hideNavigationBar: true,
-      statusBarStyle: "light-content"
+ 
+ 
     }
   }
 
   signup() {
     return {
       name: "signup",
-      title: "signup",
+ 
       component: signup,
       hideNavigationBar: true,
-      rednav:false,
-      statusBarStyle: "light-content"
+ 
     }
   }
 
@@ -90,7 +87,7 @@ class Routes {
     return {
       name: "wishlist",
       component: wishlist,
-      statusBarStyle: "light-content"
+  
     }
   }
   onboarding(user) {
@@ -108,34 +105,31 @@ class Routes {
       name: "Home1",  
       component: Home1,
       passProps: { user: user },    
-      statusBarStyle: "light-content"
+ 
     }
   }
   
-  details(desc,piclink,title,gback ) {
+  details(desc,piclink,title,uidOfLikedItem,keyOfWantedItem,gback ) {
     return {
       name: "details",
-      title: "details",
+ 
       component: details,
-      passProps: { desc:desc , piclink :piclink,title:title, gback:gback },
-      statusBarStyle: "light-content"
+      passProps: { desc:desc , piclink :piclink,title:title, uidOfLikedItem:uidOfLikedItem ,keyOfWantedItem:keyOfWantedItem ,gback:gback},
+ 
     }
   }
   
-  fuck(desc,piclink,title,itemkey, itemcategory ) {
+  fuck(iteminfo ) {
     return {
-      name: "fuck",
-      title: "fuck",
+      name: "fuck", 
       component: fuck,  
-      passProps: { desc: desc , piclink: piclink,title: title , itemkey: itemkey , itemcategory: itemcategory},
-      statusBarStyle: "light-content"
+      passProps: {  iteminfo: iteminfo},
     }
   }
   mystuff() {
     return {
       name: "mystuff",
       component: mystuff,     
-      statusBarStyle: "light-content"
     }
   } 
   addstuff() {

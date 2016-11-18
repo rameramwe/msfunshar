@@ -1,4 +1,6 @@
+
 apply plugin: "com.android.application"
+
 project.ext.vectoricons = [
     iconFontNames: [ 'MaterialIcons.ttf', 'EvilIcons.ttf' ] // Name of the font files you want to copy
 ]
@@ -88,14 +90,14 @@ def enableProguardInReleaseBuilds = false
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId "com.funshare"
           multiDexEnabled true
  
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
         ndk {
@@ -141,9 +143,10 @@ android {
 }
 
 dependencies {
-     compile project(':react-native-geocoder')
+    
+    compile project(':react-native-geocoder')
     compile project(':react-native-share')
-    compile "com.google.android.gms:play-services-base:8.4.0"
+    compile "com.google.android.gms:play-services-base:9.0.0"
     compile project(':react-native-fetch-blob')
     compile project(':react-native-vector-icons')
     compile project(':react-native-image-picker')
@@ -152,9 +155,10 @@ dependencies {
     compile 'com.parse.bolts:bolts-android:1.+'
     compile "com.facebook.react:react-native:+"  // From node_modules
     compile fileTree(dir: 'libs', include: 'Parse-*.jar')
-compile fileTree(dir: 'libs', include: "commons-io-2.4.jar")  
-compile 'com.android.support:multidex:1.0.0'
-compile project(":react-native-fbsdk")
+    compile fileTree(dir: 'libs', include: "commons-io-2.4.jar")  
+    compile 'com.android.support:multidex:1.0.0'
+    compile project(":react-native-fbsdk")
+    
 
 
 }
@@ -166,3 +170,4 @@ task copyDownloadableDepsToLibs(type: Copy) {
   into 'libs'
 }
 
+apply plugin: 'com.google.gms.google-services'
