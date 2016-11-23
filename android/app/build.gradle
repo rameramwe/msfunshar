@@ -143,10 +143,11 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-fcm')
     
     compile project(':react-native-geocoder')
     compile project(':react-native-share')
-    compile "com.google.android.gms:play-services-base:9.0.0"
+   // compile "com.google.android.gms:play-services:9.2.0"
     compile project(':react-native-fetch-blob')
     compile project(':react-native-vector-icons')
     compile project(':react-native-image-picker')
@@ -158,7 +159,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: "commons-io-2.4.jar")  
     compile 'com.android.support:multidex:1.0.0'
     compile project(":react-native-fbsdk")
-    
+  
 
 
 }

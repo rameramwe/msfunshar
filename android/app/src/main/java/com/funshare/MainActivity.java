@@ -2,6 +2,7 @@ package com.funshare;
 
 import com.facebook.react.ReactActivity;
 import com.evollu.react.fcm.FIRMessagingPackage;
+import com.evollu.react.fcm.FIRMessagingPackage;
 import android.content.Intent;
 import com.RNFetchBlob.RNFetchBlobPackage;
 

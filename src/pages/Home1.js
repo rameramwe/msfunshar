@@ -118,16 +118,65 @@ componentWillUnmount () {
     BackAndroid.exitApp();   
   }
   componentWillMount() {
-   
+       
     Actions.auth();
     Actions.onboard.started.listen(this.onOnboardStarted.bind(this));
     Actions.onboard.completed.listen(this.onOnboardCompleted.bind(this));
+
+ 
+        firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    
+       var NotifRef = firebase.database().ref('Notifications/' + "vME62xQrPudg4xUhn15S3GAl2w92"+'/Unseen/');
+        NotifRef.once("value")
+                .then(function(snapshot) {
+                    var unseenNotifNumber = snapshot.numChildren(); 
+                    console.log("unseenNotifNumber",unseenNotifNumber);
+    
+                  });
+        NotifRef.on('child_added', function(data) {
+          console.log(data.val());
+          NotifRef.once("value")
+                .then(function(snapshot) {
+                    var unseenNotifNumber = snapshot.numChildren(); 
+                    console.log("unseenNotifNumber",unseenNotifNumber);
+    
+                  });
+      });
+        /*      var newItems = false;
+      var eventsList = firebase.database().ref('Notifications/' + "24IuFFFZ53aYfl8IIe1p36OJkA83");
+
+      eventsList.on('child_added', function(message) {
+        if (!newItems) return;
+        var message = message.val();
+        console.log(message.offerKey);
+      });
+      eventsList.once('value', function(messages) {
+        newItems = true;
+      });
+
+      var queryRef = eventsList.orderBy('created').startAt(firebase.database.ServerValue.TIMESTAMP);
+
+      queryRef.on('child_added', function(snap) {
+        console.log(snap.val());
+      });*/
+    
+    }
+   else {
+    // No user is signed in.
+  }
+});
   }
 
   componentDidMount() {
+
     BackAndroid.removeEventListener('hardwareBackPress', this.exit);
     Actions.loadUser.completed.listen(this._onLoadUserCompleted.bind(this));
     Actions.logout.listen(this._onLogout.bind(this));
+
+ 
+
+
   }
   
   goToHome()

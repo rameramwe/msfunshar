@@ -100,7 +100,7 @@ export default class RootNavigator extends React.Component {
     }
 
     _getInitialRoute() {
-      return Routes.login();
+      return Routes.Home();
     }
 
     _setNavigatorRef(navigator) {

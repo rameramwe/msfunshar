@@ -22,6 +22,7 @@ import Swiper from 'react-native-swiper';
 import Routes from 'funshare/Routes';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import firebase from 'firebase';
+import FCM from 'react-native-fcm';
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 var modalheight = Dimensions.get('window').height/2 ;
@@ -155,13 +156,44 @@ _renderImage(){
 
   }
   componentDidMount() {
-    var self=this;
-    BackAndroid.addEventListener('hardwareBackPress', () => {
+      var self=this;
 
-      self.goBack();
-      return true;
+      BackAndroid.addEventListener('hardwareBackPress', () => {
 
-    });
+        self.goBack();
+        return true;
+
+      });
+      FCM.getFCMToken().then(token => {
+
+        //console.log(token);
+        // store fcm token in your server
+      });
+      this.notificationUnsubscribe = FCM.on('notification', (notif) => {
+        // there are two parts of notif. notif.notification contains the notification payload, notif.data contains data payload
+      });
+      this.refreshUnsubscribe = FCM.on('refreshToken', (token) => {
+        console.log(token)
+        // fcm token may not be available on first load, catch it here
+      });
+
+      FCM.subscribeToTopic('/topics/foo-bar');
+      FCM.unsubscribeFromTopic('/topics/foo-bar');
+
+
+       
+    
+    
+    }
+
+componentWillMount() {
+    
+
+  }
+   componentWillUnmount() {
+    // prevent leaking
+    this.refreshUnsubscribe();
+    this.notificationUnsubscribe();
   }
   constructor(props) {
     super(props);
@@ -182,10 +214,7 @@ _renderImage(){
    
  }
 addtooffereditems(desc,piclink,title,uidOfOfferingUser,keyOfOfferedItem,self){
-  console.log("uidOfLikedItem:",self.state.uidOfLikedItem);
-  console.log("keyOfWantedItem:",self.state.keyOfWantedItem);
-  console.log("uidOfOfferingUser",uidOfOfferingUser);
-  console.log("keyOfOfferedItem",keyOfOfferedItem);
+ 
   var offerData = {
             uidOfLikedItem: self.state.uidOfLikedItem,
             keyOfWantedItem: self.state.keyOfWantedItem,
@@ -193,13 +222,14 @@ addtooffereditems(desc,piclink,title,uidOfOfferingUser,keyOfOfferedItem,self){
             keyOfOfferedItem: keyOfOfferedItem,
             offerAccepted:0,
             offerConfirmedByOfferingUser:0,
-            offerStatus:"pending approval"
+            offerStatus:"pending approval",
+            created:firebase.database.ServerValue.TIMESTAMP
           };
   var uploadTask1 = firebase.database()
           .ref('Offers')
           .child(uidOfOfferingUser);
   var offerKey = uploadTask1.push(offerData).key ;
-  console.log("offer key :",offerKey)  ; 
+  //console.log("offer key :",offerKey); 
     var notificationData = {
             uidOfLikedItem: self.state.uidOfLikedItem,
             keyOfWantedItem: self.state.keyOfWantedItem,
@@ -208,11 +238,14 @@ addtooffereditems(desc,piclink,title,uidOfOfferingUser,keyOfOfferedItem,self){
             offerAccepted:0,
             offerConfirmedByOfferingUser:0,
             offerStatus:"pending approval",
-            offerKey:offerKey
+            offerKey:offerKey,
+            created:firebase.database.ServerValue.TIMESTAMP,
+            seen:0
           };
   var uploadTask2 = firebase.database()
           .ref('Notifications')
-          .child(self.state.uidOfLikedItem); 
+          .child(self.state.uidOfLikedItem)
+          .child('Unseen'); 
   var notificationKey = uploadTask2.push(notificationData).key;
 
 }
