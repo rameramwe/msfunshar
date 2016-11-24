@@ -179,7 +179,7 @@
     console.log(user1);
     currentUserGlobal=user1;
   }
-  else console.log("shit not logged in ");
+  else this.logout();
 });
 
   //Actions.auth();
