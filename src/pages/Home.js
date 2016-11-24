@@ -29,6 +29,7 @@
   var modalheight = Dimensions.get('window').height/2 ;
   var piclinks=["fuck"];
   var image=[] ;
+  global.currentUserGlobal=null;
 
   const styles = StyleSheet.create({
     Mcontainer: {flex:1 ,  justifyContent: 'flex-end', }, 
@@ -173,9 +174,10 @@
  }
 
  componentWillMount() {
-  firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    console.log(user);
+  firebase.auth().onAuthStateChanged(function(user1) {
+  if (user1) {
+    console.log(user1);
+    currentUserGlobal=user1;
   }
   else console.log("shit not logged in ");
 });
@@ -188,8 +190,8 @@
 componentDidMount() {
   var self=this;
   BackAndroid.addEventListener('hardwareBackPress', () => {
-
-    self.props.replaceRoute(Routes.Home1());
+    console.log("did",currentUserGlobal);
+    self.props.replaceRoute(Routes.Home1(currentUserGlobal));
     return true;
     
   });
@@ -367,9 +369,10 @@ goToChat(){
 }
 goToProfile(){
 
- this.props.replaceRoute(Routes.Home1());
+ this.props.replaceRoute(Routes.Home1(currentUserGlobal));
 
 }
+
 
 
 

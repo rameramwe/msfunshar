@@ -27,6 +27,7 @@ import Actions from 'funshare/Actions';
 import SharedStyles from 'funshare/SharedStyles';
 import RNFetchBlob from 'react-native-fetch-blob'
 import IconButton from 'funshare/src/components/icotextButton';
+
 const fs = RNFetchBlob.fs
 const Blob = RNFetchBlob.polyfill.Blob
 const polyfill = RNFetchBlob.polyfill
@@ -98,7 +99,7 @@ class Home1 extends React.Component {
   constructor(props) {
     super(props);
      this.exit = this.exit.bind(this);
-    var currentUser = DataStore.getCurrentUser();
+    var currentUser = currentUserGlobal;
     this.state = {
       loaded: false,
       failed: false,
@@ -143,7 +144,7 @@ componentWillUnmount () {
     
                   });
       });
-        /*      var newItems = false;
+        /* var newItems = false;
       var eventsList = firebase.database().ref('Notifications/' + "24IuFFFZ53aYfl8IIe1p36OJkA83");
 
       eventsList.on('child_added', function(message) {

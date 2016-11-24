@@ -167,7 +167,7 @@ constructor(props) {
 
 goToHome1()
 {
-   this.props.replaceRoute(Routes.Home1());
+   this.props.replaceRoute(Routes.Home1(currentUserGlobal));
 }
 
 componentDidMount() {
@@ -176,7 +176,7 @@ componentDidMount() {
   var self=this;
   BackAndroid.addEventListener('hardwareBackPress', () => {
 
-    self.props.replaceRoute(Routes.Home1());
+    self.props.replaceRoute(Routes.Home1(currentUserGlobal));
     return true;
     
   });

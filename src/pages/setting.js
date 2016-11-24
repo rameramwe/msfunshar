@@ -58,7 +58,7 @@ componentDidMount(){
      var self=this;
   BackAndroid.addEventListener('hardwareBackPress', () => {
    
-    self.props.replaceRoute(Routes.Home1());
+    self.props.replaceRoute(Routes.Home1(currentUserGlobal));
     return true;
     
   });
@@ -100,7 +100,7 @@ logout() {
     }
    goToProfile(){
 
-    this.props.replaceRoute(Routes.Home1());
+    this.props.replaceRoute(Routes.Home1(currentUserGlobal));
 
   }
 
@@ -111,7 +111,7 @@ logout() {
   }
   goToHome1()
   {
-    this.props.replaceRoute(Routes.Home1());
+    this.props.replaceRoute(Routes.Home1(currentUserGlobal));
   }
   render() {
    const TopNavigation = () => (

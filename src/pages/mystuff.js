@@ -29,8 +29,10 @@
      this.renderRow(); 
      var self=this;
      BackAndroid.addEventListener('hardwareBackPress', () => {
+      console.log("props",self.props);
+      console.log("props",self.props.user);
 
-      self.props.replaceRoute(Routes.Home1());
+      self.props.replaceRoute(Routes.Home1(currentUserGlobal));
       return true;
 
     });
@@ -127,7 +129,7 @@ constructor(props) {
 }
 goToHome1()
 {
-  this.props.replaceRoute(Routes.Home1());
+  this.props.replaceRoute(Routes.Home1(currentUserGlobal));
 }
 render(){
 

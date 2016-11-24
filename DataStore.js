@@ -4,6 +4,7 @@ import Reflux from 'reflux';
 import AccessToken from 'funshare/AccessToken';
 import Actions from 'funshare/Actions';
 import ApiRequest from 'funshare/ApiRequest';
+  import firebase from 'firebase';
 
 let currentUser = null;
 
@@ -12,7 +13,16 @@ export default Reflux.createStore({
   init: function () {},
 
   getCurrentUser() {
-    return currentUser;
+    firebase.auth().onAuthStateChanged(function(user1) {
+  if (user1) {
+    console.log(user1);
+    user=user1;
+    return user1;
+  }
+  else console.log("shit not logged in ");
+});
+
+    
   },
   setCurrentUser(uid, user) {
   

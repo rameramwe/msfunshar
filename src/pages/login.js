@@ -213,9 +213,9 @@ onLoadUserCompleted(user) {
  
     if (user.onboarded) {
       alert("km")
-      this.props.replaceRoute(Routes.Home1());
+      this.props.replaceRoute(Routes.Home1(currentUserGlobal));
     } else {
-      this.props.replaceRoute(Routes.Home1());
+      this.props.replaceRoute(Routes.Home1(currentUserGlobal));
     }
   }
 
