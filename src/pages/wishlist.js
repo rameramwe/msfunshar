@@ -241,7 +241,8 @@ render() {
 
   dataSource={this.state.dataSource}
   renderRow={(rowData) => <View>{rowData}</View>}
-   renderSeparator={() => <View style={styles.separator} />}
+  // renderSeparator={() => <View style={styles.separator} />}
+   renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
   contentContainerStyle={{flex:1,paddingTop:20 ,backgroundColor:'white',}}/>
 
 

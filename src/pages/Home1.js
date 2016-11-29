@@ -440,7 +440,7 @@ maxHeight:800,
    })
 }
 _onLoadUserCompleted(user) {
-  let currentUser = DataStore.getCurrentUser();
+  var currentUser = currentUserGlobal;
 
 
   if (currentUser.onboarded) {
@@ -454,8 +454,14 @@ _onLogout() {
   this.props.replaceRoute(Routes.login());
 }
 logout(){
+  firebase.auth().signOut().then(function() {
+      alert("Sign-out successful");
+    }, function(error) {
+      alert("Sign-out failed");
+    });
+  this.props.replaceRoute(Routes.login());
 
-  Actions.logout();
+  //Actions.logout();
 
 }
 onOnboardStarted(url) {

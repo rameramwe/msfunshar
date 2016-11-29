@@ -174,12 +174,16 @@
  }
 
  componentWillMount() {
+  var save=this;
   firebase.auth().onAuthStateChanged(function(user1) {
   if (user1) {
-    console.log(user1);
+   
     currentUserGlobal=user1;
   }
-  else this.logout();
+  else {
+    save.logout();
+    
+  }
 });
 
   //Actions.auth();
@@ -204,7 +208,16 @@ componentDidMount() {
 _setModalVisible = (visible) => {
   this.setState({modalVisible: visible});
 };
+logout(){
+    firebase.auth().signOut().then(function() {
+     // alert("Sign-out successful");
+    }, function(error) {
+      //alert("Sign-out failed");
+    });
+  this.props.replaceRoute(Routes.login());
+ // Actions.logout();
 
+}
 connfirm(){
 
 }
@@ -340,7 +353,7 @@ render(){
 
 
 _onLoadUserCompleted(user) {
-  let currentUser = DataStore.getCurrentUser();
+  var currentUser = currentUserGlobal;
 
 
   if (currentUser.onboarded) {
@@ -353,11 +366,7 @@ _onLoadUserCompleted(user) {
 _onLogout() {
   this.props.replaceRoute(Routes.login());
 }
-logout(){
 
-  Actions.logout();
-
-}
 mystuff(){
   alert("hi")
   this.props.replaceRoute(Routes.addstuff());
@@ -365,7 +374,7 @@ mystuff(){
 }
 
 goToChat(){
- this.props.replaceRoute(Routes.fuck());
+ this.props.replaceRoute(Routes.chatscreen());
 }
 goToProfile(){
 

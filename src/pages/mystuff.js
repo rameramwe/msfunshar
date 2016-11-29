@@ -21,7 +21,7 @@
   import firebase from 'firebase';
   var deviceWidth = Dimensions.get('window').width -6;
   var deviceheight = Dimensions.get('window').height -(deviceWidth/2) ;
-  var piclinks=["fuck"];
+  var piclinks=[];
 
   export default class mystuff extends Component {
 

@@ -48,12 +48,14 @@ class ApiRequest {
     return new Promise((next, error) => {
       firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
-          
- 
-          next(user);
-        } else {
-  }
-});
+
+              
+            next(user);
+         } 
+        else {
+       
+        }
+    });
       firebase.database().ref('profiles/' + uid ).on('value', function(snapshot) {
 
       });

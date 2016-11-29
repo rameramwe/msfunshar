@@ -16,7 +16,7 @@ export default Reflux.createStore({
     firebase.auth().onAuthStateChanged(function(user1) {
   if (user1) {
     console.log(user1);
-    user=user1;
+    
     return user1;
   }
   else console.log("shit not logged in ");
@@ -26,8 +26,16 @@ export default Reflux.createStore({
   },
   setCurrentUser(uid, user) {
   
-
-    currentUser = Object.assign(user);
+    firebase.auth().onAuthStateChanged(function(user1) {
+  if (user1) {
+    currentUserGlobal=user1;
+  }
+  else {
+    
+    alert("login failed");
+  }
+});
+    //currentUser = Object.assign(user);
       },
 
   onLogin: function (data) {
@@ -48,7 +56,7 @@ export default Reflux.createStore({
     Actions.loadUser(data.uid);
   },
   onLoginFailed: function (error) {
-    console.log("Login failed with error: ", error.message);
+    //console.log("Login failed with error: ", error.message);
   },
 
   onSignup: function (data) {

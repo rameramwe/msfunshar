@@ -47,10 +47,10 @@ export default React.createClass({
      </TouchableOpacity>
     <View style={{marginLeft:10, marginRight:10,borderBottomWidth:1,borderColor:'#e3e3e3', height:25, flexDirection:'row' }}>
      <View style={{flex:1}}>
-    <Text style={{fontSize:14, fontWeight:'300', color:'#444'}}>{x.title} </Text>
+    <Text style={{fontSize:14, fontWeight:'300', color:'#444'}}>{"x.title"} </Text>
     </View>
-    <View style = {{flex:1,alignItems:"flex-end"}} >
-     <Text style={{fontSize:14, fontWeight:'300', color:'#444'}}>{x.location} </Text>
+    <View  style = {{flex:1,alignItems:"flex-end"}} >
+     <Text style={{fontSize:14, fontWeight:'300', color:'#444'}}>{"x.location"} </Text>
      </View>
        </View>
    <View style={{  height:25,marginLeft:10, marginRight:10, flexDirection:'row' , flex:1 }}>
@@ -58,7 +58,7 @@ export default React.createClass({
     <Text style={{fontSize:14, fontWeight:'300', color:'#444'}}>{""} </Text>
     </View>
     <View style = {{flex:1,alignItems:"flex-end"}} >
-     <Text style={{fontSize:14, fontWeight:'300', color:'#444'}}>{x.description} </Text>
+     <Text style={{fontSize:14, fontWeight:'300', color:'#444'}}>{"x.description"} </Text>
      </View>
     </View>
     </View>
@@ -83,10 +83,15 @@ export default React.createClass({
   componentDidMount() {
 
    this.rami().then((rm) => {
+    console.log("re");
     this.setState({
       outOfCards: false
     })
   });
+},
+componentWillUnmount() {
+
+//Cards=[];
 },
 rami(){
       return new Promise((next, error) => {
@@ -96,16 +101,16 @@ rami(){
        
        firebase.database()
        .ref('categories')
-       .child('swiper-all')
+       .child('sport')
        .once('value')
        .then(function(snapshot) {
          num =snapshot.numChildren();
-        // alert(num);
+         //alert(num);
          snapshot.forEach(function(childSnapshot) {
            
           firebase.database()
        .ref('categories')
-       .child('swiper-all').child(childSnapshot.key).once('value').then(function(snapshot) {
+       .child('sport').child(childSnapshot.key).once('value').then(function(snapshot) {
             var piclink = snapshot.val().itemPic;
             var desc = snapshot.val().description;
             var title = snapshot.val().title;
