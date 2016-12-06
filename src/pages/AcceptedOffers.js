@@ -1,3 +1,4 @@
+//This is the screen where it contains the chats with everybody
 'use strict';
 import React from 'react'; 
 import{
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
   }
 });
 
-class chatscreen extends React.Component {
+class AcceptedOffers extends React.Component {
   componentDidMount() {
      this.renderRow(); 
    } 
@@ -148,16 +149,7 @@ class chatscreen extends React.Component {
  {
   this.props.replaceRoute(Routes.Home());
 }
-finishDeal(newRef,snapVal,oldRef){
-
-   
-    newRef.set( snapVal, function(error) {
-               if( !error ) {  oldRef.remove(); }
-               else if( typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
-          }).then(function(){
-            this.props.replaceRoute(Routes.AcceptedOffers());
-          });
-  
+finishDeal(){
   
 }
 
@@ -173,7 +165,7 @@ renderRow() {
       firebase.database()
       .ref('Notifications')
       .child(uid)
-      .child('Unseen')
+      .child('Seen')
       .once('value')
       .then(function(snapshot) {
        num =snapshot.numChildren();
@@ -193,7 +185,7 @@ renderRow() {
          firebase.database()
          .ref('Notifications')
          .child(uid)
-         .child('Unseen').child(childSnapshot.key).once('value').then(function(snapshot) {
+         .child('Seen').child(childSnapshot.key).once('value').then(function(snapshot) {
           snapVal=snapshot.val();
           firebase.database().ref('items').child(snapshot.val().uidOfOfferingUser)
           .child(snapshot.val().keyOfOfferedItem).once('value').then(function(snapshot1){
@@ -246,21 +238,11 @@ renderRow() {
                 </View>
 
                 <View style = {{flex:0.4 , flexDirection:'row', justifyContent:'center'}}>
-                <TouchableOpacity
-                style = {{flex:0.5 , justifyContent:'center' , alignItems:'center'}}
-                  //onPress={}
-                  >
-                  <View>
-                  <Image
-                  style={{height:40 , width:40}}
-                  source={require('funshare/src/img/dislike.png')}
-                  /> 
-                  </View>
-                  </TouchableOpacity>
+          
 
                   <TouchableOpacity
                   style = {{flex:0.5 , justifyContent:'center' , alignItems:'center'}}
-                  onPress={self._setModalVisible.bind(self, true,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef)}
+                  onPress={self.goChat.bind(self, iteminfo)}
                   >
                   <View>
                   <Image
@@ -317,6 +299,9 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
   
 
   this.setState({modalVisible: visible ,picOfOfferedItem:picOfOfferedItem , picOfWantedItem:picOfWantedItem });
+}
+goChat(iteminfo){
+  this.props.replaceRoute(Routes.OfferChat(iteminfo));
 }
 
 render() {
@@ -448,4 +433,4 @@ icostyle={{width:60, height:60}}
 }
 
 
-export default chatscreen;
+export default AcceptedOffers;

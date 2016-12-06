@@ -401,7 +401,7 @@ maxHeight:800,
 
   goTomysuff() {
 
-    this.props.replaceRoute(Routes.mystuff());
+    this.props.replaceRoute(Routes.userChat());
 
   }
 
