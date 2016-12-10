@@ -218,7 +218,7 @@ renderRow() {
           piclinks.push(iteminfo);
           images.push(
 
-                <View style={{flex:1}}>
+                <View key = {items} style={{flex:1}}>
 
                 <View style = {{flex:1,paddingTop:8, paddingBottom:12, paddingLeft:20, flexDirection:'row' ,backgroundColor:'white'}} >
 

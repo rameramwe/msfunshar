@@ -75,7 +75,7 @@
           images.push(
             <View>
             <TouchableOpacity
-
+            key = {iteminfo}
             activeOpacity={ 0.75 }
             onPress={self.fuck.bind(this,iteminfo)}
             >

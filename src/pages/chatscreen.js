@@ -151,7 +151,7 @@ class chatscreen extends React.Component {
  goToHome()
  {
   this.props.replaceRoute(Routes.Home());
-}
+ }
 finishDeal(childKey,uidOfOfferingUser,snapVal,oldRef){
   var self=this;
   //send a notification that lets the other user know that his offer was accepted and activate chat 
@@ -235,7 +235,7 @@ renderRow() {
           piclinks.push(iteminfo);
           images.push(
 
-                <View style={{flex:1}}>
+                <View key= {iteminfo} style={{flex:1}}>
 
                 <View style = {{flex:1,paddingTop:8, paddingBottom:12, paddingLeft:20, flexDirection:'row' ,backgroundColor:'white'}} >
 

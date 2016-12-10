@@ -105,6 +105,7 @@ goToDetails(desc,piclink,title,gback){
         images.push(
 
                   <TouchableHighlight
+                  key={id}
                   style={{flex:1}}
                   activeOpacity={ 0.75 }
                    onPress={self.goToDetails.bind(self,desc,piclink,title)}

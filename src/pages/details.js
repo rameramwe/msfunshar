@@ -111,7 +111,7 @@ export default class details extends Component {
             var uidOfOfferingUser = snapshot.val().uid ;
             
             images.push(
-          <View >
+          <View Key={piclink} >
                <TouchableOpacity
                activeOpacity={ 0.9 }
                style={ styles.item }
@@ -268,6 +268,7 @@ renderImages(){
 
 
     <TouchableOpacity
+    Key={this.state.piclink}
     onPress = {() => this.setImage()}
     style = {{flex:1}}
     >

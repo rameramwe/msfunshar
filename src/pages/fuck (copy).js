@@ -101,6 +101,7 @@ export default class fuck extends Component {
       
       
     <TouchableOpacity
+    key = {this.state.piclink}
     onPress = {() => this.setImage()}
     style = {{flex:1}}
     >

@@ -32,7 +32,7 @@ export default React.createClass({
 
 
   return (
-<View style= {{justifyContent:'center'}}>
+<View key= {x} style= {{justifyContent:'center'}}>
     <View style={styles.card}>
       <TouchableOpacity
       activeOpacity={ 0.7}

@@ -27,7 +27,7 @@
   var deviceWidth = Dimensions.get('window').width -6;
   var deviceheight = Dimensions.get('window').height -(deviceWidth/2) ;
   var modalheight = Dimensions.get('window').height/2 ;
-  var piclinks=["fuck"];
+  var piclinks=[];
   var image=[] ;
   global.currentUserGlobal=null;
 
@@ -108,8 +108,9 @@
             var uidOfOfferingUser = snapshot.val().uid;
             piclinks.push(piclink);
             images.push(
-              <View >
+              <View Key={piclink}>
               <TouchableHighlight
+               Key={piclink}
               activeOpacity={ 0.75 }
               style={ styles.item }
               onPress={self.handleOffereditems.bind(this,desc,piclink,title,uidOfOfferingUser)}
@@ -223,7 +224,7 @@ connfirm(){
 }
 
 handleOffereditems (desc,piclink,title,uidOfOfferingUser) {
-  alert(desc);
+ // alert(desc);
   console.log(desc);
   console.log(piclink);
   console.log(title);
