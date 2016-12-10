@@ -137,7 +137,11 @@ class chatscreen extends React.Component {
      transparent: true,
      picOfWantedItem:null,
      picOfOfferedItem:null,
-      dataSource: new ListView.DataSource({
+     uidOfOfferingUser:null,
+     newRef:null,
+     childKey:null,
+     snapVal:null,
+     dataSource: new ListView.DataSource({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }) 
    };
@@ -148,14 +152,18 @@ class chatscreen extends React.Component {
  {
   this.props.replaceRoute(Routes.Home());
 }
-finishDeal(newRef,snapVal,oldRef){
-
-   
-    newRef.set( snapVal, function(error) {
-               if( !error ) {  oldRef.remove(); }
+finishDeal(childKey,uidOfOfferingUser,snapVal,oldRef){
+  var self=this;
+  //send a notification that lets the other user know that his offer was accepted and activate chat 
+    var newRefForOfferingUser=firebase.database()
+         .ref('Notifications')
+         .child(uidOfOfferingUser)
+         .child('Seen').child('childKey');
+    newRefForOfferingUser.set( snapVal, function(error) {
+               if( !error ) {   }
                else if( typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
           }).then(function(){
-            this.props.replaceRoute(Routes.AcceptedOffers());
+            self.props.replaceRoute(Routes.AcceptedOffers());
           });
   
   
@@ -179,8 +187,8 @@ renderRow() {
        num =snapshot.numChildren();
         
         snapshot.forEach(function(childSnapshot) {
-         var picOfWantedItem= "http://orig01.deviantart.net/ace1/f/2010/227/4/6/png_test_by_destron23.png";
-         var picOfOfferedItem="http://orig01.deviantart.net/ace1/f/2010/227/4/6/png_test_by_destron23.png";
+         var picOfWantedItem= "h";
+         var picOfOfferedItem="h";
          var oldRef=firebase.database()
          .ref('Notifications')
          .child(uid)
@@ -189,6 +197,7 @@ renderRow() {
          .ref('Notifications')
          .child(uid)
          .child('Seen').child(childSnapshot.key);
+        var childKey = childSnapshot.key;
          var snapVal=null;
          firebase.database()
          .ref('Notifications')
@@ -260,7 +269,7 @@ renderRow() {
 
                   <TouchableOpacity
                   style = {{flex:0.5 , justifyContent:'center' , alignItems:'center'}}
-                  onPress={self._setModalVisible.bind(self, true,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef)}
+                  onPress={self._setModalVisible.bind(self, true,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef,snapshot.val().uidOfOfferingUser,childKey)}
                   >
                   <View>
                   <Image
@@ -307,7 +316,7 @@ renderRow() {
 }
 
 
-_setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef) => {
+_setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef,uidOfOfferingUser,childKey ) => {
   if (newRef){
     newRef.set( snapVal, function(error) {
                if( !error ) {  oldRef.remove(); }
@@ -316,7 +325,8 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
   }
   
 
-  this.setState({modalVisible: visible ,picOfOfferedItem:picOfOfferedItem , picOfWantedItem:picOfWantedItem });
+  this.setState({modalVisible: visible ,picOfOfferedItem:picOfOfferedItem , picOfWantedItem:picOfWantedItem,
+    uidOfOfferingUser:uidOfOfferingUser,newRef:newRef,snapVal:snapVal });
 }
 
 render() {
@@ -408,7 +418,7 @@ icostyle={{width:60, height:60}}
 
 <IcoButton
 source={require('funshare/src/img/like.png')}
-onPress={this.finishDeal.bind(this)}
+onPress={this.finishDeal.bind(this,this.state.childKey,this.state.uidOfOfferingUser,this.state.snapVal,this.state.newRef)}
 icostyle={{width:60, height:60}}
 />
 <Text style={{color:'white', fontSize:15 ,marginTop:18  }}>Bestätigen</Text>
