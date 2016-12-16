@@ -189,12 +189,12 @@ renderRow() {
           snapVal=snapshot.val();
           firebase.database().ref('items').child(snapshot.val().uidOfOfferingUser)
           .child(snapshot.val().keyOfOfferedItem).once('value').then(function(snapshot1){
-            console.log(snapshot1);
+           // console.log(snapshot1);
              picOfOfferedItem= snapshot1.val().itemPic;
           }).then(function(){
             firebase.database().ref('items').child(snapshot.val().uidOfLikedItem)
           .child(snapshot.val().keyOfWantedItem).once('value').then(function(snapshot2){
-            console.log(snapshot2);
+           // console.log(snapshot2);
              picOfWantedItem= snapshot2.val().itemPic;
           }).then(function(){
             var iteminfo = {
@@ -213,12 +213,12 @@ renderRow() {
                      picOfWantedItem:picOfWantedItem
                       }
 
-                     console.log(iteminfo);
+                    // console.log(iteminfo);
          // alert(itemcategory)
           piclinks.push(iteminfo);
           images.push(
 
-                <View key = {items} style={{flex:1}}>
+                <View  style={{flex:1}}>
 
                 <View style = {{flex:1,paddingTop:8, paddingBottom:12, paddingLeft:20, flexDirection:'row' ,backgroundColor:'white'}} >
 
@@ -245,10 +245,11 @@ renderRow() {
                   onPress={self.goChat.bind(self, iteminfo)}
                   >
                   <View>
-                  <Image
-                  style={{height:40 , width:40}}
-                  source={require('funshare/src/img/like.png')}
-                  /> 
+                  <Text
+                  style={{fontSize:20 , fontWeight:'bold'}}>
+
+                 go to Chat
+                  </Text> 
                   </View>
                   </TouchableOpacity>
 
@@ -408,7 +409,6 @@ icostyle={{width:60, height:60}}
 </Modal>
 
   <ListView
-
   dataSource={this.state.dataSource}
   renderRow={(rowData) => <View>{rowData}</View>}
   // renderSeparator={() => <View style={styles.separator} />}

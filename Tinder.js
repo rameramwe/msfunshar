@@ -101,7 +101,7 @@ rami(){
        
        firebase.database()
        .ref('categories')
-       .child('campus')
+       .child('swiper-all')
        .once('value')
        .then(function(snapshot) {
          num =snapshot.numChildren();
@@ -110,7 +110,7 @@ rami(){
            
           firebase.database()
        .ref('categories')
-       .child('campus').child(childSnapshot.key).once('value').then(function(snapshot) {
+       .child('swiper-all').child(childSnapshot.key).once('value').then(function(snapshot) {
             var piclink = snapshot.val().itemPic;
             var desc = snapshot.val().description;
             var title = snapshot.val().title;

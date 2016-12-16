@@ -128,11 +128,12 @@ componentWillUnmount () {
         firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     
-       var NotifRef = firebase.database().ref('Notifications/' + "vME62xQrPudg4xUhn15S3GAl2w92"+'/Unseen/');
+       var NotifRef = firebase.database().ref('Notifications/' + currentUserGlobal.uid+'/Unseen/');
         NotifRef.once("value")
                 .then(function(snapshot) {
                     var unseenNotifNumber = snapshot.numChildren(); 
-                    console.log("unseenNotifNumber",unseenNotifNumber);
+                    var unseenNotifNumberGlobal = snapshot.numChildren(); 
+                    console.log("unseenNotifNumber",unseenNotifNumber,unseenNotifNumberGlobal);
     
                   });
         NotifRef.on('child_added', function(data) {
@@ -140,11 +141,13 @@ componentWillUnmount () {
           NotifRef.once("value")
                 .then(function(snapshot) {
                     var unseenNotifNumber = snapshot.numChildren(); 
-                    console.log("unseenNotifNumber",unseenNotifNumber);
+                    var unseenNotifNumberGlobal = snapshot.numChildren(); 
+                    console.log("unseenNotifNumber",unseenNotifNumber,unseenNotifNumberGlobal);
     
                   });
       });
-        /* var newItems = false;
+        /*
+         var newItems = false;
       var eventsList = firebase.database().ref('Notifications/' + "24IuFFFZ53aYfl8IIe1p36OJkA83");
 
       eventsList.on('child_added', function(message) {
@@ -160,7 +163,9 @@ componentWillUnmount () {
 
       queryRef.on('child_added', function(snap) {
         console.log(snap.val());
-      });*/
+      });
+
+      */
     
     }
    else {
@@ -283,6 +288,19 @@ componentWillUnmount () {
     />
 
     </View>
+     <View style={styles.inputContainer}>
+  <IconButton     
+  container={{  flex: 1 ,marginBottom:5,flexDirection: "row" }}
+
+  value={"AcceptedOffers"}
+  source={require('../img/box.png')}
+  icostyle={{ width:30,
+    height: 30,
+    marginLeft:3}}
+    onPress={this.goToAcceptedOffers.bind(this)}
+    />
+
+    </View>
 
     <View style={styles.inputContainer}>
     <IconButton
@@ -401,7 +419,12 @@ maxHeight:800,
 
   goTomysuff() {
 
-    this.props.replaceRoute(Routes.userChat());
+    this.props.replaceRoute(Routes.mystuff());
+
+  }
+    goToAcceptedOffers() {
+
+    this.props.replaceRoute(Routes.AcceptedOffers());
 
   }
 

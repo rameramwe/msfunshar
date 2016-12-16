@@ -113,13 +113,15 @@ export default class details extends Component {
             images.push(
           <View Key={piclink} >
                <TouchableOpacity
+               Key={piclink}
                activeOpacity={ 0.9 }
                style={ styles.item }
                        onPress={self.addtooffereditems.bind(this,desc,piclink,title,uidOfOfferingUser,keyOfOfferedItem,self)}
                        >
 
-                       <View>
+                       <View Key={piclink}>
                        <Image
+                       Key={piclink}
                        resizeMode={Image.resizeMode.cover}
                        style={ styles.image }
                        source={{uri: piclink}}
@@ -213,6 +215,23 @@ componentWillMount() {
  
    
  }
+addtofavorite(){
+ 
+  var offerData = {
+            keyOfWantedItem: this.state.keyOfWantedItem,
+            uidOfLikedItem: this.state.uidOfLikedItem,   
+            created:firebase.database.ServerValue.TIMESTAMP
+          };
+  var uploadTask = firebase.database()
+      .ref('profiles')
+      .child(currentUserGlobal.uid)
+      .child('favorite');
+
+ 
+  var favoriteKey = uploadTask.push(offerData).key ;
+
+
+}
 addtooffereditems(desc,piclink,title,uidOfOfferingUser,keyOfOfferedItem,self){
  
   var offerData = {
@@ -273,10 +292,11 @@ renderImages(){
     style = {{flex:1}}
     >
     <Image
+    Key={this.state.piclink+"8"}
     style={{flex:1,width:null, height:null}}
     source={{uri: this.state.piclink}}>
-    <View style = {{flex:0.8}}>
-    <View style= {{
+    <View Key={this.state.piclink+"7"} style = {{flex:0.8}}>
+    <View Key={this.state.piclink+"6"} style= {{
       
       position:'absolute',
       justifyContent:'center',
@@ -287,11 +307,13 @@ renderImages(){
     }}>
 
     <TouchableHighlight
+     Key={this.state.piclink+"1"}
     underlayColor = {'rgba(0, 0, 0, 0.2)'}
     style= {{flex:1 }}
     onPress={this.goBack.bind(this)}
     >  
     <Image
+    Key={this.state.piclink+"5"}
     source={require('funshare/src/img/arrow.png')}
     style={{width:25, height:25, margin:10}}
     />
@@ -299,11 +321,11 @@ renderImages(){
     </View>
 
     </View>
-    <View style = {{flex:0.2,alignItems:'flex-start' , backgroundColor:'rgba(0, 0, 0, 0.5)' }}>
-    <View style = {{flexDirection:'row' ,flex:1 , margin:5}}>
+    <View  Key={this.state.piclink+"2"} style = {{flex:0.2,alignItems:'flex-start' , backgroundColor:'rgba(0, 0, 0, 0.5)' }}>
+    <View  Key={this.state.piclink+"3"} style = {{flexDirection:'row' ,flex:1 , margin:5}}>
     
     
-    <Text style = {{fontSize:16, fontWeight:'bold' , color:'white'}} >User name</Text>
+    <Text  Key={this.state.piclink+"4"} style = {{fontSize:16, fontWeight:'bold' , color:'white'}} >User name</Text>
     
     </View>
     </View>
@@ -467,6 +489,7 @@ renderImages(){
        </View>
        <View style={{flex:0.25,alignItems:'center' , marginTop:5}}>
        <IcoButton
+       onPress= {this.addtofavorite.bind(this)}
        source={require('funshare/src/img/wuncbt.png')}
        icostyle={{width:50, height:50}}
        />

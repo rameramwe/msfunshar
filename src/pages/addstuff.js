@@ -25,6 +25,7 @@ import StyleVars from 'funshare/StyleVars';
   //import Button from 'funshare/src/components/button';
   import InputButton from 'funshare/src/components/icotextButton';
   import fetchblob from 'funshare/src/components/fetchblob';
+  import firebase from 'firebase';
   var ImagePicker = require('react-native-image-picker');
   var deviceheight = Dimensions.get('window').height ;
   var devicewidth = Dimensions.get('window').width ;
@@ -456,7 +457,7 @@ render()
       this.state.category).then(( ) => {
        save.goBack();
      }, function(error) {
-      alert("cann't save")
+      alert(error)
     });
     
     

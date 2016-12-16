@@ -41,7 +41,7 @@
     this.onLoadEarlier = this.onLoadEarlier.bind(this);
 
     this._isAlright = null;
-  }
+  } 
 
   componentWillMount() {
     this._isMounted = true;
@@ -50,21 +50,27 @@
     var num=0;
     var currentMessages = [];
       Firebase.database()
-      .ref('messages')
+      .ref('Offers')
+      .child(self.props.iteminfo.uidOfOfferingUser)
       .child(self.props.iteminfo.offerKey)
+      .child('OfferMessages')
       .once('value')
       .then(function(snapshot) {
        num =snapshot.numChildren();
         
         snapshot.forEach(function(childSnapshot) {
 
-         Firebase.database()
-         .ref('messages')
-         .child(childSnapshot.key).once('value').then(function(snapshot) {
+
+           Firebase.database()
+          .ref('Offers')
+          .child(self.props.iteminfo.uidOfOfferingUser)
+          .child(self.props.iteminfo.offerKey)
+          .child('OfferMessages')
+          .child(childSnapshot.key).once('value').then(function(snapshot) {
           
               
              currentMessages.push(snapshot.val());
-             console.log(currentMessages);
+            // console.log(currentMessages);
     
     
 
@@ -91,12 +97,37 @@
 
   componentWillUnmount() {
     this._isMounted = false;
-    console.log(this.state.messages);
+   // console.log(this.state.messages);
   }
    componentDidMount() {
     var self=this;
-    
-  
+    var messagesRef=Firebase.database()
+      .ref('Offers')
+      .child(self.props.iteminfo.uidOfOfferingUser)
+      .child(self.props.iteminfo.offerKey)
+      .child('OfferMessages');
+
+     var newItems = false;
+     var realTimeMessage=null;
+      messagesRef.on('child_added', function(message) {
+        if (!newItems) return;
+        messagesRef.child('0').once('value', function(message1) {
+        realTimeMessage=message1.val();
+        console.log(message1.val());
+        
+      }).then(function(){
+          self.setState((previousState) => {
+
+          return {
+            messages: GiftedChat.append(previousState.messages, realTimeMessage),
+          };
+        });
+      });
+      });
+      messagesRef.once('value', function(messages) {
+        newItems = true;
+      });
+
   }
 
 
@@ -124,7 +155,11 @@
     var self=this;
     this.setState((previousState) => {
 
-      Firebase.database().ref('messages').child(self.props.iteminfo.offerKey).set(GiftedChat.append(previousState.messages, messages));
+      Firebase.database()
+      .ref('Offers')
+      .child(self.props.iteminfo.uidOfOfferingUser)
+      .child(self.props.iteminfo.offerKey)
+      .child('OfferMessages').set(GiftedChat.append(previousState.messages, messages));
       return {
         messages: GiftedChat.append(previousState.messages, messages),
       };
@@ -214,6 +249,37 @@
 
   render() {
     return (
+      <View style = {{flex:1}}>
+      <View style = {{flex:.2}}>
+        
+<View style={{ padding: 10, flexDirection: 'row', backgroundColor: '#FF5C7E' }}>
+    <View style={{ flex:0.4 , justifyContent:'center' , margin:5  }}>
+
+    
+    
+    </View>
+
+    <View style={{ flex:0.2 , alignItems:'center', justifyContent:'center'   }}>
+    <Image
+     resizeMode={Image.resizeMode.contain}
+    source={require('funshare/src/img/f.png')}
+    style={{width:45, height:45}}
+    />
+    </View>
+
+    <View style={{ flex:0.4 , alignItems:'flex-end', justifyContent:'center' , margin:5  }}>
+    <IcoButton
+    
+    source={require('funshare/src/img/swop.png')}
+    //onPress={this.goToHome.bind(this)}
+    icostyle={{width:35, height:35}}
+    />
+
+    </View>
+
+    </View>
+      </View>
+      <View style = {{flex:1 }}>
       <GiftedChat
         messages={this.state.messages}
         onSend={this.onSend}
@@ -222,7 +288,7 @@
         isLoadingEarlier={this.state.isLoadingEarlier}
 
         user={{
-          _id: 1, // sent messages should have same user._id
+          _id: currentUserGlobal.uid, // sent messages should have same user._id
         }}
 
         renderActions={this.renderCustomActions}
@@ -230,6 +296,9 @@
         renderCustomView={this.renderCustomView}
         renderFooter={this.renderFooter}
       />
+        </View>
+
+    </View>
     );
   }
 }

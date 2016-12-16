@@ -23,7 +23,7 @@ import IcoButton from 'funshare/src/components/icobutton';
 import style from '../styles/common-styles.js';
 var deviceWidth = Dimensions.get('window').width -6;
 var deviceheight = Dimensions.get('window').height -(deviceWidth/2) ;
-var piclinks=["fuck"];
+ 
 var styles = StyleSheet.create({
   li: {
     backgroundColor: '#fff',
@@ -38,10 +38,10 @@ var styles = StyleSheet.create({
     color: '#333',
     fontSize: 16,
   },
-   separator: {
+  separator: {
     alignSelf: 'flex-end',
-     borderBottomWidth:1 , borderBottomColor:'#dcdcdc',
-  
+    borderBottomWidth:1 , borderBottomColor:'#dcdcdc',
+
     width: Dimensions.get("window").width-100,
     
   },
@@ -63,7 +63,7 @@ var styles = StyleSheet.create({
 
 
   image: {
-   
+
     width:60,
     height: 60,
     borderRadius: 30 ,
@@ -72,40 +72,59 @@ var styles = StyleSheet.create({
 });
 
 export default class wishlist extends Component {
-goToDetails(desc,piclink,title,gback){
- this.props.replaceRoute(Routes.details(desc,piclink,title,"wishlist"));
+  goToDetails(desc,piclink,title,gback){
+   this.props.replaceRoute(Routes.details(desc,piclink,title,"wishlist"));
  // alert(desc + title + piclink);
 }
- renderRow() {
+renderRow() {
 
   var images= [];
   return new Promise((next, error) => {
 
     var self = this; 
-    var i = 0;
+    var i =  0;
     var num=0;
     var uid = firebase.auth().currentUser.uid;
+ 
     firebase.database()
-    .ref('items')
+    .ref('profiles')
     .child(uid)
+    .child('favorite')
     .once('value')
     .then(function(snapshot) {
-     num =snapshot.numChildren();
 
+     num =snapshot.numChildren();
+     
      snapshot.forEach(function(childSnapshot) {
 
        firebase.database()
+       .ref('profiles')
+       .child(uid).child('favorite').child(childSnapshot.key).once('value').then(function(snapshot1) {
+      
+        var keyofitem = snapshot1.val().keyOfWantedItem;
+        var uidofitem = snapshot1.val().uidOfLikedItem; 
+        var piclink=null;
+        var desc = null;
+        var title = null;
+        var keyOfWantedItem = null;
+        var uidOfLikedItem=null;
+      firebase.database()
        .ref('items')
-       .child(uid).child(childSnapshot.key).once('value').then(function(snapshot) {
-        var piclink = snapshot.val().itemPic;
-        var desc = snapshot.val().description;
-        var title = snapshot.val().title;
-        var id = snapshot.key;
-        piclinks.push(piclink);
+       .child(uidofitem)
+       .child(keyofitem)
+       .once('value')
+       .then(function(snapshot) {
+             piclink = snapshot.val().itemPic;
+             desc = snapshot.val().description;
+             title = snapshot.val().title;
+             keyOfWantedItem = snapshot.key;
+             uidOfLikedItem=snapshot.val().uid;
+   }).then(function(){ 
+ 
         images.push(
 
                   <TouchableHighlight
-                  key={id}
+                
                   style={{flex:1}}
                   activeOpacity={ 0.75 }
                    onPress={self.goToDetails.bind(self,desc,piclink,title)}
@@ -136,16 +155,26 @@ goToDetails(desc,piclink,title,gback){
                   </TouchableHighlight>
                 
                   );
-
           i++;
           if (i==num){
 
            self.setState({
             dataSource: self.state.dataSource.cloneWithRows(images)
           });
-
-          next(images);
+            next(images);
         }
+
+ 
+
+   });
+  
+            
+
+         
+        
+
+         
+        
 
       });
 
@@ -158,22 +187,24 @@ goToDetails(desc,piclink,title,gback){
 }
 
 constructor(props) {
+
+ 
   super(props);
   this.state = {
    dataSource: new ListView.DataSource({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }) 
+
 };
 }
 
 goToHome1()
 {
-   this.props.replaceRoute(Routes.Home1(currentUserGlobal));
+ this.props.replaceRoute(Routes.Home1(currentUserGlobal));
 }
 
 componentDidMount() {
-
-  this.renderRow();
+     this.renderRow();
   var self=this;
   BackAndroid.addEventListener('hardwareBackPress', () => {
 
@@ -183,8 +214,6 @@ componentDidMount() {
   });
   
 }
-
-
 details(desc,piclink,title){
 
 
@@ -192,7 +221,6 @@ details(desc,piclink,title){
 
 
 }
-
 
 
 
@@ -211,13 +239,13 @@ render() {
 
   </TouchableOpacity>
   </View>
-<View style={{ flex:0.1}}/>
+  <View style={{ flex:0.1}}/>
   <View style={{ alignItems:'center', justifyContent:'center' , margin:5  }}>
-     <Image 
-      source={require('funshare/src/img/wishliste.png')}
-      style={{width:35, height:35}}
+  <Image 
+  source={require('funshare/src/img/wishliste.png')}
+  style={{width:35, height:35}}
   />
- 
+
   </View>
 
   <View style={{ flex:0.4 , alignItems:'flex-end', justifyContent:'center' , margin:5  }}>
@@ -241,9 +269,9 @@ render() {
   <ListView
 
   dataSource={this.state.dataSource}
-  renderRow={(rowData) => <View>{rowData}</View>}
-  // renderSeparator={() => <View style={styles.separator} />}
-   renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
+  renderRow={(rowData) => <View style = {{flex:1}} >{rowData}</View>}
+ // renderSeparator={() => <View style={styles.separator} />}
+  renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
   contentContainerStyle={{flex:1,paddingTop:20 ,backgroundColor:'white',}}/>
 
 

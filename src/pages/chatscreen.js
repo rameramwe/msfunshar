@@ -154,11 +154,12 @@ class chatscreen extends React.Component {
  }
 finishDeal(childKey,uidOfOfferingUser,snapVal,oldRef){
   var self=this;
+  alert(childKey);
   //send a notification that lets the other user know that his offer was accepted and activate chat 
     var newRefForOfferingUser=firebase.database()
          .ref('Notifications')
          .child(uidOfOfferingUser)
-         .child('Seen').child('childKey');
+         .child('Seen').child(childKey);
     newRefForOfferingUser.set( snapVal, function(error) {
                if( !error ) {   }
                else if( typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
@@ -189,6 +190,7 @@ renderRow() {
         snapshot.forEach(function(childSnapshot) {
          var picOfWantedItem= "h";
          var picOfOfferedItem="h";
+         var childKey = childSnapshot.key;
          var oldRef=firebase.database()
          .ref('Notifications')
          .child(uid)
@@ -197,7 +199,7 @@ renderRow() {
          .ref('Notifications')
          .child(uid)
          .child('Seen').child(childSnapshot.key);
-        var childKey = childSnapshot.key;
+        
          var snapVal=null;
          firebase.database()
          .ref('Notifications')
@@ -326,7 +328,7 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
   
 
   this.setState({modalVisible: visible ,picOfOfferedItem:picOfOfferedItem , picOfWantedItem:picOfWantedItem,
-    uidOfOfferingUser:uidOfOfferingUser,newRef:newRef,snapVal:snapVal });
+    uidOfOfferingUser:uidOfOfferingUser,newRef:newRef,snapVal:snapVal , childKey:childKey});
 }
 
 render() {

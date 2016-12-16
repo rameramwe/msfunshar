@@ -147,17 +147,14 @@ calluploadphoto() {
    picPath1:picSetup.picPath,
    base64:picSetup.base64  
  });  
+
 }, function(error) {
   alert("can't upload the photo")
 });
 
 }
 update(){
-
-}
-remove(){
-  var uploadTask2 = firebase.database()
-  .ref('categories').child(this.state.icategory).child(this.state.itemkey).update({
+/*update({
     description: this.state.desc,
     title: this.state.title,
     starCount: 0,
@@ -165,6 +162,17 @@ remove(){
     category:this.state.icategory,
 
   });
+*/
+}
+remove(){
+  var save=this;
+ var uid=currentUserGlobal.uid;
+  firebase.database()
+  .ref('items').child(uid).child(this.state.itemkey).remove().then(function(){
+    save.goBack();
+
+  });
+  
 
 
 }

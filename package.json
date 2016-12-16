@@ -20,7 +20,7 @@
     "react-native-fbsdklogin": "0.0.8",
     "react-native-fbsdkshare": "0.0.8",
     "react-native-fcm": "^1.0.15",
-    "react-native-fetch-blob": "0.9.5-beta.4",
+    "react-native-fetch-blob": "0.10.1-beta.1",
     "react-native-geocoder": "^0.4.5",
     "react-native-gifted-chat": "0.0.10",
     "react-native-gifted-spinner": "0.0.5",

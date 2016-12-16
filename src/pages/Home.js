@@ -1,4 +1,5 @@
-  'use strict';
+
+'use strict';
   import React, { Component } from 'react';
   import {
     AppRegistry,
@@ -11,10 +12,12 @@
     Modal,
     Dimensions,
     BackAndroid,
-    TouchableHighlight
+    TouchableHighlight,
+    ListView
   } from 'react-native';
 
   import IcoButton from 'funshare/src/components/icobutton';
+  import firebaseClient from  "funshare/src/pages/FirebaseClient";
   import Header from '../components/header';
   import Login from './login';
   import firebase from 'firebase';
@@ -24,13 +27,14 @@
   import SharedStyles from 'funshare/SharedStyles';
   import StyleVars from 'funshare/StyleVars';
   import Tinder from 'funshare/Tinder';
+  import FCM from 'react-native-fcm';
   var deviceWidth = Dimensions.get('window').width -6;
   var deviceheight = Dimensions.get('window').height -(deviceWidth/2) ;
   var modalheight = Dimensions.get('window').height/2 ;
   var piclinks=[];
   var image=[] ;
   global.currentUserGlobal=null;
-
+  global.unseenNotifNumberGlobal=null;
   const styles = StyleSheet.create({
     Mcontainer: {flex:1 ,  justifyContent: 'flex-end', }, 
     MinnerContainer: {flex:1,justifyContent:'flex-end' },
@@ -80,9 +84,10 @@
     button: { width: 256 }
   });
   export default class Home extends Component {
-   rami() {
 
-    var images= [];
+ renderRow() {
+
+  var images= [];
     return new Promise((next, error) => {
 
       var self = this; 
@@ -129,54 +134,25 @@
 
             i++;
             if (i==num){
-
+             self.setState({
+            dataSource: self.state.dataSource.cloneWithRows(images)
+          });
 
               next(images);
             }
 
           });
+
         })
       });
     }); 
   }
   
-  _renderImage(){
-
-
-   this.rami().then((images) => {
-    image = images;
-    if (!this.state.loaded1){
-      this.setState({
-        loaded1:true
-      });
-
-    }
-
-  });
-    //alert(image.length);
-    return image;
-
-  }
+ 
   constructor(props) {
     super(props);
-
-    //this.fuck = this.fuck.bind(this);
-    this.state = {
-
-     image: [null],
-     hi: "hi",
-     loaded1: false,
-     loaded: false,
-     failed: false,
-     animationType: 'fade',
-     modalVisible: false,
-     transparent: true,
-   };
- }
-
- componentWillMount() {
-  var save=this;
-  firebase.auth().onAuthStateChanged(function(user1) {
+    var save = this;
+    firebase.auth().onAuthStateChanged(function(user1) {
   if (user1) {
    
     currentUserGlobal=user1;
@@ -186,22 +162,137 @@
     
   }
 });
+          firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+        var save1=save;
+       var NotifRef = firebase.database().ref('Notifications/' + currentUserGlobal.uid+'/Unseen/');
+        NotifRef.once("value")
+                .then(function(snapshot) {
+                  
+                    var unseenNotifNumber = snapshot.numChildren(); 
+                    var unseenNotifNumberGlobal = snapshot.numChildren(); 
+                    console.log("unseenNotifNumber",unseenNotifNumber,unseenNotifNumberGlobal);
+                    save1.setState({ unseenNotifNumberGlobal:unseenNotifNumber });
+                  });
+        NotifRef.on('child_added', function(data) {
+          console.log(data.val());
+          NotifRef.once("value")
+                .then(function(snapshot) {
+                    var unseenNotifNumber = snapshot.numChildren(); 
+                    var unseenNotifNumberGlobal = snapshot.numChildren(); 
+                    console.log("unseenNotifNumber",unseenNotifNumber,unseenNotifNumberGlobal);
+                   save1.setState({ unseenNotifNumberGlobal:unseenNotifNumber });
+                  });
+      });
+        /*
+         var newItems = false;
+      var eventsList = firebase.database().ref('Notifications/' + "24IuFFFZ53aYfl8IIe1p36OJkA83");
 
+      eventsList.on('child_added', function(message) {
+        if (!newItems) return;
+        var message = message.val();
+        console.log(message.offerKey);
+      });
+      eventsList.once('value', function(messages) {
+        newItems = true;
+      });
+
+      var queryRef = eventsList.orderBy('created').startAt(firebase.database.ServerValue.TIMESTAMP);
+
+      queryRef.on('child_added', function(snap) {
+        console.log(snap.val());
+      });
+
+      */
+    
+    }
+   else {
+    // No user is signed in.
+  }
+});
+  
+  
+save.state = {
+      dataSource: new ListView.DataSource({
+    rowHasChanged: (row1, row2) => row1 !== row2,
+  }),
+      Notif:1,
+     image: [null],
+     hi: "hi",
+     loaded1: false,
+     loaded: false,
+     failed: false,
+     animationType: 'fade',
+     modalVisible: false,
+     transparent: true,
+     unseenNotifNumberGlobal:null,
+     token: "",
+   };
+
+    //this.fuck = this.fuck.bind(this);
+    
+ }
+
+ componentWillMount() {
+  var save=this;
+  
   //Actions.auth();
 
 }
-
+componentWillUnmount() {
+        // prevent leaking
+        this.refreshUnsubscribe();
+        this.notificationUnsubscribe();
+    }
 
 componentDidMount() {
+   this.renderRow();
   var self=this;
   BackAndroid.addEventListener('hardwareBackPress', () => {
-    console.log("did",currentUserGlobal);
+   // console.log("did",currentUserGlobal);
     self.props.replaceRoute(Routes.Home1(currentUserGlobal));
     return true;
     
   });
   Actions.loadUser.completed.listen(this._onLoadUserCompleted.bind(this));
   Actions.logout.listen(this._onLogout.bind(this));
+       FCM.requestPermissions(); // for iOS
+       FCM.getFCMToken().then(token => {
+            console.log("TOKEN (getFCMToken)", token);
+           this.setState({token: token || ""});
+           firebaseClient.sendNotification(token);
+           firebaseClient.sendData(token);
+           firebaseClient.sendNotificationWithData(token);
+          });
+        
+          this.notificationUnsubscribe = FCM.on("notification", notif => {
+            console.log("Notification", notif);
+            if (notif && notif.local) {
+              return;
+            }
+            this.sendRemote(notif);
+          });
+
+          this.refreshUnsubscribe = FCM.on("refreshToken", token => {
+            console.log("TOKEN (refreshUnsubscribe)", token);
+            this.props.onChangeToken(token);
+          });
+        }
+
+        sendRemote(notif) {
+          FCM.presentLocalNotification({
+            title: notif.title,
+            body: notif.body,
+            priority: "high",
+            click_action: notif.click_action,
+            show_in_foreground: true,
+            local: true
+          });
+        
+
+
+
+
 }
 
 
@@ -247,6 +338,20 @@ render(){
   var innerContainerTransparentStyle =  
   { backgroundColor:   'rgba(0, 0, 0, 0.5)'}
 
+    var issellected ={ 
+
+     width:18,height:18,borderRadius:9, backgroundColor:'green',position: 'absolute',alignItems:'center',justifyContent:'center', top:0 , right:12
+
+   }  
+
+var Notification = () => 
+   (
+
+     <View style = {this.state.unseenNotifNumberGlobal >0? issellected : null} >
+    <Text style = {{color:'white', fontSize:15 , fontWeight:'bold'}} >{this.state.unseenNotifNumberGlobal}</Text>
+      </View>
+  )
+ 
 
   return (
 
@@ -279,7 +384,16 @@ render(){
       flexDirection: 'row',
       flexWrap: 'wrap',
       justifyContent: "center" }}>
-      {this._renderImage()}
+       
+  <ListView
+
+  dataSource={this.state.dataSource}
+  renderRow={(rowData) => <View style = {{flex:1}} >{rowData}</View>}
+ // renderSeparator={() => <View style={styles.separator} />}
+  renderSeparator={(sectionId, rowId) => <View key={rowId}  />}
+  contentContainerStyle={{flex:1 ,  flexDirection: 'row',}}/>
+
+
       </View>
       </ScrollView>
       </View>
@@ -324,7 +438,9 @@ render(){
   <View style={{flex:0.1 ,alignItems:'center'}}>
   <IcoButton
   source={require('funshare/src/img/profil.png')}
-  onPress={this.goToProfile.bind(this)}
+  
+   onPress={() =>firebaseClient.sendNotification(this.state.token)}
+ // onPress={this.goToProfile.bind(this)}
   icostyle={{width:40, height:40}}
   />
   </View>
@@ -335,12 +451,15 @@ render(){
 
   />
   <View style={{flex:0.1,alignItems:'center'}}>
+ 
   <IcoButton
   source={require('funshare/src/img/ichat.png')}
   onPress={this.goToChat.bind(this)}
 
   icostyle={{width:40, height:40}}
   />
+  <Notification/>
+   
   </View>
   </View>
   </View>

@@ -32,25 +32,28 @@ function upload1(path,title1,description1,category1){
     
    testFile=path;
    //var currentUser = DataStore.getCurrentUser();
-   var user1 = firebase.auth().currentUser;
-   var uid=user1.uid ;
-   var userName= user1.displayName;
+   var user1 = currentUserGlobal;
+   var uid=currentUserGlobal.uid ;
+   var userName= currentUserGlobal.displayName;
    
-   let rnfbURI = RNFetchBlob.wrap(testFile)
-   
+   let rnfbURI = RNFetchBlob.wrap(testFile);
+    console.log("fff0");
    Blob
    .build(rnfbURI, { type : 'image/jpeg;'})
    .then((blob) => {
       // upload image using Firebase SDK
+      console.log("fff1");
       var uploadTask = firebase.storage()
       .ref('usersItemss')
       .child(uid)
       .child(Math.random().toString(36).substr(2, 9));
+      console.log("fff2");
       uploadTask.put(blob, { contentType : 'image/png' })
       .then((snapshot) => {
+        console.log("fff");
       	uploadTask.getDownloadURL().then(function(url) {
       		
-      		//alert(url);
+      		console.log("fff",url,userName);
       		var uploadTask1 = firebase.database()
           .ref('items')
           .child(uid);
@@ -74,14 +77,17 @@ function upload1(path,title1,description1,category1){
           var uploadTask3 = firebase.database()
           .ref('categories').child("swiper-all").child(newItemKey).set(itemData);
         }).catch(function(error) {
-          alert("Error-fetchblob")
+          alert("Error-fetchblob");
+          throw error;
         });
 
       }).catch(function(error) {
-        alert("please choose another photo")
+        alert("please choose another photo");
+        throw error;
       });
     }).catch(function(error) {
-      alert("Error-fetchblob")
+      alert("Error-fetchblob");
+      throw error;
     });
     var ms = "hi";
 
@@ -89,7 +95,7 @@ function upload1(path,title1,description1,category1){
  //   alert(this.state.picdata);
 
 
-});
+}); 
 
 
 
