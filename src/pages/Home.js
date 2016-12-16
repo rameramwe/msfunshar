@@ -260,9 +260,9 @@ componentDidMount() {
        FCM.getFCMToken().then(token => {
             console.log("TOKEN (getFCMToken)", token);
            this.setState({token: token || ""});
-           firebaseClient.sendNotification(token);
-           firebaseClient.sendData(token);
-           firebaseClient.sendNotificationWithData(token);
+         //  firebaseClient.sendNotification(token);
+           //firebaseClient.sendData(token);
+           //firebaseClient.sendNotificationWithData(token);
           });
         
           this.notificationUnsubscribe = FCM.on("notification", notif => {
@@ -286,14 +286,10 @@ componentDidMount() {
             priority: "high",
             click_action: notif.click_action,
             show_in_foreground: true,
-            local: true
+            local: true,
           });
-        
-
-
-
-
 }
+
 
 
 
@@ -439,8 +435,8 @@ var Notification = () =>
   <IcoButton
   source={require('funshare/src/img/profil.png')}
   
-   onPress={() =>firebaseClient.sendNotification(this.state.token)}
- // onPress={this.goToProfile.bind(this)}
+   
+  onPress={this.goToProfile.bind(this)}
   icostyle={{width:40, height:40}}
   />
   </View>
