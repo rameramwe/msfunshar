@@ -42,7 +42,7 @@ const testFile = null
 const styles = StyleSheet.create({
  
   inputContainer: {
-   
+    flex:1,
     margin:20, 
     marginTop:10,
     marginBottom:0   
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   },
 
   username: {
-    
+    marginTop:10,
     textAlign: 'center',
     fontSize: 23,
     fontWeight: 'bold',
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
 
   
   buttongrop: {
+  flex:1,
    justifyContent:'center',
    
    
@@ -224,7 +225,7 @@ componentWillUnmount () {
     );
    return (
 
-    <View style={{  flex:1   }}>
+    <View style={{  flex:1, backgroundColor:'white',   }}>
     <TopNavigation/>  
     
 
@@ -244,13 +245,16 @@ componentWillUnmount () {
 
     }
     BadgeElement={
+   
      <TouchableOpacity
+
      onPress={this.uploadphoto.bind(this)}
      >
      <Image source={require('../img/edit.png')}
      
      style={{width:18,height:18}}/>
      </TouchableOpacity>
+     
    }
 
    IconBadgeStyle={
@@ -288,20 +292,6 @@ componentWillUnmount () {
     />
 
     </View>
-     <View style={styles.inputContainer}>
-  <IconButton     
-  container={{  flex: 1 ,marginBottom:5,flexDirection: "row" }}
-
-  value={"AcceptedOffers"}
-  source={require('../img/box.png')}
-  icostyle={{ width:30,
-    height: 30,
-    marginLeft:3}}
-    onPress={this.goToAcceptedOffers.bind(this)}
-    />
-
-    </View>
-
     <View style={styles.inputContainer}>
     <IconButton
     container={{  flex: 1 ,marginBottom:5,flexDirection: "row" }}

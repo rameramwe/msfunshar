@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   item: {
-
+    
     width:deviceWidth/4,
     height: 80,
     borderColor: '#efefef',
@@ -111,7 +111,7 @@ export default class details extends Component {
             var uidOfOfferingUser = snapshot.val().uid ;
             
             images.push(
-          <View Key={piclink} >
+          <View style = {{flex:1}} Key={piclink} >
                <TouchableOpacity
                Key={piclink}
                activeOpacity={ 0.9 }
@@ -119,7 +119,7 @@ export default class details extends Component {
                        onPress={self.addtooffereditems.bind(this,desc,piclink,title,uidOfOfferingUser,keyOfOfferedItem,self)}
                        >
 
-                       <View Key={piclink}>
+                       <View style = {{flex:1}} Key={piclink}>
                        <Image
                        Key={piclink}
                        resizeMode={Image.resizeMode.cover}
@@ -349,7 +349,7 @@ renderImages(){
 
     return (
 
-    <View style={{flex:1}}>
+    <View style={{flex:1, backgroundColor:'white',}}>
 
 
     <Modal
@@ -454,6 +454,7 @@ renderImages(){
        value={this.state.desc}
        style={styles.textinput}
        editable={false}
+       underlineColorAndroid="transparent"
        />
 
        </View>
@@ -471,6 +472,7 @@ renderImages(){
        autoCorrect={false}
        multiline={true}
        numberOfLines = {4}
+       underlineColorAndroid="transparent"
        />
        </View>
 

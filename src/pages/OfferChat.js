@@ -212,7 +212,10 @@
       />
     );
   }
-
+  goTochatscren()
+{
+  this.props.replaceRoute(Routes.chatscreen());
+}
   renderBubble(props) {
     return (
       <Bubble
@@ -271,7 +274,7 @@
     <IcoButton
     
     source={require('funshare/src/img/swop.png')}
-    //onPress={this.goToHome.bind(this)}
+    onPress={this.goTochatscren.bind(this)}
     icostyle={{width:35, height:35}}
     />
 
@@ -291,7 +294,7 @@
           _id: currentUserGlobal.uid, // sent messages should have same user._id
         }}
 
-        renderActions={this.renderCustomActions}
+       // renderActions={this.renderCustomActions}
         renderBubble={this.renderBubble}
         renderCustomView={this.renderCustomView}
         renderFooter={this.renderFooter}

@@ -29,10 +29,12 @@ module.exports = StyleSheet.create({
   },
   backgroundImage:{
     flex:1 ,
+     backgroundColor:'white',
     width: null,
     height: null 
   },
   profilepicture:{
+    flex:1,
     width: 100,
     height: 100,
     borderRadius: 50,

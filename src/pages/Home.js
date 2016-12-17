@@ -35,6 +35,7 @@
   var image=[] ;
   global.currentUserGlobal=null;
   global.unseenNotifNumberGlobal=null;
+  global.currentLikedItem=null;
   const styles = StyleSheet.create({
     Mcontainer: {flex:1 ,  justifyContent: 'flex-end', }, 
     MinnerContainer: {flex:1,justifyContent:'flex-end' },
@@ -47,7 +48,7 @@
       marginVertical: 20
     },
     item: {
-
+      flex:1,
       width:deviceWidth/4,
       height: 80,
       borderColor: '#efefef',
@@ -113,7 +114,7 @@
             var uidOfOfferingUser = snapshot.val().uid;
             piclinks.push(piclink);
             images.push(
-              <View Key={piclink}>
+              <View style = {{flex:1}} Key={piclink}>
               <TouchableHighlight
                Key={piclink}
               activeOpacity={ 0.75 }
@@ -121,7 +122,7 @@
               onPress={self.handleOffereditems.bind(this,desc,piclink,title,uidOfOfferingUser)}
               >
 
-              <View>
+              <View style= {{flex:1}} >
               <Image
               resizeMode={Image.resizeMode.cover}
               style={ styles.image }
@@ -182,8 +183,20 @@
                     var unseenNotifNumberGlobal = snapshot.numChildren(); 
                     console.log("unseenNotifNumber",unseenNotifNumber,unseenNotifNumberGlobal);
                    save1.setState({ unseenNotifNumberGlobal:unseenNotifNumber });
+                   var body1="You have "+unseenNotifNumber+ " new offers ";
+                   firebaseClient.sendNotification(save1.state.token,"Funshare",body1);
+                  
+
+                  save1.refreshUnsubscribe = FCM.on("refreshToken", token => {
+                    console.log("TOKEN (refreshUnsubscribe)", token);
+                    save1.props.onChangeToken(token);
                   });
-      });
+                
+
+                
+
+                          });
+              });
         /*
          var newItems = false;
       var eventsList = firebase.database().ref('Notifications/' + "24IuFFFZ53aYfl8IIe1p36OJkA83");
@@ -334,16 +347,17 @@ render(){
   var innerContainerTransparentStyle =  
   { backgroundColor:   'rgba(0, 0, 0, 0.5)'}
 
-    var issellected ={ 
+    var noti ={ 
 
-     width:18,height:18,borderRadius:9, backgroundColor:'green',position: 'absolute',alignItems:'center',justifyContent:'center', top:0 , right:12
+    flex:1, width:18,height:18,borderRadius:9, backgroundColor:'green',position: 'absolute',alignItems:'center',justifyContent:'center', top:0 , right:12
 
    }  
+   var none = {height:0}
 
 var Notification = () => 
    (
 
-     <View style = {this.state.unseenNotifNumberGlobal >0? issellected : null} >
+     <View style = {this.state.unseenNotifNumberGlobal >0? noti : none } >
     <Text style = {{color:'white', fontSize:15 , fontWeight:'bold'}} >{this.state.unseenNotifNumberGlobal}</Text>
       </View>
   )
@@ -351,7 +365,7 @@ var Notification = () =>
 
   return (
 
-    <View style={{  flex:1 , width: null,height: null }}>
+    <View style={{  backgroundColor:'white', flex:1 , width: null,height: null }}>
 
 
 
@@ -372,7 +386,7 @@ var Notification = () =>
     <View>
     <ScrollView
     horizontal={true}
-    style= {{ height: 400}} >
+    style= {{flex:1, height: 400}} >
     
     <View
     onPress={() => {this.handleOffereditems()}}
@@ -411,7 +425,7 @@ var Notification = () =>
       <View style={{flex:0.25,alignItems:'center'}}>
       <IcoButton
       source={require('funshare/src/img/like.png')}
-  //onPress={this.props._setModalVisible}
+  onPress={() => {this.goToDetails(currentLikedItem.description ,currentLikedItem.image,   currentLikedItem.title, currentLikedItem.uidOfLikedItem ,currentLikedItem.keyOfWantedItem )}}
   icostyle={{width:60, height:60}}
   />
   </View>
@@ -447,7 +461,8 @@ var Notification = () =>
 
   />
   <View style={{flex:0.1,alignItems:'center'}}>
- 
+  
+    
   <IcoButton
   source={require('funshare/src/img/ichat.png')}
   onPress={this.goToChat.bind(this)}
@@ -459,8 +474,13 @@ var Notification = () =>
   </View>
   </View>
   </View>
+   <View style={{flex:1,alignItems:'center' , justifyContent:'flex-start'}}>
   <Tinder _setModalVisible={this._setModalVisible.bind(this, true)} goToDetails={this.goToDetails.bind(this)} />
-
+    
+ 
+  
+   
+  </View>
   </View>
 
   </View>

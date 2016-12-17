@@ -27,6 +27,8 @@ import DataStore from 'funshare/DataStore';
 import Actions from 'funshare/Actions';
 import SharedStyles from 'funshare/SharedStyles';
 import IconButton from 'funshare/src/components/icotextButton';
+import AcceptedOffers from 'funshare/src/pages/AcceptedOffers';
+
 var piclinks=[];
 
 var deviceheight = Dimensions.get('window').height ;
@@ -45,6 +47,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
    separator: {
+    flex:1,
     alignSelf: 'flex-end',
      borderBottomWidth:1 , borderBottomColor:'#dcdcdc',
   
@@ -119,6 +122,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255,0.1)",
   },
   image:{
+    flex:1,
     height:60,
     width:60,
     borderRadius:30
@@ -138,6 +142,7 @@ class chatscreen extends React.Component {
      picOfWantedItem:null,
      picOfOfferedItem:null,
      uidOfOfferingUser:null,
+     uidOfLikedItem:null,
      newRef:null,
      childKey:null,
      snapVal:null,
@@ -152,19 +157,37 @@ class chatscreen extends React.Component {
  {
   this.props.replaceRoute(Routes.Home());
  }
-finishDeal(childKey,uidOfOfferingUser,snapVal,oldRef){
+finishDeal(childKey,uidOfOfferingUser,snapVal,oldRef,uidOfLikedItem){
   var self=this;
-  alert(childKey);
+  //alert(childKey);
   //send a notification that lets the other user know that his offer was accepted and activate chat 
     var newRefForOfferingUser=firebase.database()
          .ref('Notifications')
          .child(uidOfOfferingUser)
+         .child('Accepted').child(childKey);
+    var newRefForLikedItem=firebase.database()
+         .ref('Notifications')
+         .child(uidOfLikedItem)
+         .child('Accepted').child(childKey);
+    var oldRefLikedItem=firebase.database()
+         .ref('Notifications')
+         .child(uidOfLikedItem)
          .child('Seen').child(childKey);
+
     newRefForOfferingUser.set( snapVal, function(error) {
                if( !error ) {   }
                else if( typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
           }).then(function(){
-            self.props.replaceRoute(Routes.AcceptedOffers());
+            newRefForLikedItem.set( snapVal, function(error) {
+               if( !error ) {oldRefLikedItem.remove();   }
+               else if( typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
+          }).then(function(){
+            alert("Now you can chat with each other !!");
+            self.props.replaceRoute(Routes.chatscreen());
+
+          });
+
+            
           });
   
   
@@ -271,7 +294,7 @@ renderRow() {
 
                   <TouchableOpacity
                   style = {{flex:0.5 , justifyContent:'center' , alignItems:'center'}}
-                  onPress={self._setModalVisible.bind(self, true,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef,snapshot.val().uidOfOfferingUser,childKey)}
+                  onPress={self._setModalVisible.bind(self, true,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef,snapshot.val().uidOfOfferingUser,childKey,snapshot.val().uidOfLikedItem)}
                   >
                   <View>
                   <Image
@@ -317,8 +340,13 @@ renderRow() {
   }); 
 }
 
-
-_setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef,uidOfOfferingUser,childKey ) => {
+ 
+goChat(iteminfo){
+  //alert(this.state.animationType);
+ //  alert(iteminfo.lastMessage)
+ this.props.replaceRoute(Routes.OfferChat(iteminfo));
+}
+_setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef,uidOfOfferingUser,childKey,uidOfLikedItem ) => {
   if (newRef){
     newRef.set( snapVal, function(error) {
                if( !error ) {  oldRef.remove(); }
@@ -328,40 +356,39 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
   
 
   this.setState({modalVisible: visible ,picOfOfferedItem:picOfOfferedItem , picOfWantedItem:picOfWantedItem,
-    uidOfOfferingUser:uidOfOfferingUser,newRef:newRef,snapVal:snapVal , childKey:childKey});
+    uidOfOfferingUser:uidOfOfferingUser,newRef:newRef,snapVal:snapVal , childKey:childKey,uidOfLikedItem:uidOfLikedItem});
 }
 
 render() {
- const TopNavigation = () => (
-  <View style={{ padding: 10, flexDirection: 'row', backgroundColor: '#FF5C7E' }}>
+  const TopNavigation = () => (
+    <View style={{ padding: 10, flexDirection: 'row', backgroundColor: '#FF5C7E' }}>
+    <View style={{ flex:0.4 , justifyContent:'center' , margin:5  }}>  
+    </View>
 
+    <View style={{ flex:0.2 , alignItems:'center', justifyContent:'center'   }}>
+    <Image
+     resizeMode={Image.resizeMode.contain}
+    source={require('funshare/src/img/f.png')}
+    style={{width:45, height:45}}
+    />
+    </View>
 
-  <View style={{ flex:0.4 , alignItems:'flex-start', justifyContent:'center' , margin:5  }}>
-  <IcoButton
+    <View style={{ flex:0.4 , alignItems:'flex-end', justifyContent:'center' , margin:5  }}>
+    <IcoButton
+    
+    source={require('funshare/src/img/swop.png')}
+    onPress={this.goToHome.bind(this)}
+    icostyle={{width:35, height:35}}
+    />
 
-  source={require('funshare/src/img/swop.png')}
-  onPress={this.goToHome.bind(this)}
-  icostyle={{width:35, height:35}}
-  />
-  </View>
-  <View style={{ flex:0.2 , alignItems:'center', justifyContent:'center'   }}>
-  <IcoButton
-  source={require('funshare/src/img/f.png')}
-  icostyle={{width:45, height:45}}
-  />
-  </View>
+    </View>
 
-  <View style={{ flex:0.4 , justifyContent:'center' , margin:5  }}>
-  </View>
-  </View>
-  );
+    </View>
+    );
  return (
-  <View style = {styles.container}>  
+  <View style = {{flex:1, backgroundColor:'white',}}>  
   <TopNavigation/>  
-  <ScrollView>
-  <View style ={{flex:2,flexDirection:'row',  alignItems:'center',
-  justifyContent:'center'
-}}>
+  <ScrollView style= {{flex:1}}>
 
 <Modal
 animationType={this.state.animationType}
@@ -420,7 +447,7 @@ icostyle={{width:60, height:60}}
 
 <IcoButton
 source={require('funshare/src/img/like.png')}
-onPress={this.finishDeal.bind(this,this.state.childKey,this.state.uidOfOfferingUser,this.state.snapVal,this.state.newRef)}
+onPress={this.finishDeal.bind(this,this.state.childKey,this.state.uidOfOfferingUser,this.state.snapVal,this.state.newRef,this.state.uidOfLikedItem)}
 icostyle={{width:60, height:60}}
 />
 <Text style={{color:'white', fontSize:15 ,marginTop:18  }}>Bestätigen</Text>
@@ -433,7 +460,13 @@ icostyle={{width:60, height:60}}
 </View>
 </View>
 </Modal>
+  <View style= {{flex:1 , borderBottomColor:'#FF5C7E', borderBottomWidth:0.5}}>
+  <Text style = {{color:'#FF5C7E' ,fontSize:20 , fontWeight:'bold'}}>  Offers :</Text>
+</View>
+  
 
+
+<View style = {{flex:1}}>
   <ListView
 
   dataSource={this.state.dataSource}
@@ -441,15 +474,21 @@ icostyle={{width:60, height:60}}
   // renderSeparator={() => <View style={styles.separator} />}
    renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
   contentContainerStyle={{flex:1,paddingTop:20 ,backgroundColor:'white',}}/>
+ </View>
+<View style= {{flex:1 , borderBottomColor:'#FF5C7E', borderBottomWidth:0.5}}>
+  <Text style = {{color:'#FF5C7E' ,fontSize:20 , fontWeight:'bold'}}>  Messages :</Text>
+</View>
+<View style = {{flex:1}}>
+
+<AcceptedOffers goChat={this.goChat.bind(this)}/>
+</View>
 
 
 
 
 
 
-
-
-  </View>
+ 
 
   </ScrollView>
   </View>
