@@ -13,7 +13,6 @@ import DataStore from 'funshare/DataStore';
 import Actions from 'funshare/Actions';
 import Signup from './src/pages/signup';
 import Account from './src/pages/account';
-import Header from './src/components/header';
 import * as firebase from 'firebase';
 import RootNavigator from 'funshare/RootNavigator';
 import styles from './src/styles/common-styles.js';

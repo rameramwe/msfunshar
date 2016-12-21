@@ -15,7 +15,7 @@ module.exports = StyleSheet.create({
     top: 0
   },
 
-   profilePictureContainer: {
+  profilePictureContainer: {
     flex: 1,
     paddingTop:13,
     alignItems: "center",
@@ -29,7 +29,7 @@ module.exports = StyleSheet.create({
   },
   backgroundImage:{
     flex:1 ,
-     backgroundColor:'white',
+    backgroundColor:'white',
     width: null,
     height: null 
   },
@@ -51,7 +51,7 @@ module.exports = StyleSheet.create({
     height: 75,
     marginBottom: 10
   },
-    fLogo: {
+  fLogo: {
     width: 200,
     height: 100,
     marginTop:1
@@ -66,11 +66,11 @@ module.exports = StyleSheet.create({
     backgroundColor: '#F5FCFF'
   },
   textinput: {
- color: 'white',
-  
-  fontSize: 15,
+    color: 'white',
+
+    fontSize: 15,
     flex: 1,
-textAlign: 'left'
+    textAlign: 'left'
   },
   textinputcontainer: {  
     padding:0,
@@ -92,7 +92,7 @@ textAlign: 'left'
     fontSize: 16
   },
   primary_button: {
-    
+
     padding: 15,
     backgroundColor: '#529ecc'
   },

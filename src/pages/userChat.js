@@ -1,29 +1,29 @@
- 'use strict';
+'use strict';
 
-  import React, { Component } from 'react';
-  import {
-     Platform,
-    AppRegistry,
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    TouchableHighlight,
-    Dimensions,
-    TouchableOpacity,
-    ScrollView
-  } from 'react-native';
-  import Routes from 'funshare/Routes';
-  import style from '../styles/common-styles.js';
-  import {GiftedChat, Actions, Bubble} from 'react-native-gifted-chat';
-  import IcoButton from 'funshare/src/components/icobutton';
-  import Firebase from 'firebase';
-  import CustomActions from 'funshare/src/CustomActions';
-  import CustomView from 'funshare/src/CustomView';
+import React, { Component } from 'react';
+import {
+  Platform,
+  AppRegistry,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableHighlight,
+  Dimensions,
+  TouchableOpacity,
+  ScrollView
+} from 'react-native';
+import Routes from 'funshare/Routes';
+import style from '../styles/common-styles.js';
+import {GiftedChat, Actions, Bubble} from 'react-native-gifted-chat';
+import IcoButton from 'funshare/src/components/icobutton';
+import Firebase from 'firebase';
+import CustomActions from 'funshare/src/CustomActions';
+import CustomView from 'funshare/src/CustomView';
 
-  export default class userChat extends Component {
+export default class userChat extends Component {
 
-   constructor(props) {
+  constructor(props) {
     super(props);
     this.state = {
       messages: [],
@@ -45,57 +45,57 @@
 
   componentWillMount() {
     this._isMounted = true;
-      var self=this;
+    var self=this;
     var i = 0;
     var num=0;
     var currentMessages = [];
-      Firebase.database()
-      .ref('messages1')
-      .once('value')
-      .then(function(snapshot) {
-       num =snapshot.numChildren();
-        
-        snapshot.forEach(function(childSnapshot) {
+    Firebase.database()
+    .ref('messages1')
+    .once('value')
+    .then(function(snapshot) {
+      num =snapshot.numChildren();
 
-         Firebase.database()
-         .ref('messages1')
-         .child(childSnapshot.key).once('value').then(function(snapshot) {
-          
-              
-             currentMessages.push(snapshot.val());
-             console.log(currentMessages);
-    
-    
+      snapshot.forEach(function(childSnapshot) {
 
-            i++;
-            if (i==num){
+        Firebase.database()
+        .ref('messages1')
+        .child(childSnapshot.key).once('value').then(function(snapshot) {
 
-             if (currentMessages!= null){
-                  self.setState({
-                    messages:currentMessages
-                  })
-                }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+
+          currentMessages.push(snapshot.val());
+          console.log(currentMessages);
+
+
+
+          i++;
+          if (i==num){
+
+            if (currentMessages!= null){
+              self.setState({
+                messages:currentMessages
+              })
+            }
             
+
           }
 
         });
 
       })
 
-   
+
     });
-  
+
   }
 
   componentWillUnmount() {
     this._isMounted = false;
     console.log(this.state.messages);
   }
-   componentDidMount() {
+  componentDidMount() {
     var self=this;
-    
-  
+
+
   }
 
 
@@ -116,7 +116,7 @@
           };
         });
       }
-    }, 1000); // simulating network
+}, 1000); // simulating network
   }
 
   onSend(messages = []) {
@@ -128,13 +128,13 @@
       };
     });
 
-  
+
   }
 
 
   onReceive(text) {
     this.setState((previousState) => {
-      
+
       return {
         messages: GiftedChat.append(previousState.messages, {
           _id: Math.round(Math.random() * 1000000),
@@ -143,20 +143,20 @@
           user: {
             _id: 2,
             name: 'React Native',
-           avatar: 'https://facebook.github.io/react/img/logo_og.png',
+            avatar: 'https://facebook.github.io/react/img/logo_og.png',
           },
         }),
       };
     });
-    //Firebase.database().ref('messages').set(previousState);
-  }
+//Firebase.database().ref('messages').set(previousState);
+}
 
-  renderCustomActions(props) {
-    if (Platform.OS === 'ios') {
-      return (
-        <CustomActions
-          {...props}
-        />
+renderCustomActions(props) {
+  if (Platform.OS === 'ios') {
+    return (
+      <CustomActions
+      {...props}
+      />
       );
     }
     const options = {
@@ -169,42 +169,42 @@
       'Cancel': () => {},
     };
     return (
-      <Actions
-        {...props}
-        options={options}
-      />
+    <Actions
+    {...props}
+    options={options}
+    />
     );
   }
 
   renderBubble(props) {
     return (
-      <Bubble
-        {...props}
-        wrapperStyle={{
-          left: {
-            backgroundColor: '#f0f0f0',
-          }
-        }}
-      />
+    <Bubble
+    {...props}
+    wrapperStyle={{
+      left: {
+        backgroundColor: '#f0f0f0',
+      }
+    }}
+    />
     );
   }
 
   renderCustomView(props) {
     return (
-      <CustomView
-        {...props}
-      />
+    <CustomView
+    {...props}
+    />
     );
   }
 
   renderFooter(props) {
     if (this.state.typingText) {
       return (
-        <View style={styles.footerContainer}>
-          <Text style={styles.footerText}>
-            {this.state.typingText}
-          </Text>
-        </View>
+      <View style={styles.footerContainer}>
+      <Text style={styles.footerText}>
+      {this.state.typingText}
+      </Text>
+      </View>
       );
     }
     return null;
@@ -212,22 +212,22 @@
 
   render() {
     return (
-      <GiftedChat
-        messages={this.state.messages}
-        onSend={this.onSend}
-        loadEarlier={this.state.loadEarlier}
-        onLoadEarlier={this.onLoadEarlier}
-        isLoadingEarlier={this.state.isLoadingEarlier}
+    <GiftedChat
+    messages={this.state.messages}
+    onSend={this.onSend}
+    loadEarlier={this.state.loadEarlier}
+    onLoadEarlier={this.onLoadEarlier}
+    isLoadingEarlier={this.state.isLoadingEarlier}
 
-        user={{
-          _id: 1, // sent messages should have same user._id
-        }}
+    user={{
+      _id: 1, // sent messages should have same user._id
+    }}
 
-        renderActions={this.renderCustomActions}
-        renderBubble={this.renderBubble}
-        renderCustomView={this.renderCustomView}
-        renderFooter={this.renderFooter}
-      />
+    renderActions={this.renderCustomActions}
+    renderBubble={this.renderBubble}
+    renderCustomView={this.renderCustomView}
+    renderFooter={this.renderFooter}
+    />
     );
   }
 }

@@ -1,4 +1,4 @@
-  'use strict';
+'use strict';
 import React, { Component } from 'react';
 import {
   AppRegistry,
@@ -10,14 +10,9 @@ import {
 } from 'react-native';
 
 import Button from '../components/button';
-import Header from '../components/header';
-
 import Login from './login';
-
 import styles from '../styles/common-styles.js';
-
 import firebase from 'firebase';
-
 
 export default class account extends Component {
 
@@ -36,7 +31,7 @@ export default class account extends Component {
       user: user,
       loaded: true
     });
-    
+
 
   }
 
@@ -44,7 +39,7 @@ export default class account extends Component {
 
     return (
       <View style={styles.container}>
-      
+
       <View style={styles.body}>
       {
         this.state.user &&
@@ -69,30 +64,30 @@ export default class account extends Component {
       </View>
       </View>
       );
-  }
+    }
 
-  logout(){
+    logout(){
 
-    AsyncStorage.removeItem('user_data').then(() => {
-      firebase.auth().signOut().then(function() {
-        alert("Sign-out successful");
-      }, function(error) {
-        alert("Sign-out failed");
+      AsyncStorage.removeItem('user_data').then(() => {
+        firebase.auth().signOut().then(function() {
+          alert("Sign-out successful");
+        }, function(error) {
+          alert("Sign-out failed");
+        });
+        this.props.navigator.push({
+          component: Login
+        });
       });
-      this.props.navigator.push({
-        component: Login
-      });
-    });
+
+    }
 
   }
 
-}
-
-const page_styles = StyleSheet.create({
-  email_container: {
-    padding: 20
-  },
-  email_text: {
-    fontSize: 18
-  }
-});
+  const page_styles = StyleSheet.create({
+    email_container: {
+      padding: 20
+    },
+    email_text: {
+      fontSize: 18
+    }
+  });

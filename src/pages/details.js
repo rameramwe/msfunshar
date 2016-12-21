@@ -30,9 +30,9 @@ var images=[];
 var image=[] ;
 const imagesViewer = [];
 const styles = StyleSheet.create({
- isSellected:{ 
-  flex:1,position:'absolute', right:0
-},
+  isSellected:{ 
+    flex:1,position:'absolute', right:0
+  },
   wrapper: {
 
   },
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
- 
+
 export default class details extends Component { 
   rami() {
 
@@ -135,42 +135,42 @@ snapshot.forEach(function(childSnapshot) {
 
       </Image> 
       <View
-       style = {self.state.keyOfOfferedItem == keyOfOfferedItem ?  styles.isSellected : null}>
-        <IcoButton
-        source={require('funshare/src/img/like.png')}             
-        icostyle={{width:15, height:15}}
-        />
-       </View>
+      style = {self.state.keyOfOfferedItem == keyOfOfferedItem ?  styles.isSellected : null}>
+      <IcoButton
+      source={require('funshare/src/img/like.png')}             
+      icostyle={{width:15, height:15}}
+      />
+      </View>
 
       </View>    
 
       </TouchableOpacity>
       </View> );
 
-      i++;
-      if (i==num){
+    i++;
+    if (i==num){
 
 
-        next(images);
-      }
-
-    });
-  })
-});
-}); 
-}
-
-_renderImage(){
-
-
-  this.rami().then((images) => {
-    image = images;
-
-
+      next(images);
+    }
 
   });
-  //alert(image.length);
-  return image;
+})
+});
+    }); 
+  }
+
+  _renderImage(){
+
+
+    this.rami().then((images) => {
+      image = images;
+
+
+
+    });
+//alert(image.length);
+return image;
 
 }
 componentDidMount() {
@@ -184,16 +184,16 @@ componentDidMount() {
   });
   FCM.getFCMToken().then(token => {
 
-    //console.log(token);
-    // store fcm token in your server
-  });
+//console.log(token);
+// store fcm token in your server
+});
   this.notificationUnsubscribe = FCM.on('notification', (notif) => {
-    // there are two parts of notif. notif.notification contains the notification payload, notif.data contains data payload
-  });
+// there are two parts of notif. notif.notification contains the notification payload, notif.data contains data payload
+});
   this.refreshUnsubscribe = FCM.on('refreshToken', (token) => {
     console.log(token)
-    // fcm token may not be available on first load, catch it here
-  });
+// fcm token may not be available on first load, catch it here
+});
 
   FCM.subscribeToTopic('/topics/foo-bar');
   FCM.unsubscribeFromTopic('/topics/foo-bar');
@@ -209,9 +209,9 @@ componentWillMount() {
 
 }
 componentWillUnmount() {
-  // prevent leaking
-  this.refreshUnsubscribe();
-  this.notificationUnsubscribe();
+// prevent leaking
+this.refreshUnsubscribe();
+this.notificationUnsubscribe();
 }
 constructor(props) {
   super(props);
@@ -226,8 +226,8 @@ constructor(props) {
     keyOfWantedItem:this.props.keyOfWantedItem,
     offerData:null,
     modalVisible:false
-    //profilePicture:"http://domaingang.com/wp-content/uploads/2012/02/example.png"
-  }
+//profilePicture:"http://domaingang.com/wp-content/uploads/2012/02/example.png"
+}
 
 
 }
@@ -262,8 +262,8 @@ addtooffereditems(uidOfOfferingUser,keyOfOfferedItem,self){
   };
 
   self.setState({offerData: offerData , uidOfOfferingUser:uidOfOfferingUser , keyOfOfferedItem:keyOfOfferedItem});
-  
- 
+
+
 
 }
 uploadstart(){
@@ -298,7 +298,7 @@ var notificationKey = uploadTask2.push(notificationData).key;
 this.setState({modalVisible: false});
 }
 else
-alert("Es wird kein Artikel angeboten")
+  alert("Es wird kein Artikel angeboten")
 
 }
 setImage(){

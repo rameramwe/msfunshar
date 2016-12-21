@@ -1,34 +1,34 @@
-  'use strict';
+'use strict';
 
-  import React, { Component } from 'react';
-  import {
-    AppRegistry,
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    TouchableHighlight,
-    Dimensions,
-    TouchableOpacity,
-    BackAndroid,
-    ListView,
-    ScrollView
-  } from 'react-native';
+import React, { Component } from 'react';
+import {
+  AppRegistry,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableHighlight,
+  Dimensions,
+  TouchableOpacity,
+  BackAndroid,
+  ListView,
+  ScrollView
+} from 'react-native';
 
-  import Routes from 'funshare/Routes';
-  import style from '../styles/common-styles.js';
-  import IcoButton from 'funshare/src/components/icobutton';
-  import firebase from 'firebase';
-  var deviceWidth = Dimensions.get('window').width -6;
-  var deviceheight = Dimensions.get('window').height -(deviceWidth/2) ;
-  var piclinks=[];
+import Routes from 'funshare/Routes';
+import style from '../styles/common-styles.js';
+import IcoButton from 'funshare/src/components/icobutton';
+import firebase from 'firebase';
+var deviceWidth = Dimensions.get('window').width -6;
+var deviceheight = Dimensions.get('window').height -(deviceWidth/2) ;
+var piclinks=[];
 
-  export default class mystuff extends Component {
+export default class mystuff extends Component {
 
-    componentDidMount() {
-     this.renderRow(); 
-     var self=this;
-     BackAndroid.addEventListener('hardwareBackPress', () => {
+  componentDidMount() {
+    this.renderRow(); 
+    var self=this;
+    BackAndroid.addEventListener('hardwareBackPress', () => {
       console.log("props",self.props);
       console.log("props",self.props.user);
 
@@ -37,13 +37,13 @@
 
     });
 
-   }
-   goToAddstuff()
-   {
-     this.props.replaceRoute(Routes.addstuff())
-   }
+  }
+  goToAddstuff()
+  {
+    this.props.replaceRoute(Routes.addstuff())
+  }
 
-   renderRow() {
+  renderRow() {
 
     var images= [];
     return new Promise((next, error) => {
@@ -57,62 +57,62 @@
       .child(uid)
       .once('value')
       .then(function(snapshot) {
-       num =snapshot.numChildren();
-        
+        num =snapshot.numChildren();
+
         snapshot.forEach(function(childSnapshot) {
 
-         firebase.database()
-         .ref('items')
-         .child(uid).child(childSnapshot.key).once('value').then(function(snapshot) {
-          var iteminfo = {
-                     piclink: snapshot.val().itemPic ,
-                     desc: snapshot.val().description ,
-                     title: snapshot.val().title ,  
-                     itemkey: snapshot.key ,
-                     itemcategory: snapshot.val().category }
-         // alert(itemcategory)
-          piclinks.push(iteminfo);
-          images.push(
-            <View>
-            <TouchableOpacity
-            key = {iteminfo}
-            activeOpacity={ 0.75 }
-            onPress={self.fuck.bind(this,iteminfo)}
-            >
-            <View>
-            <Image
-            style={ styles.image }
-            source={{uri: iteminfo.piclink}}
-            /> 
+          firebase.database()
+          .ref('items')
+          .child(uid).child(childSnapshot.key).once('value').then(function(snapshot) {
+            var iteminfo = {
+              piclink: snapshot.val().itemPic ,
+              desc: snapshot.val().description ,
+              title: snapshot.val().title ,  
+              itemkey: snapshot.key ,
+              itemcategory: snapshot.val().category }
+// alert(itemcategory)
+piclinks.push(iteminfo);
+images.push(
+  <View>
+  <TouchableOpacity
+  key = {iteminfo}
+  activeOpacity={ 0.75 }
+  onPress={self.fuck.bind(this,iteminfo)}
+  >
+  <View>
+  <Image
+  style={ styles.image }
+  source={{uri: iteminfo.piclink}}
+  /> 
 
-            <Text numberOfLines={1} style ={{margin:5 , marginLeft:10}}>{iteminfo.title}</Text>  
-            </View>
-            </TouchableOpacity>
-            </View>);
+  <Text numberOfLines={1} style ={{margin:5 , marginLeft:10}}>{iteminfo.title}</Text>  
+  </View>
+  </TouchableOpacity>
+  </View>);
 
-            i++;
-            if (i==num){
+  i++;
+  if (i==num){
 
-             self.setState({
-              dataSource: self.state.dataSource.cloneWithRows(images)
-            });
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
-            next(images);
-          }
-
-        });
-
-      })
-
-   
+    self.setState({
+      dataSource: self.state.dataSource.cloneWithRows(images)
     });
+    
+    next(images);
+  }
 
-  }); 
+});
+
+})
+
+
+});
+
+}); 
 }
 
 fuck(desc,piclink,title,key){
- this.props.replaceRoute(Routes.fuck(desc,piclink,title,key));
- // alert(desc + title + piclink);
+  this.props.replaceRoute(Routes.fuck(desc,piclink,title,key));
+  // alert(desc + title + piclink);
 }
 
 
@@ -122,10 +122,10 @@ constructor(props) {
 
   this.fuck = this.fuck.bind(this);
   this.state = {
-   dataSource: new ListView.DataSource({
-    rowHasChanged: (row1, row2) => row1 !== row2,
-  }) 
-};
+    dataSource: new ListView.DataSource({
+      rowHasChanged: (row1, row2) => row1 !== row2,
+    }) 
+  };
 }
 goToHome1()
 {
@@ -150,7 +150,7 @@ render(){
   <View style={{ flex:0.2}}/>
   <View style={{ flex:0.2 , alignItems:'center', justifyContent:'center' , margin:5  }}>
   <Image
-   resizeMode={Image.resizeMode.contain}
+  resizeMode={Image.resizeMode.contain}
   source={require('funshare/src/img/MYSTUFF.png')}
   style={{width:35, height:35}}
   />

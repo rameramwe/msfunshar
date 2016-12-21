@@ -1,155 +1,155 @@
-'use strict';
+    'use strict';
 
-import React, { Component } from 'react';
-import {
-  Dimensions,
-  Image,
-  Switch,
-  PropTypes,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-  TouchableWithoutFeedback,
-  Text,
-  TouchableHighlight,
-  AppRegistry,
-  allert,
-  BackAndroid
-} from 'react-native';
-import Share, {ShareSheet, Button} from 'react-native-share';
-import IcoButton from 'funshare/src/components/icobutton';
-import Routes from 'funshare/Routes';
-import StyleVars from 'funshare/StyleVars';
-  //import Button from 'funshare/src/components/button';
-  import InputButton from 'funshare/src/components/icotextButton';
-  import fetchblob from 'funshare/src/components/fetchblob';
-  import firebase from 'firebase';
-  var ImagePicker = require('react-native-image-picker');
-  var deviceheight = Dimensions.get('window').height ;
-  var devicewidth = Dimensions.get('window').width ;
-  var Accordion = require('react-native-accordion');
-  var mmv = 'funshare/src/img/arrowright.png';
-  var images = [];
-  var dummypicms=null;
-  
-  
-  export default class addstuff extends Component {
-
-    constructor(props) {
-      super(props);
-      this.state = {
-       dummypic: null,
-       title:null,
-       description:null,
-       falseSwitchIsOn:false,
-       picPath1:null,
-       open:false,
-       category: null,
-       visible: false,
-       base64:null
-     }
-   }
-
-   onCancel() {
-    console.log("CANCEL")
-    this.setState({visible:false});
-  }
-  onOpen() {
-    console.log("OPEN")
-    this.setState({visible:true});
-  }
-  _onInputButtonPressed(a,b) {
-
-   this.setState({
-    category:a,
-
-    open:false
-
-  });
- }
-
- calluploadphoto() {
-  if(images.length<5)
-  {
-   fetchblob.uploadphoto().then((picSetup) => {
-    dummypicms=picSetup.source;
-    this.setState({
-      dummypic:picSetup.source,  
-      picPath1:picSetup.picPath,
-      base64:picSetup.base64  
-    });  
-  }, function(error) {
-    alert("can't upload the photo")
-  });
- }
-}
-remove(images, item) {
-  for(var i = arr.length; i--;) {
-    if(images[i] === item) {
-      arr.splice(i, 1);
-    }
-  }
-}
-componentDidMount(){
-  images=[]
-}
-calluploadphoto1(){
-
-}
-goBack(){
-  this.props.replaceRoute(Routes.mystuff());
-}
-renderImages(){
-
-  var self =dummypicms;
-  dummypicms=null;
-  images.push(
-    <TouchableOpacity
-    >
-    <Image
-    source={self}
-    style={{margin:4,width:40, height:40}}
-    />
-    </TouchableOpacity>
-    )
-  
-  
-  return images;
-}
-
-render()
-{
-
-  let shareOptions = {
-    title: "Funshare",
-    message: "My First App",
-    url: "https://web.facebook.com/mohammad.sakka2",
-      subject: "Share Link" //  for email
-    };
-
-    var shareImageBase64 = {
-      title: this.state.title,
-      message: this.state.description,
-      url: this.state.base64,
-      subject: "Share with Funshare" //  for email
-    };
-
-    var smallcontainer ={flex:1,alignItems:'flex-start'  };
-    if (this.state.picPath1)
-      smallcontainer={flex:1,alignItems:'flex-start' , backgroundColor:   'rgba(0, 0, 0, 0.5)' }
-    var issellected ={ 
-
-     flex: 0.5 ,
-     flexDirection: "row",
-     backgroundColor: '#00D77F',
-     borderRadius:3,
-     margin:7 ,
+    import React, { Component } from 'react';
+    import {
+      Dimensions,
+      Image,
+      Switch,
+      PropTypes,
+      ScrollView,
+      StyleSheet,
+      TextInput,
+      TouchableOpacity,
+      View,
+      TouchableWithoutFeedback,
+      Text,
+      TouchableHighlight,
+      AppRegistry,
+      allert,
+      BackAndroid
+    } from 'react-native';
+    import Share, {ShareSheet, Button} from 'react-native-share';
+    import IcoButton from 'funshare/src/components/icobutton';
+    import Routes from 'funshare/Routes';
+    import StyleVars from 'funshare/StyleVars';
+    //import Button from 'funshare/src/components/button';
+    import InputButton from 'funshare/src/components/icotextButton';
+    import fetchblob from 'funshare/src/components/fetchblob';
+    import firebase from 'firebase';
+    var ImagePicker = require('react-native-image-picker');
+    var deviceheight = Dimensions.get('window').height ;
+    var devicewidth = Dimensions.get('window').width ;
+    var Accordion = require('react-native-accordion');
+    var mmv = 'funshare/src/img/arrowright.png';
+    var images = [];
+    var dummypicms=null;
 
 
-   }  ;
-   var header=(
+    export default class addstuff extends Component {
+
+      constructor(props) {
+        super(props);
+        this.state = {
+          dummypic: null,
+          title:null,
+          description:null,
+          falseSwitchIsOn:false,
+          picPath1:null,
+          open:false,
+          category: null,
+          visible: false,
+          base64:null
+        }
+      }
+
+      onCancel() {
+        console.log("CANCEL")
+        this.setState({visible:false});
+      }
+      onOpen() {
+        console.log("OPEN")
+        this.setState({visible:true});
+      }
+      _onInputButtonPressed(a,b) {
+
+        this.setState({
+          category:a,
+
+          open:false
+
+        });
+      }
+
+      calluploadphoto() {
+        if(images.length<5)
+        {
+          fetchblob.uploadphoto().then((picSetup) => {
+            dummypicms=picSetup.source;
+            this.setState({
+              dummypic:picSetup.source,  
+              picPath1:picSetup.picPath,
+              base64:picSetup.base64  
+            });  
+          }, function(error) {
+            alert("can't upload the photo")
+          });
+        }
+      }
+      remove(images, item) {
+        for(var i = arr.length; i--;) {
+          if(images[i] === item) {
+            arr.splice(i, 1);
+          }
+        }
+      }
+      componentDidMount(){
+        images=[]
+      }
+      calluploadphoto1(){
+
+      }
+      goBack(){
+        this.props.replaceRoute(Routes.mystuff());
+      }
+      renderImages(){
+
+        var self =dummypicms;
+        dummypicms=null;
+        images.push(
+          <TouchableOpacity
+          >
+          <Image
+          source={self}
+          style={{margin:4,width:40, height:40}}
+          />
+          </TouchableOpacity>
+          )
+
+
+        return images;
+      }
+
+      render()
+      {
+
+        let shareOptions = {
+          title: "Funshare",
+          message: "My First App",
+          url: "https://web.facebook.com/mohammad.sakka2",
+    subject: "Share Link" //  for email
+  };
+
+  var shareImageBase64 = {
+    title: this.state.title,
+    message: this.state.description,
+    url: this.state.base64,
+    subject: "Share with Funshare" //  for email
+  };
+
+  var smallcontainer ={flex:1,alignItems:'flex-start'  };
+  if (this.state.picPath1)
+    smallcontainer={flex:1,alignItems:'flex-start' , backgroundColor:   'rgba(0, 0, 0, 0.5)' }
+  var issellected ={ 
+
+    flex: 0.5 ,
+    flexDirection: "row",
+    backgroundColor: '#00D77F',
+    borderRadius:3,
+    margin:7 ,
+
+
+  }  ;
+  var header=(
     <View style={{flex:2 ,flexDirection:"row" }}>
 
     <Image
@@ -449,110 +449,110 @@ render()
       if(this.state.title &&this.state.picPath1&&this.state.description&&this.state.category ){
         if(this.state.falseSwitchIsOn)
         {
-         setTimeout(() => {
-          Share.shareSingle(Object.assign(shareImageBase64, {
-            "social": "facebook"
-          }));
-        },500);
+          setTimeout(() => {
+            Share.shareSingle(Object.assign(shareImageBase64, {
+              "social": "facebook"
+            }));
+          },500);
+
+        }
+        fetchblob.upload1(this.state.picPath1,this.state.title,this.state.description,
+        this.state.category).then(( ) => {
+          save.goBack();
+        }, function(error) {
+          alert(error)
+        });
+
+
 
       }
-      fetchblob.upload1(this.state.picPath1,this.state.title,this.state.description,
-      this.state.category).then(( ) => {
-       save.goBack();
-     }, function(error) {
-      alert(error)
-    });
-    
-    
+      else  alert("Bitte füllen Sie alle Felder");
+
+    }
+
 
   }
-  else  alert("Bitte füllen Sie alle Felder");
-  
-}
-
-
-}
 
 
 
-var styles = StyleSheet.create({
+  var styles = StyleSheet.create({
 
- container: {
-  flex:1,
-   backgroundColor:'white',
-  alignItems:'stretch',
+    container: {
+      flex:1,
+      backgroundColor:'white',
+      alignItems:'stretch',
 
-},
-button:{
-  flexDirection: "row",
-  alignItems: "center",
-  justifyContent: "center",
-  paddingVertical: 9,
-  paddingHorizontal: 15,
-  overflow: "hidden",
-  backgroundColor:  '#00D77F',
-
-
-},
-buttontext:{
-  color: "white",
-  fontSize: 20,
-  fontWeight: "500"
-},
-
-edit: {
-  position: 'absolute',
-  height:10,
-  width:10,
-  top:0,
-  left:0
-},
-firstcontaner:{
-  flex:1,
-  height: (deviceheight/3) ,
-  width:devicewidth
-},
-imageContainer:{
+    },
+    button:{
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      paddingVertical: 9,
+      paddingHorizontal: 15,
+      overflow: "hidden",
+      backgroundColor:  '#00D77F',
 
 
-  flex:1 ,
-  width: null,
-  height: null 
+    },
+    buttontext:{
+      color: "white",
+      fontSize: 20,
+      fontWeight: "500"
+    },
 
-  
-},
-CContainer:{
-  flex:1,
-  height: deviceheight-(deviceheight/3)-166 ,
-  
-},
-
-image: {
-  flex:1,
-  position: 'absolute',
-  height: (deviceheight/3) ,
-  width:deviceheight/3
-},
-textinput: {
-  backgroundColor: 'white',
-  color: 'black',
-  fontSize: 15,
-  flex: 1,
-
-},
-description: {
-  textAlignVertical:'top',
-  backgroundColor: 'white',
-  color: 'black',
-  fontSize: 15,
-  flex: 1,
-},
+    edit: {
+      position: 'absolute',
+      height:10,
+      width:10,
+      top:0,
+      left:0
+    },
+    firstcontaner:{
+      flex:1,
+      height: (deviceheight/3) ,
+      width:devicewidth
+    },
+    imageContainer:{
 
 
+      flex:1 ,
+      width: null,
+      height: null 
 
-footer: {
-  alignItems:'flex-end',
-}
-});
 
-AppRegistry.registerComponent('addstuff', () => addstuff);
+    },
+    CContainer:{
+      flex:1,
+      height: deviceheight-(deviceheight/3)-166 ,
+
+    },
+
+    image: {
+      flex:1,
+      position: 'absolute',
+      height: (deviceheight/3) ,
+      width:deviceheight/3
+    },
+    textinput: {
+      backgroundColor: 'white',
+      color: 'black',
+      fontSize: 15,
+      flex: 1,
+
+    },
+    description: {
+      textAlignVertical:'top',
+      backgroundColor: 'white',
+      color: 'black',
+      fontSize: 15,
+      flex: 1,
+    },
+
+
+
+    footer: {
+      alignItems:'flex-end',
+    }
+  });
+
+  AppRegistry.registerComponent('addstuff', () => addstuff);

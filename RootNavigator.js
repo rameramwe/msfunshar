@@ -31,11 +31,11 @@ export default class RootNavigator extends React.Component {
   constructor(props) {
     super(props);
     this.back = this.back.bind(this);
-    
+
   }
 
   componentDidMount() {
-  
+
   }
 
   componentWillUnmount() {
@@ -44,7 +44,7 @@ export default class RootNavigator extends React.Component {
   }
 
   onNavWillFocus(route) {
-   
+
   }
 
 

@@ -17,7 +17,6 @@ import {
 } from 'react-native';
 
 import Button from '../components/button';
-import Header from '../components/header';
 import Reflux from 'reflux';
 import DataStore from 'funshare/DataStore';
 import Actions from 'funshare/Actions';
@@ -41,34 +40,34 @@ export default class login extends Component {
 
   constructor(props) {
     super(props);
-     this.exit = this.exit.bind(this);
+    this.exit = this.exit.bind(this);
     this.state = { modalVisible: false };
     this.email = null;
     this.password = null;
     this.passwordConfirmation = null;
   }
-componentWillUnmount () {
+  componentWillUnmount () {
     BackAndroid.removeEventListener('hardwareBackPress', this.exit);
- }
+  }
   componentDidMount() {
     Actions.loadUser.completed.listen(this.onLoadUserCompleted.bind(this));
-  BackAndroid.removeEventListener('hardwareBackPress', this.exit);
+    BackAndroid.removeEventListener('hardwareBackPress', this.exit);
   }
 
   exit(){
     BackAndroid.exitApp();   
   }
 
-_setModalVisible = (visible) => {
-  this.setState({modalVisible: visible});
-}
+  _setModalVisible = (visible) => {
+    this.setState({modalVisible: visible});
+  }
   render(){
 
-var spinner =   
+    var spinner =   
     ( <ActivityIndicator
-          style={{ alignItems: 'center', justifyContent: 'center', padding: 8,}}
-            size="large" 
-             color="white"/> ) 
+      style={{ alignItems: 'center', justifyContent: 'center', padding: 8,}}
+      size="large" 
+      color="white"/> ) 
     return (
       <Image
       resizeMode={Image.resizeMode.cover}
@@ -76,21 +75,21 @@ var spinner =
       style = {styles.backgroundImage}
       >
       <ScrollView>
-    
-           <Modal
-    animationType={'fade'}
-    transparent={true}
-    visible={this.state.modalVisible}
-    onRequestClose={() => {this._setModalVisible(false)}}
-    >
-    <View style = {{flex:1 ,justifyContent: 'center', backgroundColor:   'rgba(0, 0, 0, 0.5)'}}>
+
+      <Modal
+      animationType={'fade'}
+      transparent={true}
+      visible={this.state.modalVisible}
+      onRequestClose={() => {this._setModalVisible(false)}}
+      >
+      <View style = {{flex:1 ,justifyContent: 'center', backgroundColor:   'rgba(0, 0, 0, 0.5)'}}>
       <View style = {{flexDirection:'row' , justifyContent:'center'}}>
       {spinner}
       <Text style = {{color:'white' ,marginTop:5 ,fontSize:20}} > Loading </Text>
       </View>
-    </View>
-    </Modal>
-      
+      </View>
+      </Modal>
+
       <View style={styles.LogoComponent}>
 
       <Image 
@@ -105,11 +104,11 @@ var spinner =
       style={styles.Logo}                                
       />
 
-      
+
       </View>
       <View style={{flex:0.4, marginTop:deviceheight/10,justifyContent:'flex-end'}}>
 
-     
+
       <View style = {styles.textinputcontainer}>
       <TextInput
       style={styles.textinput}
@@ -124,7 +123,7 @@ var spinner =
       value={this.state.email}
       />
       </View>
-       <View style = {styles.textinputcontainer}>
+      <View style = {styles.textinputcontainer}>
       <TextInput
       maxLength = {18}
       ref={(ref) => this.password = ref}
@@ -138,7 +137,7 @@ var spinner =
       underlineColorAndroid="transparent"
       />
       </View>
-    
+
       <View style={{    margin:5, flexDirection: 'row'}}>
       <View style= {{flex:0.5}}>
       <Button
@@ -149,21 +148,21 @@ var spinner =
       button_text_styles={styles.primary_button_text} />
       </View>
       <View style={{ flex:0.5  , alignItems:'center'  }}>
-      
+
       <Text style={{color:"white" , fontSize:14}}>Passwort vergessen?</Text>
       <TouchableHighlight
       onPress={this.goToSignup.bind(this)}>
-           <Text style={{textDecorationLine: 'underline', color:"white" , fontSize:14}}>Jetzt hier registrieren</Text>     
+      <Text style={{textDecorationLine: 'underline', color:"white" , fontSize:14}}>Jetzt hier registrieren</Text>     
       </TouchableHighlight>
       </View>
       </View>
 
       </View>
 
-      
+
 
       <View style={{flex: 0.1,justifyContent:'center', alignItems: 'center', marginTop: deviceheight/15}}>
-      
+
 
       <LoginButton
       style={{ width:300 , height:35}}
@@ -175,42 +174,42 @@ var spinner =
           } else if (result.isCancelled) {
             alert("Login was cancelled");
           } else {
-            
+
             alert("Login was successful with permissions: " + result.grantedPermissions)
           }
         }
       }
       onLogoutFinished={() => alert("User logged out")}/>
-    
+
       </View>
-      
-      
-        </ScrollView>  
+
+
+      </ScrollView>  
       </Image>
       );
   }
 
- 
+
   login(){
 
- Actions.login({
+    Actions.login({
       email: this.state.email,
       password: this.state.password
     }) 
 
-     
-  
-}
-
-goToSignup(){
-  this.props.replaceRoute(Routes.signup());
-}
-loginfb(){
 
 
-}
-onLoadUserCompleted(user) {
- 
+  }
+
+  goToSignup(){
+    this.props.replaceRoute(Routes.signup());
+  }
+  loginfb(){
+
+
+  }
+  onLoadUserCompleted(user) {
+
     if (user.onboarded) {
       alert("km")
       this.props.replaceRoute(Routes.Home1(currentUserGlobal));
