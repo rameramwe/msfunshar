@@ -266,15 +266,21 @@ images.push(
 
   <View style = {{flex:0.6 , flexDirection:'row', justifyContent:'flex-start' , alignItems:'center'}}>
   <Image
-  style={ styles.image }
+  style={{flex:0.4,
+    height:60,
+    width:60,
+    borderRadius:30}}
   source={{uri:picOfWantedItem}}
   /> 
   <Image
-  style={{height:25 , width : 25 , margin:10}}
+  style={{height:20 , width : 20 , margin:10}}
   source={require('funshare/src/img/star.png')}
   /> 
   <Image
-  style={ styles.image }
+  style={{flex:0.4,
+    height:60,
+    width:60,
+    borderRadius:30}}
   source={{uri:picOfOfferedItem}}
   /> 
   </View>
@@ -284,7 +290,7 @@ images.push(
   style = {{flex:0.5 , justifyContent:'center' , alignItems:'center'}}
 //onPress={}
 >
-<View>
+<View style= {{flex:1  , alignItems:'center',justifyContent:'center'}}>
 <Image
 style={{height:40 , width:40}}
 source={require('funshare/src/img/dislike.png')}
@@ -296,7 +302,7 @@ source={require('funshare/src/img/dislike.png')}
 style = {{flex:0.5 , justifyContent:'center' , alignItems:'center'}}
 onPress={self._setModalVisible.bind(self, true,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef,snapshot.val().uidOfOfferingUser,childKey,snapshot.val().uidOfLikedItem)}
 >
-<View>
+<View style = {{flex:1 , alignItems:'center',justifyContent:'center'}} >
 <Image
 style={{height:40 , width:40}}
 source={require('funshare/src/img/like.png')}
@@ -470,7 +476,7 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     <ListView
 
     dataSource={this.state.dataSource}
-    renderRow={(rowData) => <View>{rowData}</View>}
+    renderRow={(rowData) => <View style = {{flex:1}} >{rowData}</View>}
     // renderSeparator={() => <View style={styles.separator} />}
     renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
     contentContainerStyle={{flex:1,paddingTop:20 ,backgroundColor:'white',}}/>
