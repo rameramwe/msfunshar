@@ -30,6 +30,9 @@ var images=[];
 var image=[] ;
 const imagesViewer = [];
 const styles = StyleSheet.create({
+ isSellected:{ 
+  flex:1,position:'absolute', right:0
+},
   wrapper: {
 
   },
@@ -48,7 +51,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   item: {
-    
+
     width:deviceWidth/4,
     height: 80,
     borderColor: '#efefef',
@@ -80,196 +83,225 @@ const styles = StyleSheet.create({
     fontSize: 13,
     flex: 1,
   },
-})
-
+});
+ 
 export default class details extends Component { 
- rami() {
+  rami() {
 
-  var images= [null];
-  return new Promise((next, error) => {
+    var images= [null];
+    return new Promise((next, error) => {
 
-    var self = this; 
-    var i = 0;
-    var num=0;
-    var uid = firebase.auth().currentUser.uid;
-    firebase.database()
-    .ref('items')
-    .child(uid)
-    .once('value')
-    .then(function(snapshot) {
-     num =snapshot.numChildren();
-        // alert(num);
-        snapshot.forEach(function(childSnapshot) {
+      var self = this; 
+      var i = 0;
+      var num=0;
+      var uid = firebase.auth().currentUser.uid;
+      firebase.database()
+      .ref('items')
+      .child(uid)
+      .once('value')
+      .then(function(snapshot) {
+        num =snapshot.numChildren();
+// alert(num);
+snapshot.forEach(function(childSnapshot) {
 
-          firebase.database()
-          .ref('items')
-          .child(uid).child(childSnapshot.key).once('value').then(function(snapshot) {
-            var piclink = snapshot.val().itemPic;
-            var desc = snapshot.val().description;
-            var title = snapshot.val().title;
-            var keyOfOfferedItem = snapshot.key;
-            var uidOfOfferingUser = snapshot.val().uid ;
-            
-            images.push(
-          <View style = {{flex:1}} Key={piclink} >
-               <TouchableOpacity
-               Key={piclink}
-               activeOpacity={ 0.9 }
-               style={ styles.item }
-                       onPress={self.addtooffereditems.bind(this,desc,piclink,title,uidOfOfferingUser,keyOfOfferedItem,self)}
-                       >
+  firebase.database()
+  .ref('items')
+  .child(uid).child(childSnapshot.key).once('value').then(function(snapshot) {
+    var piclink = snapshot.val().itemPic;
+    var desc = snapshot.val().description;
+    var title = snapshot.val().title;
+    var keyOfOfferedItem = snapshot.key;
+    var uidOfOfferingUser = snapshot.val().uid ;
 
-                       <View style = {{flex:1}} Key={piclink}>
-                       <Image
-                       Key={piclink}
-                       resizeMode={Image.resizeMode.cover}
-                       style={ styles.image }
-                       source={{uri: piclink}}
-                       /> 
-                       </View>    
-                       
-                       </TouchableOpacity>
-                       </View> );
+    images.push(
+      <View style = {{flex:1}} Key={piclink} >
+      <TouchableOpacity
+      Key={piclink}
+      activeOpacity={ 0.9 }
+      style={ styles.item }
+      onPress={self.addtooffereditems.bind( this,uidOfOfferingUser,keyOfOfferedItem,self )}
+      >
 
-            i++;
-            if (i==num){
+      <View style = {{flex:1}} Key={piclink}>
 
 
-              next(images);
-            }
 
-          });
-        })
-      });
-  }); 
+      <Image
+      Key={piclink}
+      resizeMode={Image.resizeMode.cover}
+      style={ styles.image }
+      source={{uri: piclink}}
+      >
+
+      </Image> 
+      <View
+       style = {self.state.keyOfOfferedItem == keyOfOfferedItem ?  styles.isSellected : null}>
+        <IcoButton
+        source={require('funshare/src/img/like.png')}             
+        icostyle={{width:15, height:15}}
+        />
+       </View>
+
+      </View>    
+
+      </TouchableOpacity>
+      </View> );
+
+      i++;
+      if (i==num){
+
+
+        next(images);
+      }
+
+    });
+  })
+});
+}); 
 }
 
 _renderImage(){
 
 
- this.rami().then((images) => {
-   image = images;
+  this.rami().then((images) => {
+    image = images;
 
 
 
- });
-    //alert(image.length);
-    return image;
+  });
+  //alert(image.length);
+  return image;
 
-  }
-  componentDidMount() {
-      var self=this;
+}
+componentDidMount() {
+  var self=this;
 
-      BackAndroid.addEventListener('hardwareBackPress', () => {
+  BackAndroid.addEventListener('hardwareBackPress', () => {
 
-        self.goBack();
-        return true;
+    self.goBack();
+    return true;
 
-      });
-      FCM.getFCMToken().then(token => {
+  });
+  FCM.getFCMToken().then(token => {
 
-        //console.log(token);
-        // store fcm token in your server
-      });
-      this.notificationUnsubscribe = FCM.on('notification', (notif) => {
-        // there are two parts of notif. notif.notification contains the notification payload, notif.data contains data payload
-      });
-      this.refreshUnsubscribe = FCM.on('refreshToken', (token) => {
-        console.log(token)
-        // fcm token may not be available on first load, catch it here
-      });
+    //console.log(token);
+    // store fcm token in your server
+  });
+  this.notificationUnsubscribe = FCM.on('notification', (notif) => {
+    // there are two parts of notif. notif.notification contains the notification payload, notif.data contains data payload
+  });
+  this.refreshUnsubscribe = FCM.on('refreshToken', (token) => {
+    console.log(token)
+    // fcm token may not be available on first load, catch it here
+  });
 
-      FCM.subscribeToTopic('/topics/foo-bar');
-      FCM.unsubscribeFromTopic('/topics/foo-bar');
+  FCM.subscribeToTopic('/topics/foo-bar');
+  FCM.unsubscribeFromTopic('/topics/foo-bar');
 
 
-       
-    
-    
-    }
+
+
+
+}
 
 componentWillMount() {
-    
 
+
+}
+componentWillUnmount() {
+  // prevent leaking
+  this.refreshUnsubscribe();
+  this.notificationUnsubscribe();
+}
+constructor(props) {
+  super(props);
+
+  this.state = {
+    visible: false,
+    title:this.props.title,
+    desc:this.props.desc,
+    piclink:this.props.piclink,
+    gback:this.props.gback,
+    uidOfLikedItem:this.props.uidOfLikedItem,
+    keyOfWantedItem:this.props.keyOfWantedItem,
+    offerData:null,
+    modalVisible:false
+    //profilePicture:"http://domaingang.com/wp-content/uploads/2012/02/example.png"
   }
-   componentWillUnmount() {
-    // prevent leaking
-    this.refreshUnsubscribe();
-    this.notificationUnsubscribe();
-  }
-  constructor(props) {
-    super(props);
-    
-    this.state = {
-      visible: false,
-      title:this.props.title,
-      desc:this.props.desc,
-      piclink:this.props.piclink,
-      gback:this.props.gback,
-      uidOfLikedItem:this.props.uidOfLikedItem,
-      keyOfWantedItem:this.props.keyOfWantedItem,
-      
-      modalVisible:false
-     //profilePicture:"http://domaingang.com/wp-content/uploads/2012/02/example.png"
-   }
- 
-   
- }
+
+
+}
 addtofavorite(){
- 
-  var offerData = {
-            keyOfWantedItem: this.state.keyOfWantedItem,
-            uidOfLikedItem: this.state.uidOfLikedItem,   
-            created:firebase.database.ServerValue.TIMESTAMP
-          };
-  var uploadTask = firebase.database()
-      .ref('profiles')
-      .child(currentUserGlobal.uid)
-      .child('favorite');
 
- 
+  var offerData = {
+    keyOfWantedItem: this.state.keyOfWantedItem,
+    uidOfLikedItem: this.state.uidOfLikedItem,   
+    created:firebase.database.ServerValue.TIMESTAMP
+  };
+  var uploadTask = firebase.database()
+  .ref('profiles')
+  .child(currentUserGlobal.uid)
+  .child('favorite');
+
+
   var favoriteKey = uploadTask.push(offerData).key ;
 
 
 }
-addtooffereditems(desc,piclink,title,uidOfOfferingUser,keyOfOfferedItem,self){
- 
+addtooffereditems(uidOfOfferingUser,keyOfOfferedItem,self){
+  self.setState({keyOfOfferedItem: keyOfOfferedItem});
   var offerData = {
-            uidOfLikedItem: self.state.uidOfLikedItem,
-            keyOfWantedItem: self.state.keyOfWantedItem,
-            uidOfOfferingUser: uidOfOfferingUser,
-            keyOfOfferedItem: keyOfOfferedItem,
-            offerAccepted:0,
-            offerConfirmedByOfferingUser:0,
-            offerStatus:"pending approval",
-            created:firebase.database.ServerValue.TIMESTAMP
-          };
-  var uploadTask1 = firebase.database()
-          .ref('Offers')
-          .child(uidOfOfferingUser);
-  var offerKey = uploadTask1.push(offerData).key ;
-  //console.log("offer key :",offerKey); 
-    var notificationData = {
-            uidOfLikedItem: self.state.uidOfLikedItem,
-            keyOfWantedItem: self.state.keyOfWantedItem,
-            uidOfOfferingUser: uidOfOfferingUser,
-            keyOfOfferedItem: keyOfOfferedItem,
-            offerAccepted:0,
-            offerConfirmedByOfferingUser:0,
-            offerStatus:"pending approval",
-            offerKey:offerKey,
-            created:firebase.database.ServerValue.TIMESTAMP,
-            seen:0
-          };
-  var uploadTask2 = firebase.database()
-          .ref('Notifications')
-          .child(self.state.uidOfLikedItem)
-          .child('Unseen'); 
-  var notificationKey = uploadTask2.push(notificationData).key;
+    uidOfLikedItem: self.state.uidOfLikedItem,
+    keyOfWantedItem: self.state.keyOfWantedItem,
+    uidOfOfferingUser: uidOfOfferingUser,
+    keyOfOfferedItem: keyOfOfferedItem,
+    offerAccepted:0,
+    offerConfirmedByOfferingUser:0,
+    offerStatus:"pending approval",
+    created:firebase.database.ServerValue.TIMESTAMP
+  };
+
+  self.setState({offerData: offerData , uidOfOfferingUser:uidOfOfferingUser , keyOfOfferedItem:keyOfOfferedItem});
+  
+ 
 
 }
+uploadstart(){
+  var offerData= this.state.offerData;
+  var uidOfOfferingUser= this.state.uidOfOfferingUser;
+  var keyOfOfferedItem= this.state.keyOfOfferedItem;
+  if(offerData)
 
- setImage(){
+  { 
+    var uploadTask1 = firebase.database()
+    .ref('Offers')
+    .child(uidOfOfferingUser);
+    var offerKey = uploadTask1.push(offerData).key ;
+//console.log("offer key :",offerKey); 
+var notificationData = {
+  uidOfLikedItem: this.state.uidOfLikedItem,
+  keyOfWantedItem: this.state.keyOfWantedItem,
+  uidOfOfferingUser: uidOfOfferingUser,
+  keyOfOfferedItem: keyOfOfferedItem,
+  offerAccepted:0,
+  offerConfirmedByOfferingUser:0,
+  offerStatus:"pending approval",
+  offerKey:offerKey,
+  created:firebase.database.ServerValue.TIMESTAMP,
+  seen:0
+}; 
+var uploadTask2 = firebase.database()
+.ref('Notifications')
+.child(this.state.uidOfLikedItem)
+.child('Unseen'); 
+var notificationKey = uploadTask2.push(notificationData).key;
+this.setState({modalVisible: false});
+}
+else
+alert("Es wird kein Artikel angeboten")
+
+}
+setImage(){
   imagesViewer= []
   var link = {url: this.state.piclink}
   imagesViewer.push(link)
@@ -297,7 +329,7 @@ renderImages(){
     source={{uri: this.state.piclink}}>
     <View Key={this.state.piclink+"7"} style = {{flex:0.8}}>
     <View Key={this.state.piclink+"6"} style= {{
-      
+
       position:'absolute',
       justifyContent:'center',
 
@@ -307,7 +339,7 @@ renderImages(){
     }}>
 
     <TouchableHighlight
-     Key={this.state.piclink+"1"}
+    Key={this.state.piclink+"1"}
     underlayColor = {'rgba(0, 0, 0, 0.2)'}
     style= {{flex:1 }}
     onPress={this.goBack.bind(this)}
@@ -323,10 +355,10 @@ renderImages(){
     </View>
     <View  Key={this.state.piclink+"2"} style = {{flex:0.2,alignItems:'flex-start' , backgroundColor:'rgba(0, 0, 0, 0.5)' }}>
     <View  Key={this.state.piclink+"3"} style = {{flexDirection:'row' ,flex:1 , margin:5}}>
-    
-    
+
+
     <Text  Key={this.state.piclink+"4"} style = {{fontSize:16, fontWeight:'bold' , color:'white'}} >User name</Text>
-    
+
     </View>
     </View>
     </Image> 
@@ -345,6 +377,7 @@ renderImages(){
   }
 
   render() {
+
 
 
     return (
@@ -368,7 +401,7 @@ renderImages(){
     <ScrollView
     horizontal={true}
     style= {{ height: 400}} >
-    
+
     <View style = {{ flex: 1,
       flexDirection: 'row',
       flexWrap: 'wrap',
@@ -398,7 +431,7 @@ renderImages(){
       <View style={{flex:0.25,alignItems:'center'}}>
       <IcoButton
       source={require('funshare/src/img/like.png')}
-      onPress={this._setModalVisible.bind(this, true)}
+      onPress={this.uploadstart.bind(this, true)}
       icostyle={{width:60, height:60}}
       />
       </View>
@@ -415,106 +448,106 @@ renderImages(){
 
       <Modal visible={this.state.visible}  onRequestClose={() =>{this._setModalVisible.bind(this, false)}} transparent={true}>
       <View style = {{ height:40,
-       backgroundColor:   'rgba(0, 0, 0, 1)'}}>
-       <View style= {{
-         margin:10,
-         flexDirection:'row',
-       }}>
+        backgroundColor:   'rgba(0, 0, 0, 1)'}}>
+        <View style= {{
+          margin:10,
+          flexDirection:'row',
+        }}>
 
-       <IcoButton
-       source={require('funshare/src/img/arrow.png')}
-       onPress={()=>this.setImage()}
-       icostyle={{width:25, height:25}}
-       />
-         </View>
-       </View>
-       <ImageViewer visible={true} imageUrls={imagesViewer}/>
+        <IcoButton
+        source={require('funshare/src/img/arrow.png')}
+        onPress={()=>this.setImage()}
+        icostyle={{width:25, height:25}}
+        />
+        </View>
+        </View>
+        <ImageViewer visible={true} imageUrls={imagesViewer}/>
 
-       </Modal>
-       <View style={{flex:.5}}>
+        </Modal>
+        <View style={{flex:.5}}>
 
-       <Swiper style={styles.wrapper}
-       height={deviceHeight/2}
-       onMomentumScrollEnd={this._onMomentumScrollEnd}
-       >
+        <Swiper style={styles.wrapper}
+        height={deviceHeight/2}
+        onMomentumScrollEnd={this._onMomentumScrollEnd}
+        >
 
-       {this.renderImages()}
-
-
-
-       </Swiper>
-       </View>
-
-       <View style= {{flex:.5}}>
-       <View style ={{flex:0.8 , flexDirection:'row' , marginTop:0 ,borderBottomWidth:1, borderColor:'#a9a9a9'}}>
-       <TextInput
-       multiline={true}
-       numberOfLines = {2}
-       //value={this.state.desc}
-       value={this.state.desc}
-       style={styles.textinput}
-       editable={false}
-       underlineColorAndroid="transparent"
-       />
-
-       </View>
-
-
-       <View style ={{flex:3 , marginTop:0 ,borderBottomWidth:1, borderColor:'#a9a9a9'}}>
-       <TextInput
-       ref={(ref) => this.description = ref}
-       value={this.state.title}
-       editable={false}
-       placeholderTextColor= '#a9a9a9'
-       selectionColor='#6495ed'
-       style={styles.description}
-       autoCapitalize="none"
-       autoCorrect={false}
-       multiline={true}
-       numberOfLines = {4}
-       underlineColorAndroid="transparent"
-       />
-       </View>
-
-       <View style={{position:'absolute', bottom:10 ,flex:1,marginLeft:20,marginRight:20,flexDirection:'row',alignItems:'center', justifyContent:'center'}}>
-
-
-       <View style={{flex:0.12,alignItems:'center'}}>
-       </View>
-
-       <View style={{flex:0.25,alignItems:'center'}}>
-       <IcoButton
-       onPress={() => this.goBack()}
-       source={require('funshare/src/img/dislike.png')}
-       icostyle={{width:60, height:60}}
-       />
-       </View>
-       <View style={{flex:0.25,alignItems:'center' , marginTop:5}}>
-       <IcoButton
-       onPress= {this.addtofavorite.bind(this)}
-       source={require('funshare/src/img/wuncbt.png')}
-       icostyle={{width:50, height:50}}
-       />
-       </View>
-
-       <View style={{flex:0.25,alignItems:'center'}}>
-       <IcoButton
-       source={require('funshare/src/img/like.png')}
-       onPress={this._setModalVisible.bind(this, true)}
-       icostyle={{width:60, height:60}}
-       />
-       </View>
-
-       <View style={{flex:0.12,alignItems:'center'}}>
-       </View>
-
-       </View>
+        {this.renderImages()}
 
 
 
-       </View>
-       </View>
+        </Swiper>
+        </View>
 
-       );
-     }
-   }
+        <View style= {{flex:.5}}>
+        <View style ={{flex:0.8 , flexDirection:'row' , marginTop:0 ,borderBottomWidth:1, borderColor:'#a9a9a9'}}>
+        <TextInput
+        multiline={true}
+        numberOfLines = {2}
+        //value={this.state.desc}
+        value={this.state.title}
+        style={styles.textinput}
+        editable={false}
+        underlineColorAndroid="transparent"
+        />
+
+        </View>
+
+
+        <View style ={{flex:3 , marginTop:0 ,borderBottomWidth:1, borderColor:'#a9a9a9'}}>
+        <TextInput
+        ref={(ref) => this.description = ref}
+        value={this.state.desc}
+        editable={false}
+        placeholderTextColor= '#a9a9a9'
+        selectionColor='#6495ed'
+        style={styles.description}
+        autoCapitalize="none"
+        autoCorrect={false}
+        multiline={true}
+        numberOfLines = {4}
+        underlineColorAndroid="transparent"
+        />
+        </View>
+
+        <View style={{position:'absolute', bottom:10 ,flex:1,marginLeft:20,marginRight:20,flexDirection:'row',alignItems:'center', justifyContent:'center'}}>
+
+
+        <View style={{flex:0.12,alignItems:'center'}}>
+        </View>
+
+        <View style={{flex:0.25,alignItems:'center'}}>
+        <IcoButton
+        onPress={() => this.goBack()}
+        source={require('funshare/src/img/dislike.png')}
+        icostyle={{width:60, height:60}}
+        />
+        </View>
+        <View style={{flex:0.25,alignItems:'center' , marginTop:5}}>
+        <IcoButton
+        onPress= {this.addtofavorite.bind(this)}
+        source={require('funshare/src/img/wuncbt.png')}
+        icostyle={{width:50, height:50}}
+        />
+        </View>
+
+        <View style={{flex:0.25,alignItems:'center'}}>
+        <IcoButton
+        source={require('funshare/src/img/like.png')}
+        onPress={this._setModalVisible.bind(this, true)}
+        icostyle={{width:60, height:60}}
+        />
+        </View>
+
+        <View style={{flex:0.12,alignItems:'center'}}>
+        </View>
+
+        </View>
+
+
+
+        </View>
+        </View>
+
+        );
+      }
+    }
