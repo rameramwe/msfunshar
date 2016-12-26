@@ -55,15 +55,23 @@ export default class mystuff extends Component {
 
       var self = this; 
       var i = 0;
-      var num=0;
+      var num=null;
       var uid = firebase.auth().currentUser.uid;
       firebase.database()
       .ref('items')
       .child(uid)
       .once('value')
       .then(function(snapshot) {
-        num =snapshot.numChildren();
 
+        num =snapshot.numChildren();
+        if(num == 0)
+        {
+           self.setState({
+     
+              isloading:false
+            });
+            
+        }
         snapshot.forEach(function(childSnapshot) {
 
           firebase.database()

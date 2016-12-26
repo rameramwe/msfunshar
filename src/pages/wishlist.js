@@ -86,7 +86,7 @@ renderRow() {
 
     var self = this; 
     var i =  0;
-    var num=0;
+    var num=null;
     var uid = firebase.auth().currentUser.uid;
 
     firebase.database()
@@ -97,7 +97,15 @@ renderRow() {
     .then(function(snapshot) {
 
       num =snapshot.numChildren();
-
+      
+        if(num == 0)
+        {
+           self.setState({
+     
+              loading:false
+            });
+            
+        }
       snapshot.forEach(function(childSnapshot) {
 
         firebase.database()

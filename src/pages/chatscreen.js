@@ -213,7 +213,14 @@ renderRow() {
     .once('value')
     .then(function(snapshot) {
       num =snapshot.numChildren();
-
+          if(num == 0)
+        {
+           self.setState({
+     
+              loading:false
+            });
+            
+        }
       snapshot.forEach(function(childSnapshot) {
         var picOfWantedItem= "h";
         var picOfOfferedItem="h";
@@ -399,7 +406,7 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     <View style={{ flex:0.2 , alignItems:'center', justifyContent:'center'   }}>
     <Image
     resizeMode={Image.resizeMode.contain}
-    source={require('funshare/src/img/f.png')}
+    source={require('funshare/src/img/ichat.png')}
     style={{width:45, height:45}}
     />
     </View>

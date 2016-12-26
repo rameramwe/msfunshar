@@ -116,6 +116,14 @@ export default React.createClass({
         .then(function(snapshot) {
           num =snapshot.numChildren();
           //alert(num);
+            if(num == 0)
+        {
+           self.setState({
+     
+              loading:false
+            });
+            
+        }
           snapshot.forEach(function(childSnapshot) {
 
             firebase.database()

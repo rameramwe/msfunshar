@@ -171,7 +171,14 @@ class AcceptedOffers extends React.Component {
       .once('value')
       .then(function(snapshot) {
         num =snapshot.numChildren();
-
+            if(num == 0)
+        {
+           self.setState({
+     
+              loading:false
+            });
+            
+        }
         snapshot.forEach(function(childSnapshot) {
           var picOfWantedItem= "http://orig01.deviantart.net/ace1/f/2010/227/4/6/png_test_by_destron23.png";
           var picOfOfferedItem="http://orig01.deviantart.net/ace1/f/2010/227/4/6/png_test_by_destron23.png";

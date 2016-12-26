@@ -19,7 +19,7 @@ export default class Loadin extends Component {
   super(props);
   this.state = {
    
-    loading:false,
+    visible:false,
   };
 }
 
@@ -34,7 +34,7 @@ export default class Loadin extends Component {
       <Modal
       animationType={'fade'}
       transparent={true}
-      visible={this.props.loading }
+      visible={this.state.visible||this.props.loading }
       onRequestClose={() => {this._setModalVisible(false)}}
       >
       <View style = {{flex:1 ,justifyContent: 'center', backgroundColor:   'rgba(0, 0, 0, 0.5)'}}>
