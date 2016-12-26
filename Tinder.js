@@ -1,20 +1,23 @@
 'use strict';
-import React, { Component } from 'react';
+import React, {Modal,ActivityIndicator, Component } from 'react';
 
 import  {TouchableOpacity,StyleSheet,Dimensions, Text, View, Image} from 'react-native';
 import IcoButton from 'funshare/src/components/icobutton';
 import SwipeCards from 'react-native-swipe-cards';
 import firebase from 'firebase';
 import Routes from 'funshare/Routes';
+import Loading from 'funshare/src/components/Loading';
 var deviceheight = Dimensions.get('window').height/(3/2)  ;
 var deviceWidth = Dimensions.get('window').width-30  ;
 var Cards = []
-
+var currentLikedItem = null;
 let NoMoreCards = React.createClass({
+  
   render() {
+
     return (
       <View style={styles.noMoreCards}>
-      <Text>No more cards</Text>
+       
       </View>
       )
   }
@@ -35,7 +38,7 @@ export default React.createClass({
       <View style={styles.card}>
       <TouchableOpacity
       activeOpacity={ 0.7}
-      onPress={() => {this.props.goToDetails(x.description ,x.image,   x.title, x.uidOfLikedItem ,x.keyOfWantedItem )}}
+      onPress={() => {this.props.goToDetails(x.description ,x.image,   x.title, x.uidOfLikedItem ,x.keyOfWantedItem , x.username )}}
       >
 
       <View style= {{width:deviceWidth, height:deviceheight-50 }} >
@@ -46,10 +49,10 @@ export default React.createClass({
       </TouchableOpacity>
       <View style={{marginLeft:10, marginRight:10,borderBottomWidth:1,borderColor:'#e3e3e3', height:25, flexDirection:'row' }}>
       <View style={{flex:1}}>
-      <Text numberOfLines={1} style={{fontSize:14, fontWeight:'300', color:'#444'}}>{x.title} </Text>
+      <Text numberOfLines={1} style={{fontSize:14, fontWeight:'bold', color:'#444'}}>{x.title} </Text>
       </View>
       <View  style = {{flex:1,alignItems:"flex-end"}} >
-      <Text style={{fontSize:14, fontWeight:'300', color:'#444'}}>{} </Text>
+      <Text style={{fontSize:14, fontWeight:'300', color:'#444'}}>{x.username} </Text>
       </View>
       </View>
       <View style={{  height:25,marginLeft:10, marginRight:10, flexDirection:'row' , flex:1 }}>
@@ -95,6 +98,12 @@ export default React.createClass({
       //Cards=[];
     },
     rami(){
+      
+     this.setState({
+      loading: true
+    });
+      var self = this ;
+      var ar = [];
       return new Promise((next, error) => {
         var i = 0;
         var num=0;
@@ -115,17 +124,24 @@ export default React.createClass({
               var piclink = snapshot.val().itemPic;
               var desc = snapshot.val().description;
               var title = snapshot.val().title;
+              var userofitem = snapshot.val().username;
               var keyOfWantedItem = snapshot.key;
               var uidOfLikedItem=snapshot.val().uid;
               // console.log(uidOfLikedItem);
 
 
 
-              var im = {image:piclink ,title:title , description:desc , location:'9' , uidOfLikedItem:uidOfLikedItem,keyOfWantedItem:keyOfWantedItem }
-              Cards.push(im);
+              var im = {image:piclink ,title:title , description:desc , location:'9' , uidOfLikedItem:uidOfLikedItem,keyOfWantedItem:keyOfWantedItem , username:userofitem }
+              ar.push(im);
+              
 
               i++;
               if (i==num){
+               
+                self.reflectArray(ar).then((rm) => {
+                Cards = rm 
+                });
+                
                 var rm = "Rami function is finished";
                 next(rm);
               }
@@ -139,14 +155,28 @@ export default React.createClass({
 
     },
 
-
+    reflectArray(array)
+    {
+      this.setState({loading:false
+                });
+       return new Promise((next, error) => {
+      let reflect = [];
+      for(var i=array.length-1 ; i>= 0 ; i --)
+      {
+        Cards.push(array[i]);
+      }
+    })
+      next(Cards);
+        
+    },
     getInitialState() {
       return {
+        loading:false,
         cards: Cards,
         outOfCards: false
       }
     },
-
+ 
     cardRemoved (index) {
       console.log(`The index is ${index}`);
 
@@ -171,21 +201,28 @@ export default React.createClass({
       this.props.replaceRoute(Routes.addstuff())
     },
     addtofavorite (x){
+      if(x)
+      {
+        var offerData = {
+          keyOfWantedItem: x.keyOfWantedItem,
+          uidOfLikedItem: x.uidOfLikedItem,   
+          created:firebase.database.ServerValue.TIMESTAMP
+        };
+        var uploadTask = firebase.database()
+        .ref('profiles')
+        .child(currentUserGlobal.uid)
+        .child('favorite');
+      
+  
+        var favoriteKey = uploadTask.push(offerData).key ;
+        if (favoriteKey) alert("Du hast den Item in den Wünschliste")
+      }
 
-      var offerData = {
-        keyOfWantedItem: x.keyOfWantedItem,
-        uidOfLikedItem: x.uidOfLikedItem,   
-        created:firebase.database.ServerValue.TIMESTAMP
-      };
-      var uploadTask = firebase.database()
-      .ref('profiles')
-      .child(currentUserGlobal.uid)
-      .child('favorite');
-
-
-      var favoriteKey = uploadTask.push(offerData).key ;
-
-
+    },
+    goToDetails(currentLikedItem)
+    { 
+      if (currentLikedItem) 
+      this.props.goToDetails(currentLikedItem.description ,currentLikedItem.image,   currentLikedItem.title, currentLikedItem.uidOfLikedItem ,currentLikedItem.keyOfWantedItem ,currentLikedItem.username );
     },
     render() {
 
@@ -194,6 +231,8 @@ export default React.createClass({
       <View style = {{flex:1, alignItems:'center'}} >
 
       <View style= {{flex:1.1}} >
+      <Loading loading = {this.state.loading} />
+
       <SwipeCards
 
       ref = {'swiper'}
@@ -204,9 +243,9 @@ export default React.createClass({
       renderNoMoreCards={() => <NoMoreCards />}
       showYup={false}
       showNope={false}
-      handleYup={this.cardRemoved}
+      handleYup={this.handleNope}
       handleNope={this.handleNope}
-      cardRemoved={this.cardRemoved}
+      //cardRemoved={this.cardRemoved}
       />
       </View>
 
@@ -233,7 +272,7 @@ export default React.createClass({
       <View style={{flex:0.25,alignItems:'center'}}>
       <IcoButton
       source={require('funshare/src/img/like.png')}
-      onPress={() => {this.props.goToDetails(currentLikedItem.description ,currentLikedItem.image,   currentLikedItem.title, currentLikedItem.uidOfLikedItem ,currentLikedItem.keyOfWantedItem )}}
+      onPress={() => {this.goToDetails(currentLikedItem)}}
       icostyle={{width:60, height:60}}
       />
       </View>

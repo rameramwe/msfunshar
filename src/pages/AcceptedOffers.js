@@ -18,6 +18,7 @@ import{
   Modal,
   Text
 } from 'react-native';
+import Loading from 'funshare/src/components/Loading';
 import IcoButton from 'funshare/src/components/icobutton';
 import IconBadge from 'react-native-icon-badge';
 import StyleVars from 'funshare/StyleVars';
@@ -133,6 +134,7 @@ class AcceptedOffers extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading:false,
       animationType: 'fade',
       modalVisible: false,
       transparent: true,
@@ -154,7 +156,7 @@ class AcceptedOffers extends React.Component {
   }
 
   renderRow() {
-
+    this.setState({loading:true});
     var images= [];
     return new Promise((next, error) => {
 
@@ -275,8 +277,8 @@ i++;
 if (i==num){
 
   self.setState({
-    dataSource: self.state.dataSource.cloneWithRows(images)
-
+    dataSource: self.state.dataSource.cloneWithRows(images),
+    loading:false,
   });
 
   next(images);
@@ -328,6 +330,7 @@ render() {
   <View style = {styles.container}>  
 
 
+ <Loading loading = {this.state.loading} />
 
 
 

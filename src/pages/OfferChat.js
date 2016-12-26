@@ -47,7 +47,7 @@ export default class OfferChat extends Component {
     this._isMounted = true;
     var self=this;
     var i = 0;
-    var num=0;
+    var num=1;
     var currentMessages = [];
     Firebase.database()
     .ref('Offers')
@@ -57,7 +57,7 @@ export default class OfferChat extends Component {
     .once('value')
     .then(function(snapshot) {
       num =snapshot.numChildren();
-
+      alert(num)
       snapshot.forEach(function(childSnapshot) {
 
 
@@ -74,8 +74,8 @@ export default class OfferChat extends Component {
 
 
 
-i++;
-if (i==num){
+num--;
+if (num==0){
 
   if (currentMessages!= null){
     self.setState({

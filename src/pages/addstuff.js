@@ -71,8 +71,8 @@
       }
 
       calluploadphoto() {
-        if(images.length<5)
-        {
+        this.images=[];
+        
           fetchblob.uploadphoto().then((picSetup) => {
             dummypicms=picSetup.source;
             this.setState({
@@ -83,7 +83,7 @@
           }, function(error) {
             alert("can't upload the photo")
           });
-        }
+        
       }
       remove(images, item) {
         for(var i = arr.length; i--;) {
@@ -102,18 +102,18 @@
         this.props.replaceRoute(Routes.mystuff());
       }
       renderImages(){
-
+        images=null;
         var self =dummypicms;
         dummypicms=null;
-        images.push(
-          <TouchableOpacity
-          >
-          <Image
-          source={self}
-          style={{margin:4,width:40, height:40}}
-          />
-          </TouchableOpacity>
-          )
+        images = (
+                  <TouchableOpacity
+                  >
+                  <Image
+                  source={self}
+                  style={{margin:4,width:40, height:40}}
+                  />
+                  </TouchableOpacity>);
+           
 
 
         return images;
@@ -360,6 +360,7 @@
       <View style ={{height:50 ,marginTop:1 ,borderBottomWidth:1, borderColor:'#dcdcdc'}}>
       <TextInput
       placeholder="Was tauchst du.."
+      maxLength={87}
       placeholderTextColor= '#a9a9a9'
       selectionColor='#6495ed'
       style={styles.textinput}

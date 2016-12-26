@@ -116,12 +116,12 @@ class Routes {
     }
   }
   
-  details(desc,piclink,title,uidOfLikedItem,keyOfWantedItem,gback ) {
+  details(desc,piclink,title,uidOfLikedItem,keyOfWantedItem,username,gback ) {
     return {
       name: "details",
  
       component: details,
-      passProps: { desc:desc , piclink :piclink,title:title, uidOfLikedItem:uidOfLikedItem ,keyOfWantedItem:keyOfWantedItem ,gback:gback},
+      passProps: { desc:desc , piclink :piclink,title:title, uidOfLikedItem:uidOfLikedItem ,keyOfWantedItem:keyOfWantedItem,username:username ,gback:gback},
  
     }
   }

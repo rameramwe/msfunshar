@@ -12,12 +12,15 @@ import {
   TouchableOpacity,
   BackAndroid,
   ListView,
-  ScrollView
+  ScrollView,
+  ActivityIndicator,
+  Modal,
 } from 'react-native';
 
 import Routes from 'funshare/Routes';
 import style from '../styles/common-styles.js';
 import IcoButton from 'funshare/src/components/icobutton';
+import Loading from 'funshare/src/components/Loading';
 import firebase from 'firebase';
 var deviceWidth = Dimensions.get('window').width -6;
 var deviceheight = Dimensions.get('window').height -(deviceWidth/2) ;
@@ -44,7 +47,9 @@ export default class mystuff extends Component {
   }
 
   renderRow() {
-
+     this.setState({
+      isloading: true
+    });
     var images= [];
     return new Promise((next, error) => {
 
@@ -94,7 +99,8 @@ images.push(
   if (i==num){
 
     self.setState({
-      dataSource: self.state.dataSource.cloneWithRows(images)
+      dataSource: self.state.dataSource.cloneWithRows(images),
+      isloading:false
     });
     
     next(images);
@@ -115,7 +121,9 @@ fuck(desc,piclink,title,key){
   // alert(desc + title + piclink);
 }
 
-
+loading = (visible) => {
+  this.setState({loading: visible});
+}
 constructor(props) {
   super(props);
 
@@ -124,7 +132,8 @@ constructor(props) {
   this.state = {
     dataSource: new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2,
-    }) 
+    }),
+    isloading:false,
   };
 }
 goToHome1()
@@ -132,6 +141,13 @@ goToHome1()
   this.props.replaceRoute(Routes.Home1(currentUserGlobal));
 }
 render(){
+   var spinner =  
+    ( 
+    <ActivityIndicator
+
+      size="large" 
+      color="white"/> 
+    ) ;
 
   const TopNavigation = () => (
   <View style={{ padding: 10, flexDirection: 'row', backgroundColor: '#00D77F' }}>
@@ -181,6 +197,11 @@ render(){
 
   <ScrollView style={{ flex:1 }}>
   <View style={styles.container} >
+
+
+
+<Loading loading = {this.state.isloading} />
+
 
   <ListView
   initialListSize={2}

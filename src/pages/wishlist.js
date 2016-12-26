@@ -20,6 +20,7 @@ import IcotextButton from 'funshare/src/components/icotextButton';
 import firebase from 'firebase';
 import InputButton from 'funshare/src/components/icotextButton';
 import IcoButton from 'funshare/src/components/icobutton';
+import Loading from 'funshare/src/components/Loading';
 import style from '../styles/common-styles.js';
 var deviceWidth = Dimensions.get('window').width -6;
 var deviceheight = Dimensions.get('window').height -(deviceWidth/2) ;
@@ -72,12 +73,14 @@ var styles = StyleSheet.create({
 });
 
 export default class wishlist extends Component {
-  goToDetails(desc,piclink,title,gback){
-    this.props.replaceRoute(Routes.details(desc,piclink,title,"wishlist"));
-// alert(desc + title + piclink);
+goToDetails(desc,piclink,title,uidOfLikedItem ,keyOfWantedItem,username){
+   this.props.replaceRoute(Routes.details(desc ,piclink,title,uidOfLikedItem , keyOfWantedItem,username,"wishlist"));
+ 
 }
 renderRow() {
-
+     this.setState({
+      loading: true
+    });
   var images= [];
   return new Promise((next, error) => {
 
@@ -106,6 +109,7 @@ renderRow() {
           var piclink=null;
           var desc = null;
           var title = null;
+          var username = null;
           var keyOfWantedItem = null;
           var uidOfLikedItem=null;
           firebase.database()
@@ -117,6 +121,8 @@ renderRow() {
             piclink = snapshot.val().itemPic;
             desc = snapshot.val().description;
             title = snapshot.val().title;
+            username = snapshot.val().username;
+
             keyOfWantedItem = snapshot.key;
             uidOfLikedItem=snapshot.val().uid;
           }).then(function(){ 
@@ -127,7 +133,7 @@ renderRow() {
 
               style={{flex:1}}
               activeOpacity={ 0.75 }
-              onPress={self.goToDetails.bind(self,desc,piclink,title)}
+               onPress={() => self.goToDetails(desc ,piclink, title, uidOfLikedItem ,keyOfWantedItem,username )}
               >
               <View style = {{flex:1,paddingTop:8, paddingBottom:12, paddingLeft:20, flexDirection:'row' ,backgroundColor:'white'}} >
               <View style = {{flex:0.3 , justifyContent:'center' , alignItems:'center'}}>
@@ -138,9 +144,9 @@ renderRow() {
               </View>
               <View style = {{flex:1 , flexDirection:'row'}}>
               <View style= {{flex:0.9,justifyContent:'center' , marginLeft:10}} >
-              <Text numberOfLines={1} style ={{fontWeight:'bold', marginLeft:10}}>{title}</Text> 
+              <Text numberOfLines={1} style ={{fontWeight:'bold', marginLeft:10}}>{username}</Text> 
               <Text numberOfLines={1} style ={{ marginLeft:10}}>{title}</Text> 
-              <Text  numberOfLines={1} style ={{ marginLeft:10}}>{title}</Text> 
+              <Text  numberOfLines={1} style ={{ marginLeft:10}}>{desc}</Text> 
 
               </View>
               <View style = {{flex:0.2, top:25 ,alignItems:'center', justifyContent:'center'}}>
@@ -159,7 +165,8 @@ renderRow() {
               if (i==num){
 
                 self.setState({
-                  dataSource: self.state.dataSource.cloneWithRows(images)
+                  dataSource: self.state.dataSource.cloneWithRows(images),
+                  loading:false
                 });
                 next(images);
               }
@@ -193,7 +200,9 @@ renderRow() {
     this.state = {
       dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
-      }) 
+      }) ,
+      loading:false
+       
 
     };
   }
@@ -264,6 +273,8 @@ renderRow() {
 
     <TopNavigation/>
     <ScrollView style={{ flex:1 }}>
+    <Loading loading = {this.state.loading} />
+
 
 
     <ListView

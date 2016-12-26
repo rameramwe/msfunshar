@@ -11,6 +11,7 @@ import  {
   BackAndroid,
   Modal,
   Dimensions
+  
 } from 'react-native';
 
 import Button from '../components/button';

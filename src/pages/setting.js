@@ -320,18 +320,23 @@ render() {
 
     </View>
 
-    <View style= {{flex:1,marginBottom:deviceheight/15 , backgroundColor:'#fff'}}>
-    <View style= {{flex:1}}>
-    <Accordion
+    <View style= {{flex:5,marginBottom: 10 , backgroundColor:'#fff'}}>
+     <Accordion
     style={{flex:1}}
     header={header}
     //onPress={this.change.bind(this)}
     content={mit}
     easing="easeOutCubic"
     />
+ 
+     
+ 
+    
+
     </View>
-    <View style= {{flex:1}}>
-    <Accordion
+     <View style= {{flex:5,marginBottom:10 , backgroundColor:'#fff'}}>
+    
+        <Accordion
     style={{flex:1}}
     header={rechheader}
     //onPress={this.change.bind(this)}
@@ -339,18 +344,16 @@ render() {
     easing="easeOutCubic"
     />
     </View>
-    <View style= {{flex:1}}>
-    <Accordion
+     <View style= {{flex:5,marginBottom:10 , backgroundColor:'#fff'}}>
+    
+   <Accordion
     style={{flex:1}}
     header={supportheader}
     //onPress={this.change.bind(this)}
     content={support}
     easing="easeOutCubic"
     />
-    </View>
-
-
-    </View>
+ </View>
 
 
 

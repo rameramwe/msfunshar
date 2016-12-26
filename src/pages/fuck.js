@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   textinput: {
-
+    fontWeight:'bold',
     backgroundColor: 'white',
     color: 'black',
     fontSize: 15,
@@ -231,7 +231,7 @@ export default class fuck extends Component {
         onPress={this.remove.bind(this)}
         >
         <View style= {{alignItems:'center' , justifyContent:'center'}}>
-        <Text style= {{fontSize:20 ,marginRight:5, fontWeight:'bold' , color:'white'}} >
+        <Text style= {{fontSize:15 ,marginRight:9, fontWeight:'bold' , color:'white'}} >
         Delete
         </Text>
         </View>
@@ -241,7 +241,7 @@ export default class fuck extends Component {
         onPress={this.update.bind(this)}
         >
         <View style= {{alignItems:'center' , justifyContent:'center'}}>
-        <Text style= {{fontSize:20 , fontWeight:'bold' , color:'white'}} >
+        <Text style= {{fontSize:15 , fontWeight:'bold' , color:'white'}} >
         Save
         </Text>
         </View>
@@ -295,8 +295,8 @@ export default class fuck extends Component {
           </Swiper>
           </View>
 
-          <View style= {{ height:(deviceHeight-(deviceHeight/3)-90)}}>
-          <View style ={{flex:2, marginTop:0 ,borderBottomWidth:1, borderColor:'#a9a9a9'}}>
+          <View style= {{ height:(deviceHeight-(deviceHeight/3)-82)}}>
+          <View style ={{flex:2, marginTop:0 ,borderBottomWidth:1,  borderColor:'#dcdcdc'}}>
 
 
           <TextInput
@@ -318,7 +318,7 @@ export default class fuck extends Component {
           </View>
 
 
-          <View style ={{flex:6 , marginTop:0 ,borderBottomWidth:1, borderColor:'#a9a9a9'}}>
+          <View style ={{flex:6 , marginTop:0 }}>
           <TextInput
           ref={(ref) => this.description = ref}
           onChangeText={(text) => this.setState({desc: text})} 

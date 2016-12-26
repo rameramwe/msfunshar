@@ -17,6 +17,7 @@ import{
   Modal,
   Text
 } from 'react-native';
+import Loading from 'funshare/src/components/Loading';
 import IcoButton from 'funshare/src/components/icobutton';
 import IconBadge from 'react-native-icon-badge';
 import StyleVars from 'funshare/StyleVars';
@@ -136,6 +137,7 @@ class chatscreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: false,
       animationType: 'fade',
       modalVisible: false,
       transparent: true,
@@ -194,7 +196,9 @@ newRefForOfferingUser.set( snapVal, function(error) {
 }
 
 renderRow() {
-
+    this.setState({
+      loading: true
+    });
   var images= [];
   return new Promise((next, error) => {
 
@@ -267,9 +271,9 @@ images.push(
   <View style = {{flex:0.6 , flexDirection:'row', justifyContent:'flex-start' , alignItems:'center'}}>
   <Image
   style={{flex:0.4,
-    height:60,
-    width:60,
-    borderRadius:30}}
+    height:70,
+    width:70,
+    borderRadius:35}}
   source={{uri:picOfWantedItem}}
   /> 
   <Image
@@ -278,9 +282,9 @@ images.push(
   /> 
   <Image
   style={{flex:0.4,
-    height:60,
-    width:60,
-    borderRadius:30}}
+    height:70,
+    width:70,
+    borderRadius:35}}
   source={{uri:picOfOfferedItem}}
   /> 
   </View>
@@ -288,7 +292,7 @@ images.push(
   <View style = {{flex:0.4 , flexDirection:'row', justifyContent:'center'}}>
   <TouchableOpacity
   style = {{flex:0.5 , justifyContent:'center' , alignItems:'center'}}
-//onPress={}
+  onPress={self.remove.bind(self,childKey)}
 >
 <View style= {{flex:1  , alignItems:'center',justifyContent:'center'}}>
 <Image
@@ -320,8 +324,8 @@ i++;
 if (i==num){
 
   self.setState({
-    dataSource: self.state.dataSource.cloneWithRows(images)
-
+    dataSource: self.state.dataSource.cloneWithRows(images),
+    loading:false
   });
   
   next(images);
@@ -364,6 +368,27 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
   this.setState({modalVisible: visible ,picOfOfferedItem:picOfOfferedItem , picOfWantedItem:picOfWantedItem,
     uidOfOfferingUser:uidOfOfferingUser,newRef:newRef,snapVal:snapVal , childKey:childKey,uidOfLikedItem:uidOfLikedItem});
   }
+  back()
+  {
+    var save=this;
+    save.setState({modalVisible:false});
+    
+  }
+    remove(iteminfo){
+    var save=this;
+    var uid=currentUserGlobal.uid;
+    firebase.database()
+    .ref('Notifications')
+        .child(uid)
+        .child('Unseen').child(iteminfo).remove().then(function(){
+      alert("removed")
+        
+
+    });
+
+
+
+  }
 
   render() {
     const TopNavigation = () => (
@@ -395,6 +420,7 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     <View style = {{flex:1, backgroundColor:'white',}}>  
     <TopNavigation/>  
     <ScrollView style= {{flex:1}}>
+    <Loading loading = {this.state.loading} />
 
     <Modal
     animationType={this.state.animationType}
@@ -443,7 +469,7 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     <View style={{flexDirection:'row',flex:0.5 }}>
     <Text style={{color:'white', fontSize:15 ,marginTop:18  }}>Abbrechen</Text>
     <IcoButton
-    onPress={this._setModalVisible.bind(this, false)}
+    onPress={this.back.bind(this)}
     source={require('funshare/src/img/dislike.png')}
     icostyle={{width:60, height:60}}
     />

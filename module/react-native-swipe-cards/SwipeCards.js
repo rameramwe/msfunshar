@@ -97,6 +97,8 @@ class SwipeCards extends Component {
     let currentCardIdx = this.props.cards.indexOf(this.state.card);
     let newIdx = currentCardIdx + 1;
 
+    global.indexArray = newIdx;
+
     // Checks to see if last card.
     // If props.loop=true, will start again from the first card.
     let card = newIdx > this.props.cards.length - 1
@@ -122,7 +124,7 @@ class SwipeCards extends Component {
   componentWillReceiveProps(nextProps){
     if(nextProps.cards && nextProps.cards.length > 0){
       this.setState({
-        card: nextProps.cards[0]
+        card: nextProps.cards[global.indexArray]
       })
     }
   }

@@ -13,7 +13,8 @@ import {
   Dimensions,
   BackAndroid,
   TouchableHighlight,
-  ListView
+  ListView,
+  Vibration
 } from 'react-native';
 
 import IcoButton from 'funshare/src/components/icobutton';
@@ -32,6 +33,7 @@ var deviceheight = Dimensions.get('window').height -(deviceWidth/2) ;
 var modalheight = Dimensions.get('window').height/2 ;
 var piclinks=[];
 var image=[] ;
+global.indexArray=0;
 global.currentUserGlobal=null;
 global.unseenNotifNumberGlobal=null;
 global.currentLikedItem=null;
@@ -175,11 +177,17 @@ snapshot.forEach(function(childSnapshot) {
           save1.setState({ unseenNotifNumberGlobal:unseenNotifNumber });
         });
         NotifRef.on('child_added', function(data) {
+
           console.log(data.val());
           NotifRef.once("value")
           .then(function(snapshot) {
             var unseenNotifNumber = snapshot.numChildren(); 
-            var unseenNotifNumberGlobal = snapshot.numChildren(); 
+             if(global.unseenNotifNumberGlobal < unseenNotifNumber)
+             {
+              Vibration.vibrate();
+              global.unseenNotifNumberGlobal= unseenNotifNumber;
+             }
+                 
             console.log("unseenNotifNumber",unseenNotifNumber,unseenNotifNumberGlobal);
             save1.setState({ unseenNotifNumberGlobal:unseenNotifNumber });
             var body1="You have "+unseenNotifNumber+ " new offers ";
@@ -242,7 +250,7 @@ else {
     };
 
 //this.fuck = this.fuck.bind(this);
-
+  this.renderRow = this.renderRow.bind(this)
 }
 
 componentWillMount() {
@@ -334,8 +342,9 @@ console.log(uidOfOfferingUser);
 handleNope () {
   Tinder._goToNextCard() 
 }
-goToDetails(desc,piclink,title,uidOfLikedItem ,keyOfWantedItem){
-  this.props.replaceRoute(Routes.details(desc ,piclink,title,uidOfLikedItem , keyOfWantedItem));
+goToDetails(desc,piclink,title,uidOfLikedItem ,keyOfWantedItem ,username){
+  if(keyOfWantedItem)
+  this.props.replaceRoute(Routes.details(desc ,piclink,title,uidOfLikedItem , keyOfWantedItem,username));
 
 }
 

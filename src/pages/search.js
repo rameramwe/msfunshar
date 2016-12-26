@@ -351,11 +351,11 @@ render() {
     </View>
     );
     var schlagwort= (
-    <View style={{margin:15}}>
+    <View style={{flex:1,margin:15}}>
 
     <Text style={{fontWeight:'bold', fontSize:10}}>Du weißt wonach du suchst, dann nutze die Schlagwortsuche.</Text>
 
-    <View style ={{    padding:0,
+    <View style ={{  padding:0,
       marginTop:5,
       marginBottom:5,
       borderColor: 'green',
@@ -382,8 +382,9 @@ render() {
 
       <TopNavigation/>
       <ScrollView style={{ flex:1 }}>
-      <View style={{marginTop:5}}>
+     <View style ={{ flex:1  , marginBottom:15 , marginTop:15}}>
       <Accordion
+      style={{flex:1}}
       header={header}
       onPress={this.change.bind(this)}
       content={category}
@@ -392,16 +393,16 @@ render() {
       </View>
 
 
-
+      <View style ={{ flex:4 , marginBottom:30}}>
       <Accordion
-
+      style={{flex:1}}
       header={header1}
       onPress={this.change.bind(this)}
       content={schlagwort}
       easing="easeOutCubic"
       />
-
-      <View>
+      </View>
+      <View  style={{flex:1}} >
       <View style={{flex:1,margin:10 , flexDirection:'row'}}>
       <View style={{flex:0.5 ,flexDirection:'row', alignItems:'flex-start'}}>
       <Image source={require('../img/radius.png')}

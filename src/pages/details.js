@@ -15,7 +15,8 @@ import {
   Modal,
   ScrollView,
   TouchableOpacity,
-  TouchableHighlight
+  TouchableHighlight,
+  ListView
 } from'react-native';
 import IcoButton from 'funshare/src/components/icobutton';
 import Swiper from 'react-native-swiper';
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
 });
 
 export default class details extends Component { 
-  rami() {
+  renderRow() {
 
     var images= [null];
     return new Promise((next, error) => {
@@ -135,7 +136,7 @@ snapshot.forEach(function(childSnapshot) {
 
       </Image> 
       <View
-      style = {self.state.keyOfOfferedItem == keyOfOfferedItem ?  styles.isSellected : null}>
+      style = {self.state.keyOfOfferedItem == keyOfOfferedItem ? {flex:1,position:'absolute', right:0} : {height:0}} >
       <IcoButton
       source={require('funshare/src/img/like.png')}             
       icostyle={{width:15, height:15}}
@@ -147,35 +148,27 @@ snapshot.forEach(function(childSnapshot) {
       </TouchableOpacity>
       </View> );
 
-    i++;
+   i++;
     if (i==num){
-
+      self.setState({
+        dataSource: self.state.dataSource.cloneWithRows(images)
+      });
 
       next(images);
     }
 
   });
+
 })
 });
     }); 
   }
 
-  _renderImage(){
 
-
-    this.rami().then((images) => {
-      image = images;
-
-
-
-    });
-//alert(image.length);
-return image;
-
-}
+ 
 componentDidMount() {
   var self=this;
-
+  self.renderRow();
   BackAndroid.addEventListener('hardwareBackPress', () => {
 
     self.goBack();
@@ -217,17 +210,22 @@ constructor(props) {
   super(props);
 
   this.state = {
+    dataSource: new ListView.DataSource({
+        rowHasChanged: (row1, row2) => row1 !== row2,
+      }),
     visible: false,
     title:this.props.title,
     desc:this.props.desc,
     piclink:this.props.piclink,
     gback:this.props.gback,
+    username:this.props.username,
     uidOfLikedItem:this.props.uidOfLikedItem,
     keyOfWantedItem:this.props.keyOfWantedItem,
     offerData:null,
     modalVisible:false
 //profilePicture:"http://domaingang.com/wp-content/uploads/2012/02/example.png"
 }
+
 
 
 }
@@ -249,6 +247,7 @@ addtofavorite(){
 
 }
 addtooffereditems(uidOfOfferingUser,keyOfOfferedItem,self){
+ 
   self.setState({keyOfOfferedItem: keyOfOfferedItem});
   var offerData = {
     uidOfLikedItem: self.state.uidOfLikedItem,
@@ -261,8 +260,8 @@ addtooffereditems(uidOfOfferingUser,keyOfOfferedItem,self){
     created:firebase.database.ServerValue.TIMESTAMP
   };
 
-  self.setState({offerData: offerData , uidOfOfferingUser:uidOfOfferingUser , keyOfOfferedItem:keyOfOfferedItem});
-
+  self.setState({offerData: offerData , uidOfOfferingUser:uidOfOfferingUser});
+   self.renderRow();
 
 
 }
@@ -357,7 +356,7 @@ renderImages(){
     <View  Key={this.state.piclink+"3"} style = {{flexDirection:'row' ,flex:1 , margin:5}}>
 
 
-    <Text  Key={this.state.piclink+"4"} style = {{fontSize:16, fontWeight:'bold' , color:'white'}} >User name</Text>
+    <Text  Key={this.state.piclink+"4"} style = {{fontSize:16, fontWeight:'bold' , color:'white'}} >{this.state.username}</Text>
 
     </View>
     </View>
@@ -406,7 +405,14 @@ renderImages(){
       flexDirection: 'row',
       flexWrap: 'wrap',
       justifyContent: "center" }}>
-      {this._renderImage()}
+      <ListView
+
+      dataSource={this.state.dataSource}
+      renderRow={(rowData) => <View style = {{flex:1}} >{rowData}</View>}
+// renderSeparator={() => <View style={styles.separator} />}
+renderSeparator={(sectionId, rowId) => <View key={rowId}  />}
+contentContainerStyle={{flex:1 ,  flexDirection: 'row',}}/>
+
       </View>
       </ScrollView>
       </View>
@@ -479,9 +485,11 @@ renderImages(){
         </View>
 
         <View style= {{flex:.5}}>
-        <View style ={{flex:0.8 , flexDirection:'row' , marginTop:0 ,borderBottomWidth:1, borderColor:'#a9a9a9'}}>
+        <View style ={{flex:0.8 , flexDirection:'row' , marginTop:0 ,borderBottomWidth:1, borderColor:'#dcdcdc'}}>
+        <ScrollView style = {{flex:1}}>
         <TextInput
-        multiline={true}
+        multiline={true} 
+
         numberOfLines = {2}
         //value={this.state.desc}
         value={this.state.title}
@@ -489,11 +497,11 @@ renderImages(){
         editable={false}
         underlineColorAndroid="transparent"
         />
-
+        </ScrollView>
         </View>
 
 
-        <View style ={{flex:3 , marginTop:0 ,borderBottomWidth:1, borderColor:'#a9a9a9'}}>
+        <View style ={{flex:3 , marginTop:0 }}>
         <TextInput
         ref={(ref) => this.description = ref}
         value={this.state.desc}
