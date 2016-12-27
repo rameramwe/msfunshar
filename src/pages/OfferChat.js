@@ -57,7 +57,7 @@ export default class OfferChat extends Component {
     .once('value')
     .then(function(snapshot) {
       num =snapshot.numChildren();
-      alert(num)
+       
       snapshot.forEach(function(childSnapshot) {
 
 
