@@ -186,7 +186,7 @@ componentDidMount() {
 // there are two parts of notif. notif.notification contains the notification payload, notif.data contains data payload
 });
   this.refreshUnsubscribe = FCM.on('refreshToken', (token) => {
-    console.log(token)
+    //console.log(token)
 // fcm token may not be available on first load, catch it here
 });
 

@@ -113,7 +113,7 @@ componentDidMount() {
     if (!newItems) return;
     messagesRef.child('0').once('value', function(message1) {
       realTimeMessage=message1.val();
-      console.log(message1.val());
+      //console.log(message1.val());
 
     }).then(function(){
       self.setState((previousState) => {

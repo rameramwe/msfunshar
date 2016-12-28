@@ -112,8 +112,7 @@ class Home1 extends React.Component {
   }
 
   componentWillUnmount () {
-    BackAndroid.removeEventListener('hardwareBackPress', this.exit);
-  }
+    }
 
 
   exit(){
@@ -134,16 +133,16 @@ class Home1 extends React.Component {
         .then(function(snapshot) {
           var unseenNotifNumber = snapshot.numChildren(); 
           var unseenNotifNumberGlobal = snapshot.numChildren(); 
-          console.log("unseenNotifNumber",unseenNotifNumber,unseenNotifNumberGlobal);
+          //console.log("unseenNotifNumber",unseenNotifNumber,unseenNotifNumberGlobal);
 
         });
         NotifRef.on('child_added', function(data) {
-          console.log(data.val());
+          //console.log(data.val());
           NotifRef.once("value")
           .then(function(snapshot) {
             var unseenNotifNumber = snapshot.numChildren(); 
             var unseenNotifNumberGlobal = snapshot.numChildren(); 
-            console.log("unseenNotifNumber",unseenNotifNumber,unseenNotifNumberGlobal);
+            //console.log("unseenNotifNumber",unseenNotifNumber,unseenNotifNumberGlobal);
 
           });
         });
@@ -177,10 +176,15 @@ else {
 
   componentDidMount() {
 
-    BackAndroid.removeEventListener('hardwareBackPress', this.exit);
-    Actions.loadUser.completed.listen(this._onLoadUserCompleted.bind(this));
+     Actions.loadUser.completed.listen(this._onLoadUserCompleted.bind(this));
     Actions.logout.listen(this._onLogout.bind(this));
+     var self=this;
+  BackAndroid.addEventListener('hardwareBackPress', () => {
+// console.log("did",currentUserGlobal);
+self.exit();
+return true;
 
+});
 
 
 
@@ -362,7 +366,7 @@ else {
         * The second arg is the callback which sends object: response (more info below in README)
         */
         ImagePicker.showImagePicker(options, (response) => {
-          console.log('Response = ', response);
+         // console.log('Response = ', response);
 
           if (response.didCancel) {
             console.log('User cancelled image picker');

@@ -15,7 +15,8 @@ import{
   ListView,
   Platform,
   Modal,
-  Text
+  Text,
+  BackAndroid,
 } from 'react-native';
 import Loading from 'funshare/src/components/Loading';
 import IcoButton from 'funshare/src/components/icobutton';
@@ -133,6 +134,13 @@ const styles = StyleSheet.create({
 class chatscreen extends React.Component {
   componentDidMount() {
     this.renderRow(); 
+  var self=this;
+  self.renderRow();
+  BackAndroid.addEventListener('hardwareBackPress', () => {
+    self.goToHome();
+    return true;
+
+  });
   } 
   constructor(props) {
     super(props);
@@ -242,12 +250,12 @@ renderRow() {
           snapVal=snapshot.val();
           firebase.database().ref('items').child(snapshot.val().uidOfOfferingUser)
           .child(snapshot.val().keyOfOfferedItem).once('value').then(function(snapshot1){
-            console.log(snapshot1);
+            //console.log(snapshot1);
             picOfOfferedItem= snapshot1.val().itemPic;
           }).then(function(){
             firebase.database().ref('items').child(snapshot.val().uidOfLikedItem)
             .child(snapshot.val().keyOfWantedItem).once('value').then(function(snapshot2){
-              console.log(snapshot2);
+              //console.log(snapshot2);
               picOfWantedItem= snapshot2.val().itemPic;
             }).then(function(){
               var iteminfo = {
@@ -266,7 +274,7 @@ renderRow() {
                 picOfWantedItem:picOfWantedItem
               }
 
-              console.log(iteminfo);
+              //console.log(iteminfo);
 // alert(itemcategory)
 piclinks.push(iteminfo);
 images.push(

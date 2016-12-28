@@ -173,12 +173,12 @@ snapshot.forEach(function(childSnapshot) {
 
           var unseenNotifNumber = snapshot.numChildren(); 
           var unseenNotifNumberGlobal = snapshot.numChildren(); 
-          console.log("unseenNotifNumber",unseenNotifNumber,unseenNotifNumberGlobal);
+          //console.log("unseenNotifNumber",unseenNotifNumber,unseenNotifNumberGlobal);
           save1.setState({ unseenNotifNumberGlobal:unseenNotifNumber });
         });
         NotifRef.on('child_added', function(data) {
 
-          console.log(data.val());
+         // console.log(data.val());
           NotifRef.once("value")
           .then(function(snapshot) {
             var unseenNotifNumber = snapshot.numChildren(); 
@@ -188,14 +188,14 @@ snapshot.forEach(function(childSnapshot) {
               global.unseenNotifNumberGlobal= unseenNotifNumber;
              }
                  
-            console.log("unseenNotifNumber",unseenNotifNumber,unseenNotifNumberGlobal);
+           // console.log("unseenNotifNumber",unseenNotifNumber,unseenNotifNumberGlobal);
             save1.setState({ unseenNotifNumberGlobal:unseenNotifNumber });
             var body1="You have "+unseenNotifNumber+ " new offers ";
             firebaseClient.sendNotification(save1.state.token,"Funshare",body1);
 
 
             save1.refreshUnsubscribe = FCM.on("refreshToken", token => {
-              console.log("TOKEN (refreshUnsubscribe)", token);
+              //console.log("TOKEN (refreshUnsubscribe)", token);
               save1.props.onChangeToken(token);
             });
 
@@ -278,7 +278,7 @@ return true;
   Actions.logout.listen(this._onLogout.bind(this));
 FCM.requestPermissions(); // for iOS
 FCM.getFCMToken().then(token => {
-  console.log("TOKEN (getFCMToken)", token);
+  //console.log("TOKEN (getFCMToken)", token);
   this.setState({token: token || ""});
 //  firebaseClient.sendNotification(token);
 //firebaseClient.sendData(token);
@@ -286,7 +286,7 @@ FCM.getFCMToken().then(token => {
 });
 
 this.notificationUnsubscribe = FCM.on("notification", notif => {
-  console.log("Notification", notif);
+ // console.log("Notification", notif);
   if (notif && notif.local) {
     return;
   }
@@ -294,7 +294,7 @@ this.notificationUnsubscribe = FCM.on("notification", notif => {
 });
 
 this.refreshUnsubscribe = FCM.on("refreshToken", token => {
-  console.log("TOKEN (refreshUnsubscribe)", token);
+ // console.log("TOKEN (refreshUnsubscribe)", token);
   this.props.onChangeToken(token);
 });
 }
@@ -332,11 +332,11 @@ connfirm(){
 
 handleOffereditems (desc,piclink,title,uidOfOfferingUser) {
 // alert(desc);
-console.log(desc);
+/*console.log(desc);
 console.log(piclink);
 console.log(title);
 console.log(uidOfOfferingUser);
-
+*/
 }
 
 handleNope () {

@@ -53,11 +53,11 @@
       }
 
       onCancel() {
-        console.log("CANCEL")
+       // console.log("CANCEL")
         this.setState({visible:false});
       }
       onOpen() {
-        console.log("OPEN")
+       // console.log("OPEN")
         this.setState({visible:true});
       }
       _onInputButtonPressed(a,b) {
@@ -93,6 +93,13 @@
         }
       }
       componentDidMount(){
+         var self=this;
+ 
+  BackAndroid.addEventListener('hardwareBackPress', () => {
+    self.goBack();
+    return true;
+
+  });
         images=[]
       }
       calluploadphoto1(){

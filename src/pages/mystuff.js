@@ -29,16 +29,14 @@ var piclinks=[];
 export default class mystuff extends Component {
 
   componentDidMount() {
-    this.renderRow(); 
-    var self=this;
+     var self=this;
     BackAndroid.addEventListener('hardwareBackPress', () => {
-      console.log("props",self.props);
-      console.log("props",self.props.user);
-
-      self.props.replaceRoute(Routes.Home1(currentUserGlobal));
+      self.goToHome1();
       return true;
 
     });
+    self.renderRow(); 
+   
 
   }
   goToAddstuff()
@@ -135,7 +133,7 @@ loading = (visible) => {
 constructor(props) {
   super(props);
 
-
+  this.goToHome1 = this.goToHome1.bind(this);
   this.fuck = this.fuck.bind(this);
   this.state = {
     dataSource: new ListView.DataSource({
@@ -145,7 +143,10 @@ constructor(props) {
   };
 }
 goToHome1()
-{
+{ 
+    this.setState({
+      isloading: true
+    });
   this.props.replaceRoute(Routes.Home1(currentUserGlobal));
 }
 render(){
