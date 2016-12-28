@@ -11,7 +11,8 @@ import {
   TouchableHighlight,
   Dimensions,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  BackAndroid
 } from 'react-native';
 import Routes from 'funshare/Routes';
 import style from '../styles/common-styles.js';
@@ -94,7 +95,7 @@ if (num==0){
     });
 
   }
- 
+
   componentWillUnmount() {
     this._isMounted = false;
 
