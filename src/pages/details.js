@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
     height: 78 ,
   },
   textinput: {
+    padding: 10,
     fontWeight:'bold',
     backgroundColor: 'white',
     color: 'black',
@@ -76,6 +77,7 @@ const styles = StyleSheet.create({
     flex:1
   },
   description: {
+    padding: 10,
     textAlignVertical:'top',
     backgroundColor: 'white',
     alignItems:'flex-start',
@@ -487,38 +489,24 @@ contentContainerStyle={{flex:1 ,  flexDirection: 'row',}}/>
         <View style= {{flex:.5}}>
         <View style ={{flex:0.8 , flexDirection:'row' , marginTop:0 ,borderBottomWidth:1, borderColor:'#dcdcdc'}}>
         <ScrollView style = {{flex:1}}>
-        <TextInput
-        multiline={true} 
-
-        numberOfLines = {2}
-        //value={this.state.desc}
-        value={this.state.title}
-        style={styles.textinput}
-        editable={false}
-        underlineColorAndroid="transparent"
-        />
+        <Text style={styles.textinput}>        
+        {this.state.title}
+        </Text>
         </ScrollView>
         </View>
 
 
         <View style ={{flex:3 , marginTop:0 }}>
-        <TextInput
-        ref={(ref) => this.description = ref}
-        value={this.state.desc}
-        editable={false}
-        placeholderTextColor= '#a9a9a9'
-        selectionColor='#6495ed'
-        style={styles.description}
-        autoCapitalize="none"
-        autoCorrect={false}
-        multiline={true}
-        numberOfLines = {4}
-        underlineColorAndroid="transparent"
-        />
+        <ScrollView style = {{flex:1}}>
+        <Text       
+        style={styles.description}     
+        >{this.state.desc}
+        </Text>
+        </ScrollView>
         </View>
 
-        <View style={{position:'absolute', bottom:10 ,flex:1,marginLeft:20,marginRight:20,flexDirection:'row',alignItems:'center', justifyContent:'center'}}>
-
+        <View style={{  flex:1.2,  justifyContent:'flex-end'}}>
+        <View style = {{flex:1 ,bottom:10,marginLeft:20,marginRight:20,flexDirection:'row',alignItems:'center',}}>
 
         <View style={{flex:0.12,alignItems:'center'}}>
         </View>
@@ -551,7 +539,7 @@ contentContainerStyle={{flex:1 ,  flexDirection: 'row',}}/>
 
         </View>
 
-
+        </View>
 
         </View>
         </View>
