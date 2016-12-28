@@ -94,13 +94,19 @@ if (num==0){
     });
 
   }
-
+ 
   componentWillUnmount() {
     this._isMounted = false;
+
 // console.log(this.state.messages);
 }
 componentDidMount() {
   var self=this;
+  BackAndroid.addEventListener('hardwareBackPress', () => {
+    self.goTochatscren();
+    return true;
+
+  });
   var messagesRef=Firebase.database()
   .ref('Offers')
   .child(self.props.iteminfo.uidOfOfferingUser)
