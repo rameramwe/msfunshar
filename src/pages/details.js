@@ -117,20 +117,18 @@ snapshot.forEach(function(childSnapshot) {
     var uidOfOfferingUser = snapshot.val().uid ;
 
     images.push(
-      <View style = {{flex:1}} Key={piclink} >
+      <View style = {{flex:1}} >
       <TouchableOpacity
-      Key={piclink}
       activeOpacity={ 0.9 }
       style={ styles.item }
       onPress={self.addtooffereditems.bind( this,uidOfOfferingUser,keyOfOfferedItem,self )}
       >
 
-      <View style = {{flex:1}} Key={piclink}>
+      <View style = {{flex:1}}>
 
 
 
       <Image
-      Key={piclink}
       resizeMode={Image.resizeMode.cover}
       style={ styles.image }
       source={{uri: piclink}}
@@ -170,13 +168,14 @@ snapshot.forEach(function(childSnapshot) {
  
 componentDidMount() {
   var self=this;
-  self.renderRow();
+
   BackAndroid.addEventListener('hardwareBackPress', () => {
 
     self.goBack();
     return true;
 
   });
+    self.renderRow();
   FCM.getFCMToken().then(token => {
 
 //console.log(token);
@@ -313,11 +312,10 @@ _setModalVisible = (visible) => {
   this.setState({modalVisible: visible});
 }
 renderImages(){
-  var images = []
+  var images = 
 
-  images.push(
-
-
+  
+(
 
     <TouchableOpacity
     Key={this.state.piclink}
@@ -465,7 +463,7 @@ contentContainerStyle={{flex:1 ,  flexDirection: 'row',}}/>
         <IcoButton
         source={require('funshare/src/img/arrow.png')}
         onPress={()=>this.setImage()}
-        icostyle={{width:25, height:25}}
+        icostyle={{width:20, height:20}}
         />
         </View>
         </View>

@@ -96,10 +96,11 @@ export default class fuck extends Component {
     this.setState({visible: visible});
   }
   renderImages(){
-    var images = []
+    var images ;
     var self =dummypicms;
 
-    images.push(
+    images=
+    (
 
 
       <TouchableOpacity
@@ -273,7 +274,7 @@ export default class fuck extends Component {
           <IcoButton
           source={require('funshare/src/img/arrow.png')}
           onPress={()=>this.setImage()}
-          icostyle={{width:25, height:25}}
+          icostyle={{width:20, height:20}}
           />
           </View>
           </View>
