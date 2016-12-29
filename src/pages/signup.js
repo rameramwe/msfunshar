@@ -55,12 +55,16 @@ var Loginfbb = React.createClass({
 
 export default class signup extends Component {
 
-  componentWillUnmount () {
-    BackAndroid.removeEventListener('hardwareBackPress', this.goBack);
-  }
-  componentDidMount() {
+ 
+ 
+    componentDidMount() {
+            var self=this;
+  BackAndroid.addEventListener('hardwareBackPress', () => {
+// console.log("did",currentUserGlobal);
+self.exit();
+return true;
 
-    BackAndroid.removeEventListener('hardwareBackPress', this.goBack);
+});
   }
 
   exit(){

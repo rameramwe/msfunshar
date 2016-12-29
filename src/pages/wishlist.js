@@ -126,16 +126,21 @@ renderRow() {
           .child(keyofitem)
           .once('value')
           .then(function(snapshot) {
+            if(snapshot.val())
+           { 
             piclink = snapshot.val().itemPic;
-            desc = snapshot.val().description;
-            title = snapshot.val().title;
-            username = snapshot.val().username;
+           desc = snapshot.val().description;
+           title = snapshot.val().title;
+           username = snapshot.val().username;
 
-            keyOfWantedItem = snapshot.key;
-            uidOfLikedItem=snapshot.val().uid;
-          }).then(function(){ 
-
-            images.push(
+           keyOfWantedItem = snapshot.key;
+           uidOfLikedItem=snapshot.val().uid;
+          }
+          }).then(function(){
+          
+            if(piclink&&desc&&title&&username)
+            {
+              images.push(
 
               <TouchableHighlight
 
@@ -169,6 +174,8 @@ renderRow() {
               </TouchableHighlight>
 
               );
+            }
+            
               i++;
               if (i==num){
 

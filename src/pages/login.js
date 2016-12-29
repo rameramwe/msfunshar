@@ -47,12 +47,18 @@ export default class login extends Component {
     this.passwordConfirmation = null;
   }
   componentWillUnmount () {
-    BackAndroid.removeEventListener('hardwareBackPress', this.exit);
-  }
+     }
   componentDidMount() {
+            var self=this;
+  BackAndroid.addEventListener('hardwareBackPress', () => {
+// console.log("did",currentUserGlobal);
+self.exit();
+return true;
+
+});
     Actions.loadUser.completed.listen(this.onLoadUserCompleted.bind(this));
-    BackAndroid.removeEventListener('hardwareBackPress', this.exit);
-  }
+
+     }
 
   exit(){
     BackAndroid.exitApp();   
