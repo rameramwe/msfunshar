@@ -116,7 +116,7 @@ goToHome1()
 render() {
   const TopNavigation = () => (
     <View style={{ padding: 10, flexDirection: 'row', backgroundColor: '#00D77F' }}>
-    <View style={{ flex:0.2 , justifyContent:'center' , margin:5  }}>
+    <View style={{ flex:0.4 , justifyContent:'center' , margin:5  }}>
     <TouchableOpacity
     onPress={this.goToHome1.bind(this)}
     style={styles.buttonStyle}
@@ -128,7 +128,7 @@ render() {
 
     </TouchableOpacity>
     </View>
-    <View style={{ flex:0.2}}/>
+   
     <View style={{ flex:0.2 , alignItems:'center', justifyContent:'center' }}>
     <Image
     resizeMode={Image.resizeMode.contain}
@@ -336,23 +336,11 @@ render() {
     </View>
      <View style= {{flex:5,marginBottom:10 , backgroundColor:'#fff'}}>
     
-        <Accordion
-    style={{flex:1}}
-    header={rechheader}
-    //onPress={this.change.bind(this)}
-    content={recht}
-    easing="easeOutCubic"
-    />
+  
     </View>
      <View style= {{flex:5,marginBottom:10 , backgroundColor:'#fff'}}>
     
-   <Accordion
-    style={{flex:1}}
-    header={supportheader}
-    //onPress={this.change.bind(this)}
-    content={support}
-    easing="easeOutCubic"
-    />
+ 
  </View>
 
 

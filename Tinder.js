@@ -211,19 +211,39 @@ export default React.createClass({
     addtofavorite (x){
       if(x)
       {
-        var offerData = {
-          keyOfWantedItem: x.keyOfWantedItem,
-          uidOfLikedItem: x.uidOfLikedItem,   
-          created:firebase.database.ServerValue.TIMESTAMP
-        };
-        var uploadTask = firebase.database()
+        firebase.database()
         .ref('profiles')
         .child(currentUserGlobal.uid)
-        .child('favorite');
-      
-  
-        var favoriteKey = uploadTask.push(offerData).key ;
-        if (favoriteKey) alert("Du hast den Item in den Wünschliste")
+        .child('favorite').once("value")
+        .then(function(snapshot) {
+          var hasName = snapshot.hasChild(x.keyOfWantedItem);
+          if (hasName){
+           firebase.database()
+          .ref('profiles')
+          .child(currentUserGlobal.uid)
+          .child('favorite').child(x.keyOfWantedItem).remove().then(function(){
+             alert("Item removed from favorite Items");
+            });
+          }
+          else {
+                  var favData = {
+                    keyOfWantedItem: x.keyOfWantedItem,
+                    uidOfLikedItem: x.uidOfLikedItem,   
+                    created:firebase.database.ServerValue.TIMESTAMP
+                  };        
+                  var uploadTask = firebase.database()
+                  .ref('profiles')
+                  .child(currentUserGlobal.uid)
+                  .child('favorite')
+                  .child(x.keyOfWantedItem);
+                  var favoriteKey = uploadTask.set(favData);
+                  alert("Item has been added to favorite");
+          }
+          
+        });
+
+        
+        
       }
 
     },

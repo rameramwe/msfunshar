@@ -133,8 +133,8 @@
           title: "Funshare",
           message: "My First App",
           url: "https://web.facebook.com/mohammad.sakka2",
-    subject: "Share Link" //  for email
-  };
+          subject: "Share Link" //  for email
+      };
 
   var shareImageBase64 = {
     title: this.state.title,

@@ -14,7 +14,8 @@ import {
   BackAndroid,
   TouchableHighlight,
   ListView,
-  Vibration
+  Vibration,
+  TouchableOpacity
 } from 'react-native';
 
 import IcoButton from 'funshare/src/components/icobutton';
@@ -357,7 +358,7 @@ render(){
 
   var noti ={ 
 
-    flex:1, width:18,height:18,borderRadius:9, backgroundColor:'green',position: 'absolute',alignItems:'center',justifyContent:'center', top:0 , right:12
+    flex:1, width:10,height:10,borderRadius:5, backgroundColor:'#00D77F',position: 'absolute',alignItems:'center',justifyContent:'center', top:0 , right:0
 
   }  
   var none = {height:0}
@@ -366,7 +367,6 @@ render(){
   (
 
     <View style = {this.state.unseenNotifNumberGlobal >0? noti : none } >
-    <Text style = {{color:'white', fontSize:15 , fontWeight:'bold'}} >{this.state.unseenNotifNumberGlobal}</Text>
     </View>
     )
 
@@ -454,31 +454,37 @@ icostyle={{width:60, height:60}}
 
 <View style={{flexDirection:'row' ,alignItems:'center' , justifyContent:'center'  }}>
 <View style={{flex:0.1 ,alignItems:'center'}}>
-<IcoButton
-source={require('funshare/src/img/profil.png')}
 
-
+<TouchableOpacity
 onPress={this.goToProfile.bind(this)}
-icostyle={{width:40, height:40}}
-/>
-</View>
+>
 <Image
+source={require('funshare/src/img/profil.png')}
+style={{width:40, height:40}}
+/>
+</TouchableOpacity>
 
+</View>
+
+<Image
 source={require('../img/ifunshare.png')}
 style={{height:50, width:150 , }}
 
 />
 <View style={{flex:0.1,alignItems:'center'}}>
-
-
-<IcoButton
-source={require('funshare/src/img/ichat.png')}
+ 
+<TouchableOpacity
 onPress={this.goToChat.bind(this)}
-
-icostyle={{width:40, height:40}}
-/>
+>
+<Image
+source={require('funshare/src/img/ichat.png')}
+style={{width:40, height:40}}
+>
 <Notification/>
+</Image>
+</TouchableOpacity>
 
+ 
 </View>
 </View>
 </View>

@@ -1,4 +1,3 @@
-
 'use strict';
 
 import React, { Component } from 'react';
@@ -35,12 +34,11 @@ export default class Loadin extends Component {
       animationType={'fade'}
       transparent={true}
       visible={this.state.visible||this.props.loading }
-      onRequestClose={() => {this._setModalVisible(false)}}
+      onRequestClose={() => {this.setState({visible:false})}}
       >
       <View style = {{flex:1 ,justifyContent: 'center', backgroundColor:   'rgba(0, 0, 0, 0.5)'}}>
       <View style = {{flexDirection:'row' , justifyContent:'center'}}>
       <ActivityIndicator
-
       size="large" 
       color="white"/>
       <Text style = {{color:'white' ,marginTop:5 ,fontSize:20}} > Loading </Text>

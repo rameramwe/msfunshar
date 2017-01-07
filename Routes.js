@@ -15,10 +15,12 @@ import details from 'funshare/src/pages/details';
 import fuck from 'funshare/src/pages/fuck';
 import addstuff from 'funshare/src/pages/addstuff';
 import mystuff from 'funshare/src/pages/mystuff';
+import searchresult from 'funshare/src/pages/searchresult';
 import wishlist from 'funshare/src/pages/wishlist'; 
 import chatscreen from 'funshare/src/pages/chatscreen';
 import AcceptedOffers from 'funshare/src/pages/AcceptedOffers';
 import OfferChat from 'funshare/src/pages/OfferChat';
+
 
 
 class Routes {
@@ -121,7 +123,7 @@ class Routes {
       name: "details",
  
       component: details,
-      passProps: { desc:desc , piclink :piclink,title:title, uidOfLikedItem:uidOfLikedItem ,keyOfWantedItem:keyOfWantedItem,username:username ,gback:gback},
+      passProps: { desc:desc , piclink :piclink,title:title, uidOfLikedItem:uidOfLikedItem ,keyOfWantedItem:keyOfWantedItem,username:username ,gback:gback,search:search},
  
     }
   }
@@ -139,7 +141,13 @@ class Routes {
       component: mystuff,     
     }
   } 
-  
+    searchresult(searchItems) {
+    return {
+      name: "searchresult",
+      component: searchresult,
+      passProps: {searchMatches: searchItems}     
+    }
+  }
   OfferChat(iteminfo) {
     return {
       name: "OfferChat",

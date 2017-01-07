@@ -213,6 +213,8 @@ renderRow() {
     var self = this; 
     var i = 0;
     var num=0;
+    var checker1=0;
+    var checker2=0;
     var uid = firebase.auth().currentUser.uid;
     firebase.database()
     .ref('Notifications')
@@ -250,103 +252,164 @@ renderRow() {
           snapVal=snapshot.val();
           firebase.database().ref('items').child(snapshot.val().uidOfOfferingUser)
           .child(snapshot.val().keyOfOfferedItem).once('value').then(function(snapshot1){
-            //console.log(snapshot1);
+
+          if (snapshot1.val())
+          {
             picOfOfferedItem= snapshot1.val().itemPic;
+            checker1=1;
+          }
+            else{
+                  checker1=0;
+                  firebase.database()
+                  .ref('Offers').child(snapshot.val().uidOfOfferingUser).child(snapshot.val().offerKey).remove().then(function(){
+                  
+                  });
+                     firebase.database()
+                    .ref('Notifications')
+                    .child(uid)
+                    .child('Unseen').child(childKey).remove().then(function(){});
+                  
+                }
+            //console.log(snapshot1);
           }).then(function(){
-            firebase.database().ref('items').child(snapshot.val().uidOfLikedItem)
-            .child(snapshot.val().keyOfWantedItem).once('value').then(function(snapshot2){
-              //console.log(snapshot2);
-              picOfWantedItem= snapshot2.val().itemPic;
-            }).then(function(){
-              var iteminfo = {
-                created: snapshot.val().created ,
-                keyOfOfferedItem: snapshot.val().keyOfOfferedItem ,
-                keyOfWantedItem: snapshot.val().keyOfWantedItem ,  
-                itemkey: snapshot.key ,
-                offerAccepted: snapshot.val().offerAccepted,
-                offerConfirmedByOfferingUser: snapshot.val().offerConfirmedByOfferingUser,
-                offerKey: snapshot.val().offerKey,
-                offerStatus: snapshot.val().offerStatus,
-                seen: snapshot.val().seen,
-                uidOfLikedItem: snapshot.val().uidOfLikedItem,
-                uidOfOfferingUser: snapshot.val().uidOfOfferingUser,
-                picOfOfferedItem:picOfOfferedItem,
-                picOfWantedItem:picOfWantedItem
-              }
+             if (checker1)
+                {
+                  firebase.database().ref('items').child(snapshot.val().uidOfLikedItem)
+                  .child(snapshot.val().keyOfWantedItem).once('value').then(function(snapshot2){
+                    if (snapshot2.val()){
+                      picOfWantedItem= snapshot2.val().itemPic;
+                      checker2=1;
+                    }
+                    else {
 
-              //console.log(iteminfo);
-// alert(itemcategory)
-piclinks.push(iteminfo);
-images.push(
+                      checker2=0;
+                      firebase.database()
+                      .ref('Offers').child(snapshot.val().uidOfOfferingUser).child(snapshot.val().offerKey).remove().then(function(){
+                       
+                      });
+                    firebase.database()
+                    .ref('Notifications')
+                    .child(uid)
+                    .child('Unseen').child(childKey).remove().then(function(){});
 
-  <View key= {iteminfo} style={{flex:1}}>
+                    }
+                    //console.log(snapshot2);
+                    
+                  }).then(function(){
+                    
+                    if (checker2)
+                    {
+                      var iteminfo = {
+                      created: snapshot.val().created ,
+                      keyOfOfferedItem: snapshot.val().keyOfOfferedItem ,
+                      keyOfWantedItem: snapshot.val().keyOfWantedItem ,  
+                      itemkey: snapshot.key ,
+                      offerAccepted: snapshot.val().offerAccepted,
+                      offerConfirmedByOfferingUser: snapshot.val().offerConfirmedByOfferingUser,
+                      offerKey: snapshot.val().offerKey,
+                      offerStatus: snapshot.val().offerStatus,
+                      seen: snapshot.val().seen,
+                      uidOfLikedItem: snapshot.val().uidOfLikedItem,
+                      uidOfOfferingUser: snapshot.val().uidOfOfferingUser,
+                      picOfOfferedItem:picOfOfferedItem,
+                      picOfWantedItem:picOfWantedItem
+                    }
 
-  <View style = {{flex:1,paddingTop:8, paddingBottom:12, paddingLeft:20, flexDirection:'row' ,backgroundColor:'white'}} >
+                    //console.log(iteminfo);
+      // alert(itemcategory)
+      piclinks.push(iteminfo);
+      images.push(
 
-  <View style = {{flex:0.6 , flexDirection:'row', justifyContent:'flex-start' , alignItems:'center'}}>
-  <Image
-  style={{flex:0.4,
-    height:70,
-    width:70,
-    borderRadius:35}}
-  source={{uri:picOfWantedItem}}
-  /> 
-  <Image
-  style={{height:20 , width : 20 , margin:10}}
-  source={require('funshare/src/img/star.png')}
-  /> 
-  <Image
-  style={{flex:0.4,
-    height:70,
-    width:70,
-    borderRadius:35}}
-  source={{uri:picOfOfferedItem}}
-  /> 
-  </View>
+        <View key= {iteminfo} style={{flex:1}}>
 
-  <View style = {{flex:0.4 , flexDirection:'row', justifyContent:'center'}}>
-  <TouchableOpacity
-  style = {{flex:0.5 , justifyContent:'center' , alignItems:'center'}}
-  onPress={self.remove.bind(self,childKey)}
->
-<View style= {{flex:1  , alignItems:'center',justifyContent:'center'}}>
-<Image
-style={{height:40 , width:40}}
-source={require('funshare/src/img/dislike.png')}
-/> 
-</View>
-</TouchableOpacity>
+        <View style = {{flex:1,paddingTop:8, paddingBottom:12, paddingLeft:20, flexDirection:'row' ,backgroundColor:'white'}} >
 
-<TouchableOpacity
-style = {{flex:0.5 , justifyContent:'center' , alignItems:'center'}}
-onPress={self._setModalVisible.bind(self, true,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef,snapshot.val().uidOfOfferingUser,childKey,snapshot.val().uidOfLikedItem)}
->
-<View style = {{flex:1 , alignItems:'center',justifyContent:'center'}} >
-<Image
-style={{height:40 , width:40}}
-source={require('funshare/src/img/like.png')}
-/> 
-</View>
-</TouchableOpacity>
+        <View style = {{flex:0.6 , flexDirection:'row', justifyContent:'flex-start' , alignItems:'center'}}>
+        <Image
+        style={{flex:0.4,
+          height:60,
+          width:60,
+          borderRadius:30}}
+        source={{uri:picOfWantedItem}}
+        /> 
+        <Image
+        style={{height:15 , width : 15 , margin:10}}
+        source={require('funshare/src/img/star.png')}
+        /> 
+        <Image
+        style={{flex:0.4,
+          height:60,
+          width:60,
+          borderRadius:30}}
+        source={{uri:picOfOfferedItem}}
+        /> 
+        </View>
 
-</View>
+        <View style = {{flex:0.4 , flexDirection:'row', justifyContent:'center'}}>
+        <TouchableOpacity
+        style = {{flex:0.5 , justifyContent:'center' , alignItems:'center'}}
+        onPress={self.remove.bind(self,childKey)}
+      >
+      <View style= {{flex:1  , alignItems:'center',justifyContent:'center'}}>
+      <Image
+      style={{height:40 , width:40}}
+      source={require('funshare/src/img/dislike.png')}
+      /> 
+      </View>
+      </TouchableOpacity>
 
-</View>
-</View>
+      <TouchableOpacity
+      style = {{flex:0.5 , justifyContent:'center' , alignItems:'center'}}
+      onPress={self._setModalVisible.bind(self, true,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef,snapshot.val().uidOfOfferingUser,childKey,snapshot.val().uidOfLikedItem)}
+      >
+      <View style = {{flex:1 , alignItems:'center',justifyContent:'center'}} >
+      <Image
+      style={{height:40 , width:40}}
+      source={require('funshare/src/img/like.png')}
+      /> 
+      </View>
+      </TouchableOpacity>
 
-);
-i++;
-if (i==num){
+      </View>
 
-  self.setState({
-    dataSource: self.state.dataSource.cloneWithRows(images),
-    loading:false
-  });
-  
-  next(images);
-}
+      </View>
+      </View>
 
-});
+      );
+                    }
+ 
+       i++;
+
+      if (i==num){
+
+        self.setState({
+          dataSource: self.state.dataSource.cloneWithRows(images),
+          loading:false
+        });
+        
+        next(images);
+      }
+          
+      
+      });
+
+                }
+    else {
+
+       i++;
+
+      if (i==num){
+
+        self.setState({
+          dataSource: self.state.dataSource.cloneWithRows(images),
+          loading:false
+        });
+        
+        next(images);
+      }
+            
+    }
+             
 
 });
 
@@ -409,6 +472,12 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     const TopNavigation = () => (
     <View style={{ padding: 10, flexDirection: 'row', backgroundColor: '#FF5C7E' }}>
     <View style={{ flex:0.4 , justifyContent:'center' , margin:5  }}>  
+      <IcoButton
+
+    source={require('funshare/src/img/swop.png')}
+    onPress={this.goToHome.bind(this)}
+    icostyle={{width:35, height:35}}
+    />
     </View>
 
     <View style={{ flex:0.2 , alignItems:'center', justifyContent:'center'   }}>
@@ -420,12 +489,7 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     </View>
 
     <View style={{ flex:0.4 , alignItems:'flex-end', justifyContent:'center' , margin:5  }}>
-    <IcoButton
-
-    source={require('funshare/src/img/swop.png')}
-    onPress={this.goToHome.bind(this)}
-    icostyle={{width:35, height:35}}
-    />
+  
 
     </View>
 
@@ -507,8 +571,8 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     </View>
     </View>
     </Modal>
-    <View style= {{flex:1 , borderBottomColor:'#FF5C7E', borderBottomWidth:0.5}}>
-    <Text style = {{color:'#FF5C7E' ,fontSize:20 , fontWeight:'bold'}}>  Offers :</Text>
+    <View style= {{flex:1}}>
+    <Text style = {{color:'#FF5C7E' ,fontSize:16 }}>  New Offers </Text>
     </View>
 
 
@@ -522,8 +586,8 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
     contentContainerStyle={{flex:1,paddingTop:20 ,backgroundColor:'white',}}/>
     </View>
-    <View style= {{flex:1 , borderBottomColor:'#FF5C7E', borderBottomWidth:0.5}}>
-    <Text style = {{color:'#FF5C7E' ,fontSize:20 , fontWeight:'bold'}}>  Messages :</Text>
+    <View style= {{flex:1}}>
+    <Text style = {{color:'#FF5C7E' ,fontSize:16  }}>  Messages </Text>
     </View>
     <View style = {{flex:1}}>
 

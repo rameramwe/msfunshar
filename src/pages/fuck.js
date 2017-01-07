@@ -155,23 +155,35 @@ export default class fuck extends Component {
 
   }
   update(){
-    /*update({
-      description: this.state.desc,
-      title: this.state.title,
-      starCount: 0,
-      itemPic: this.state.piclink,
-      category:this.state.icategory,
+ 
+ alert("OKo");
+      var save= this;
+      if(save.state.title &&save.state.piclink&&save.state.desc&&save.state.icategory )
+      {
+     alert("OK");
+        fetchblob.upload1(save.state.piclink,save.state.title,save.state.desc,
+        save.state.icategory).then(( ) => {
+          save.goBack();
+        }, function(error) {
+          alert(error)
+        });
+    }
 
-    });
-    */
+      else  alert("Bitte füllen Sie alle Felder");
+
   }
   remove(){
     var save=this;
     var uid=currentUserGlobal.uid;
     firebase.database()
     .ref('items').child(uid).child(this.state.itemkey).remove().then(function(){
+    });
+    firebase.database()
+    .ref('categories').child('swiper-all').child(this.state.itemkey).remove().then(function(){
+    });
+    firebase.database()
+    .ref('categories').child(this.state.icategory).child(this.state.itemkey).remove().then(function(){
       save.goBack();
-
     });
 
 
@@ -209,7 +221,7 @@ export default class fuck extends Component {
     render() {
       const TopNavigation = () => (
         <View style={{ paddingTop:15,paddingBottom:10,padding:15 , flexDirection: 'row', backgroundColor: '#FF5C7E'}}>
-        <View style={{ flex:0.2 , justifyContent:'center' , margin:5  }}>
+        <View style={{ flex:0.4 , justifyContent:'center' , margin:5  }}>
         <TouchableOpacity
         onPress={this.goBack.bind(this)}
         style={{flex:1, justifyContent:'center'}}
@@ -221,7 +233,7 @@ export default class fuck extends Component {
 
         </TouchableOpacity>
         </View>
-        <View style={{ flex:0.2}}/>
+        
         <View style={{ flex:0.2 , alignItems:'center', justifyContent:'center' , margin:5  }}>
 
         </View>
@@ -243,7 +255,7 @@ export default class fuck extends Component {
         >
         <View style= {{alignItems:'center' , justifyContent:'center'}}>
         <Text style= {{fontSize:15 , fontWeight:'bold' , color:'white'}} >
-        Save
+         
         </Text>
         </View>
         </TouchableOpacity>
@@ -263,7 +275,9 @@ export default class fuck extends Component {
         style={{flex:1}}
         >
         <TopNavigation/>
-        <Modal visible={this.state.visible}  onRequestClose={() =>{this._setModalVisible.bind(this, false)}} transparent={true}>
+        <Modal visible={this.state.visible} 
+         onRequestClose={() => {this.setState({visible:false})}}
+        transparent={true}>
         <View style = {{ height:40,
           backgroundColor:   'rgba(0, 0, 0, 1)'}}>
           <View style= {{
@@ -282,7 +296,7 @@ export default class fuck extends Component {
 
           </Modal>
 
-          <View style={{height:deviceHeight/3}}>
+          <View style={{height:deviceHeight/2-50}}>
 
           <Swiper style={styles.wrapper}
           height={deviceHeight/2}
@@ -296,7 +310,7 @@ export default class fuck extends Component {
           </Swiper>
           </View>
 
-          <View style= {{ height:(deviceHeight-(deviceHeight/3)-82)}}>
+          <View style= {{ height:(deviceHeight-(deviceHeight/2)-82)}}>
           <View style ={{flex:2, marginTop:0 ,borderBottomWidth:1,  borderColor:'#dcdcdc'}}>
 
 

@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   },
   separator: {
     alignSelf: 'flex-end',
-    borderBottomWidth:1 , borderBottomColor:'#dcdcdc',
+    
 
     width: Dimensions.get("window").width-100,
 
@@ -266,11 +266,7 @@ source={{uri:picOfWantedItem}}
 <Text  numberOfLines={1}  style={{fontSize:13}}>{iteminfo.lastMessage}</Text>                       
 </View>
 <View style = {{flex:0.2, top:25 ,alignItems:'center', justifyContent:'center'}}>
-<IcoButton
-source={require('funshare/src/img/arrowrigh.png')}
-icostyle={{width:20, height:20 }}
-
-/>
+ 
 </View>
 </View>
 </View>

@@ -167,6 +167,7 @@ snapshot.forEach(function(childSnapshot) {
 
  
 componentDidMount() {
+ 
   var self=this;
 
   BackAndroid.addEventListener('hardwareBackPress', () => {
@@ -214,6 +215,7 @@ constructor(props) {
     dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
       }),
+    search:this.props.search,
     visible: false,
     title:this.props.title,
     desc:this.props.desc,
@@ -232,23 +234,51 @@ constructor(props) {
 }
 addtofavorite(){
 
-  var offerData = {
-    keyOfWantedItem: this.state.keyOfWantedItem,
-    uidOfLikedItem: this.state.uidOfLikedItem,   
-    created:firebase.database.ServerValue.TIMESTAMP
-  };
-  var uploadTask = firebase.database()
+  var save = this ;
+  firebase.database()
   .ref('profiles')
   .child(currentUserGlobal.uid)
-  .child('favorite');
+  .child('favorite').once("value")
+  .then(function(snapshot) {
+    var hasName = snapshot.hasChild(save.state.keyOfWantedItem);
+    if (hasName){
 
+     
+      firebase.database()
+  .ref('profiles')
+  .child(currentUserGlobal.uid)
+  .child('favorite').child(save.state.keyOfWantedItem).remove().then(function(){
+     alert("Item removed from favorite Items");
+    });
+ 
+ 
 
-  var favoriteKey = uploadTask.push(offerData).key ;
-
+    }
+    else {
+          var favData = {
+            keyOfWantedItem: save.state.keyOfWantedItem,
+            uidOfLikedItem: save.state.uidOfLikedItem,   
+            created:firebase.database.ServerValue.TIMESTAMP
+          };        
+          var uploadTask = firebase.database()
+          .ref('profiles')
+          .child(currentUserGlobal.uid)
+          .child('favorite')
+          .child(save.state.keyOfWantedItem);
+          var favoriteKey = uploadTask.set(favData);
+          alert("Item has been added to favorite");
+         }
+  });
 
 }
 addtooffereditems(uidOfOfferingUser,keyOfOfferedItem,self){
- 
+ if(self.state.keyOfOfferedItem==keyOfOfferedItem)
+     {
+      self.setState({keyOfOfferedItem: null});
+       self.renderRow();
+    }
+  else
+  {
   self.setState({keyOfOfferedItem: keyOfOfferedItem});
   var offerData = {
     uidOfLikedItem: self.state.uidOfLikedItem,
@@ -263,6 +293,8 @@ addtooffereditems(uidOfOfferingUser,keyOfOfferedItem,self){
 
   self.setState({offerData: offerData , uidOfOfferingUser:uidOfOfferingUser});
    self.renderRow();
+  }
+ 
 
 
 }
@@ -270,7 +302,7 @@ uploadstart(){
   var offerData= this.state.offerData;
   var uidOfOfferingUser= this.state.uidOfOfferingUser;
   var keyOfOfferedItem= this.state.keyOfOfferedItem;
-  if(offerData)
+  if(offerData && keyOfOfferedItem && uidOfOfferingUser  )
 
   { 
     var uploadTask1 = firebase.database()
@@ -308,7 +340,8 @@ setImage(){
   var visible = !this.state.visible
   this.setState({visible: visible});
 }
-_setModalVisible = (visible) => {
+_setModalVisible(visible)
+{ 
   this.setState({modalVisible: visible});
 }
 renderImages(){
@@ -371,7 +404,12 @@ renderImages(){
 
     if(this.state.gback=="wishlist")
       this.props.replaceRoute(Routes.wishlist());
-    else
+    else if (this.state.gback=="searchresult")
+     {
+      var searchItems = this.state.search;
+       this.props.replaceRoute(Routes.search());
+      }
+         else
       this.props.replaceRoute(Routes.Home());
   }
 
@@ -388,7 +426,7 @@ renderImages(){
     animationType={'fade'}
     transparent={true}
     visible={this.state.modalVisible}
-    onRequestClose={() => {this._setModalVisible.bind(this, false)}}
+    onRequestClose={() => {this.setState({modalVisible:false})}}
     >
 
     <View style={ {flex:1 ,justifyContent:'flex-end' } }>
@@ -425,7 +463,7 @@ contentContainerStyle={{flex:1 ,  flexDirection: 'row',}}/>
 
       <View style={{flex:0.25,alignItems:'center'}}>
       <IcoButton
-      onPress={this._setModalVisible.bind(this, false)}
+      onPress={()=>this._setModalVisible(false)}
       source={require('funshare/src/img/dislike.png')}
       icostyle={{width:60, height:60}}
       />
@@ -452,7 +490,10 @@ contentContainerStyle={{flex:1 ,  flexDirection: 'row',}}/>
       </Modal>
 
 
-      <Modal visible={this.state.visible}  onRequestClose={() =>{this._setModalVisible.bind(this, false)}} transparent={true}>
+      <Modal visible={this.state.visible}
+      onRequestClose={() => {this.setState({visible:false})}}
+    
+    transparent={true}>
       <View style = {{ height:40,
         backgroundColor:   'rgba(0, 0, 0, 1)'}}>
         <View style= {{
@@ -503,9 +544,8 @@ contentContainerStyle={{flex:1 ,  flexDirection: 'row',}}/>
         </ScrollView>
         </View>
 
-        <View style={{  flex:1.2,  justifyContent:'flex-end'}}>
-        <View style = {{flex:1 ,bottom:10,marginLeft:20,marginRight:20,flexDirection:'row',alignItems:'center',}}>
-
+        <View style={{flex:1}}>
+        <View style={{position:'absolute', bottom:10 ,flex:1,marginLeft:20,marginRight:20,flexDirection:'row',alignItems:'center', justifyContent:'center'}}>
         <View style={{flex:0.12,alignItems:'center'}}>
         </View>
 

@@ -26,12 +26,13 @@ var deviceWidth = Dimensions.get('window').width -6;
 var deviceheight = Dimensions.get('window').height -(deviceWidth/2) ;
 var piclinks=[];
 
-export default class mystuff extends Component {
+export default class searchresult extends Component {
 
   componentDidMount() {
+    
      var self=this;
     BackAndroid.addEventListener('hardwareBackPress', () => {
-      self.goToHome1();
+      self.goBack();
       return true;
 
     });
@@ -45,86 +46,50 @@ export default class mystuff extends Component {
   }
 
   renderRow() {
-     this.setState({
-      isloading: true
-    });
-    var images= [];
-    return new Promise((next, error) => {
+    var self = this;
+var searchresult =this.state.searchMatches;
+ 
+var images= [];
+var num = searchresult.length;
+var j = 0;
+for(var i = 0 ; i <searchresult.length ; i++)
+    { j++;
+      var iteminfo = searchresult[i];
+    
+      images.push(
+          <View>
+          <TouchableOpacity
+          activeOpacity={ 0.75 }
+          onPress={self.goToDetails.bind(this,iteminfo)}
+          >
+          <View>
+          <Image
+          style={ styles.image }
+          source={{uri: iteminfo.piclink}}
+          /> 
+    
+          <Text numberOfLines={1} style ={{margin:5 , marginLeft:10}}>{iteminfo.title}</Text>  
+          </View>
+          </TouchableOpacity>
+          </View>);
+    
+    }
 
-      var self = this; 
-      var i = 0;
-      var num=null;
-      var uid = firebase.auth().currentUser.uid;
-      firebase.database()
-      .ref('items')
-      .child(uid)
-      .once('value')
-      .then(function(snapshot) {
-
-        num =snapshot.numChildren();
-        if(num == 0)
-        {
-           self.setState({
-     
-              isloading:false
-            });
-            
-        }
-        snapshot.forEach(function(childSnapshot) {
-
-          firebase.database()
-          .ref('items')
-          .child(uid).child(childSnapshot.key).once('value').then(function(snapshot) {
-            var iteminfo = {
-              piclink: snapshot.val().itemPic ,
-              desc: snapshot.val().description ,
-              title: snapshot.val().title ,  
-              itemkey: snapshot.key ,
-              itemcategory: snapshot.val().category }
-// alert(itemcategory)
-piclinks.push(iteminfo);
-images.push(
-  <View>
-  <TouchableOpacity
-  key = {iteminfo}
-  activeOpacity={ 0.75 }
-  onPress={self.fuck.bind(this,iteminfo)}
-  >
-  <View>
-  <Image
-  style={ styles.image }
-  source={{uri: iteminfo.piclink}}
-  /> 
-
-  <Text numberOfLines={1} style ={{margin:5 , marginLeft:10}}>{iteminfo.title}</Text>  
-  </View>
-  </TouchableOpacity>
-  </View>);
-
-  i++;
-  if (i==num){
+  if (j==num){
 
     self.setState({
       dataSource: self.state.dataSource.cloneWithRows(images),
-      isloading:false
+     
     });
-    
-    next(images);
-  }
-
-});
-
-})
-
-
-});
-
-}); 
+    }
+  
+ 
 }
 
-fuck(desc,piclink,title,key){
-  this.props.replaceRoute(Routes.fuck(desc,piclink,title,key));
-  // alert(desc + title + piclink);
+goToDetails(searchresult){
+  var searchItems = this.state.searchMatches;
+  
+  this.props.replaceRoute(Routes.details(searchresult.desc ,searchresult.piclink,   searchresult.title, searchresult.uidOfLikedItem ,searchresult.keyOfWantedItem ,searchresult.userofitem , "searchresult" ,searchItems));  
 }
 
 loading = (visible) => {
@@ -133,21 +98,19 @@ loading = (visible) => {
 constructor(props) {
   super(props);
 
-  this.goToHome1 = this.goToHome1.bind(this);
-  this.fuck = this.fuck.bind(this);
+  //this.goToHome1 = this.goToHome1.bind(this);
+  //this.fuck = this.fuck.bind(this);
   this.state = {
+    searchMatches:this.props.searchMatches,
     dataSource: new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2,
     }),
     isloading:false,
   };
 }
-goToHome1()
+goBack()
 { 
-    this.setState({
-      isloading: true
-    });
-  this.props.replaceRoute(Routes.Home1(currentUserGlobal));
+  this.props.replaceRoute(Routes.search());
 }
 render(){
    var spinner =  
@@ -160,9 +123,9 @@ render(){
 
   const TopNavigation = () => (
   <View style={{ padding: 10, flexDirection: 'row', backgroundColor: '#00D77F' }}>
-  <View style={{ flex:0.4 , justifyContent:'center' , margin:5  }}>
+  <View style={{ flex:0.2 , justifyContent:'center' , margin:5  }}>
   <TouchableOpacity
-  onPress={this.goToHome1.bind(this)}
+  onPress={this.goBack.bind(this)}
   style={{flex:1, justifyContent:'center'}}
   >
   <Image 
@@ -172,7 +135,7 @@ render(){
 
   </TouchableOpacity>
   </View>
- 
+  <View style={{ flex:0.2}}/>
   <View style={{ flex:0.2 , alignItems:'center', justifyContent:'center' , margin:5  }}>
   <Image
   resizeMode={Image.resizeMode.contain}
@@ -184,7 +147,7 @@ render(){
   <View style={{ flex:0.4 , alignItems:'flex-end', justifyContent:'center' , margin:5  }}>
   <TouchableOpacity
   style={styles.buttonStyle}
-  onPress={this.goToHome1.bind(this)}
+  onPress={this.goBack.bind(this)}
   >
   <View style= {{alignItems:'center' , justifyContent:'center'}}>
   <Text style= {{fontSize:20 , fontWeight:'bold' , color:'white'}} >
@@ -284,4 +247,4 @@ var styles = StyleSheet.create({
   }
 });
 
-AppRegistry.registerComponent('mystuff', () => mystuff);
+AppRegistry.registerComponent('searchresult', () => searchresult);

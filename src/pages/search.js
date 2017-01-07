@@ -81,14 +81,7 @@ var header1=
   );
 export default class setting extends Component {
   componentDidMount(){
-    this.distance(52.5661158,
-      13.3249123,
-      52.5661150,
-      13.3249300)
-    navigator.geolocation.getCurrentPosition( (position) => { var initialPosition = JSON.stringify(position);
-      this.setState({initialPosition}); }, (error) => alert(JSON.stringify(error)), {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000} );
-    this.watchID = navigator.geolocation.watchPosition((position) => { var lastPosition = JSON.stringify(position); 
-      this.setState({lastPosition}); });
+ 
     var self=this;
     BackAndroid.addEventListener('hardwareBackPress', () => {
 
@@ -112,9 +105,10 @@ export default class setting extends Component {
       picPath1:null,
       open:false,
       open1:false,
-      category: "Katagorie Auswahlen",
+      category: "swiper-all",
       slideCompletionValue: 0,
       slideCompletionCount: 0,
+      searchtext:null
 
     }
   }
@@ -135,13 +129,91 @@ export default class setting extends Component {
 
   }
   finish(){
-    if(this.state.Katagorie){
+    if(this.state.category&&this.state.searchtext){
+      var text =this.state.searchtext;
+      var array = text.split(" ");
+      this.renderRow(array)
 
-
+                  
     }
 
     else alert("Bitte füllen Sie alle Felder");
   }
+       
+
+   renderRow(array) {
+    var searchItems=[];
+      var self = this ;
+      var ar = [];
+      return new Promise((next, error) => {
+        var i = 0;
+        var num=0;
+
+
+        firebase.database()
+        .ref('categories')
+        .child(self.state.category)
+        .once('value')
+        .then(function(snapshot) {
+          num =snapshot.numChildren();
+          //alert(num);
+     
+          snapshot.forEach(function(childSnapshot) {
+
+            firebase.database()
+            .ref('categories')
+            .child(self.state.category).child(childSnapshot.key).once('value').then(function(snapshot) {
+              var iteminfo = {
+                piclink: snapshot.val().itemPic,
+                desc :snapshot.val().description,
+                title: snapshot.val().title,
+                userofitem: snapshot.val().username,
+                keyOfWantedItem: snapshot.key,
+                uidOfLikedItem:snapshot.val().uid,
+              }
+           
+                var titlearray = iteminfo.title.split(" ");
+                  for(var j = 0 ; j<titlearray.length; j++)
+                    
+                  {     
+                        var result =false;
+                        var titleword = titlearray[j];
+                    
+                        for (var k = 0 ; k<array.length ; k++)
+                        {
+                         
+                          if(array[k] == titleword)
+                            {
+                                searchItems.push(iteminfo);
+                                result=true;
+                                 break;
+                                 
+                            }
+                            
+                        }
+                    if(result)break;
+              }
+
+
+  i++;
+  if (i==num){
+    
+    self.props.replaceRoute(Routes.searchresult(searchItems))
+     
+    
+    next(searchItems);
+  }
+
+});
+
+})
+
+
+});
+
+}); 
+}
+
   distance(lat1, lon1, lat2, lon2, unit) {
     var radlat1 = Math.PI * lat1/180
     var radlat2 = Math.PI * lat2/180
@@ -162,7 +234,7 @@ render() {
 
   const TopNavigation = () => (
     <View style={{ padding: 8, flexDirection: 'row', backgroundColor: '#00D77F' }}>
-    <View style={{ flex:0.2 , justifyContent:'center' , margin:5  }}>
+    <View style={{ flex:0.4 , justifyContent:'center' , margin:5  }}>
     <TouchableOpacity
     onPress={this.goToSetting.bind(this)}
     >
@@ -173,7 +245,7 @@ render() {
 
     </TouchableOpacity>
     </View>
-    <View style={{ flex:0.2}}/>
+     
     <View style={{ flex:0.2 , alignItems:'center', justifyContent:'center' , margin:5  }}>
     <Image
     resizeMode={Image.resizeMode.contain}
@@ -182,20 +254,11 @@ render() {
     />
     </View>
 
-    <View style={{ flex:0.4 , alignItems:'flex-end', justifyContent:'center' , margin:5  }}>
-    <TouchableOpacity
-    style={styles.buttonStyle}
-    onPress={this.finish.bind(this)}
-    >
-    <View style= {{alignItems:'center' , justifyContent:'center', marginRight:5  }}>
-    <Text style= {{fontSize:15, fontWeight:'bold' , color:'white'}} >
-    Anwenden
-    </Text>
+ 
+   <View style={{ flex:0.4 , alignItems:'flex-end', justifyContent:'center' , margin:5  }}>
+   
     </View>
-    </TouchableOpacity>
-
-    </View>
-
+ 
     </View>
     );
 
@@ -212,9 +275,9 @@ render() {
     <View style={{flexDirection:'row'}}>
     <InputButton
     value={"Alles"}
-    container={this.state.category =="alles" ? issellected : null}
+    container={this.state.category =="swiper-all" ? issellected : null}
     source={require('funshare/src/img/categories/all.png')}
-    onPress={this._onInputButtonPressed.bind(this,"alles","funshare/src/img/categories/hotswop.png")}
+    onPress={this._onInputButtonPressed.bind(this,"swiper-all","funshare/src/img/categories/hotswop.png")}
     />
     <InputButton
     value={"Hotswop"}
@@ -363,6 +426,7 @@ render() {
       borderWidth: 0.5, }} >  
       <TextInput
       placeholder="z.B. Canon Spiegelreflexkamera"
+      onChangeText={(text) => this.setState({searchtext: text})}
       placeholderTextColor= '#a9a9a9'
       selectionColor='#6495ed'
       autoCapitalize="none"
@@ -402,50 +466,7 @@ render() {
       easing="easeOutCubic"
       />
       </View>
-      <View  style={{flex:1}} >
-      <View style={{flex:1,margin:10 , flexDirection:'row'}}>
-      <View style={{flex:0.5 ,flexDirection:'row', alignItems:'flex-start'}}>
-      <Image source={require('../img/radius.png')}
-
-      style={{width:25,height:25 ,marginLeft:8, marginRight:30}}/>
-      <Text style={styles.text} >
-      RADIUS
-      </Text>
-
-      </View>
-      <View style={{flex:0.5 , alignItems:'flex-end'}}>
-
-
-      <Text style={styles.text} >
-      {this.state.value && +this.state.value.toFixed(3) + " Km"}
-      </Text>
-
-      </View>
-
-      </View>
-
-      <View style={{flex:1, flexDirection:'row' , marginLeft:15 ,marginBottom:10 ,padding:10 ,borderBottomWidth:0.5 , borderBottomColor:'#dcdcdc'}}> 
-      <View style={{flex:0.1}}> 
-      <Image source={require('../img/house.png')}
-
-      style={{width:25,height:25 , marginRight:10}}/>
-      </View>
-      <View style={{flex:0.8}}> 
-      <Slider
-      minimumValue={1}
-      maximumValue={500}
-      step={1}
-
-      {...this.props}
-      onValueChange={(value) => this.setState({value: value})} />
-      </View>
-      <Image source={require('../img/world.png')}
-
-      style={{width:25,height:25 , marginRight:10}}/>
-      </View>
-      </View>
-      <View>
-      </View>
+  
 
 
 
@@ -455,7 +476,7 @@ render() {
 
       <TouchableOpacity
       style={styles.button}
-      //onPress={this.finish.bind(this)}
+      onPress={this.finish.bind(this)}
       >
       <Text style={styles.buttontext}>Anwenden</Text>
       </TouchableOpacity>
