@@ -28,7 +28,7 @@ var piclinks=[];
 
 export default class mystuff extends Component {
 
-  componentDidMount() {
+componentDidMount() {
      var self=this;
     BackAndroid.addEventListener('hardwareBackPress', () => {
       self.goToHome1();
@@ -36,6 +36,13 @@ export default class mystuff extends Component {
 
     });
     self.renderRow(); 
+    var ref = firebase.database()
+          .ref('items')
+          .child(currentUserGlobal.uid);
+    ref.on('child_added', function(childSnapshot, prevChildKey) {
+      self.renderRow(); 
+      
+    });
    
 
   }

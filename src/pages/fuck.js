@@ -76,7 +76,6 @@ export default class fuck extends Component {
     this.state = {
       visible: false,
       icategory:this.props.iteminfo.itemcategory,
-
       title:this.props.iteminfo.title,
       desc:this.props.iteminfo.desc,
       piclink:this.props.iteminfo.piclink,
