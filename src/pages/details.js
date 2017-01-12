@@ -432,7 +432,7 @@ renderImages(){
     <View style={ {flex:1 ,justifyContent:'flex-end' } }>
 
     <View style= {{height:modalheight , backgroundColor:   'rgba(0, 0, 0, 0.7)'}} >
-    <Text style={{color:'white', fontSize:16 , marginLeft:8}}>Meine offered Objekte</Text>
+    <Text style={{color:'white', fontSize:16 , marginLeft:8}}>Meine Objekte</Text>
 
     <View>
     <ScrollView

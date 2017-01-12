@@ -170,22 +170,7 @@ return true;
       <View style={{flex: 0.1,justifyContent:'center', alignItems: 'center', marginTop: deviceheight/15}}>
 
 
-      <LoginButton
-      style={{ width:300 , height:35}}
-      publishPermissions={["publish_actions"]}
-      onLoginFinished={
-        (error, result) => {
-          if (error) {
-            alert("Login failed with error: " + result.error);
-          } else if (result.isCancelled) {
-            alert("Login was cancelled");
-          } else {
-
-            alert("Login was successful with permissions: " + result.grantedPermissions)
-          }
-        }
-      }
-      onLogoutFinished={() => alert("User logged out")}/>
+      
 
       </View>
 

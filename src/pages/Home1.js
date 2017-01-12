@@ -265,7 +265,8 @@ return true;
         {
           width:28,
           height:28,
-
+          justifyContent:'center',
+          alignItems:'center',
           backgroundColor: '#FF5C7E'
         }
       }
@@ -316,16 +317,7 @@ return true;
         />
 
         </View>
-        <View style={styles.inputContainer}>
-        <IconButton
-        container={{  flex: 1 ,marginBottom:7,flexDirection: "row" }}
-        inputButtonText={{color:'#FF5C7E',fontSize:20 , fontStyle: 'italic'}}
-        value={"Premium"}
-        source={require('../img/star.png')}
-        onPress={this.logout.bind(this)}
-        />
-
-        </View>
+      
         </View>
         </View>
 

@@ -51,8 +51,6 @@ const styles = StyleSheet.create({
   separator: {
     flex:1,
     alignSelf: 'flex-end',
-    borderBottomWidth:1 , borderBottomColor:'#dcdcdc',
-
     width: Dimensions.get("window").width-100,
 
   },
@@ -322,27 +320,35 @@ renderRow() {
 
         <View key= {iteminfo} style={{flex:1}}>
 
-        <View style = {{flex:1,paddingTop:8, paddingBottom:12, paddingLeft:20, flexDirection:'row' ,backgroundColor:'white'}} >
+        <View style = {{paddingTop:8, paddingBottom:12, paddingLeft:20, flexDirection:'row' ,backgroundColor:'white'}} >
 
         <View style = {{flex:0.6 , flexDirection:'row', justifyContent:'flex-start' , alignItems:'center'}}>
+       <View style = {{height:60,
+    width: 60,
+    borderRadius: 30}}>
         <Image
-        style={{flex:0.4,
+        style={{
           height:60,
           width:60,
           borderRadius:30}}
         source={{uri:picOfWantedItem}}
         /> 
+        </View>
         <Image
         style={{height:15 , width : 15 , margin:10}}
         source={require('funshare/src/img/star.png')}
         /> 
+          <View style = {{height:60,
+    width: 60,
+    borderRadius: 30}}>
         <Image
-        style={{flex:0.4,
+        style={{
           height:60,
           width:60,
           borderRadius:30}}
         source={{uri:picOfOfferedItem}}
         /> 
+        </View>
         </View>
 
         <View style = {{flex:0.4 , flexDirection:'row', justifyContent:'center'}}>
@@ -513,7 +519,7 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     <View style= {{ height:deviceheight, backgroundColor:   'rgba(0, 0, 0, 0.9)'}} >
     <View style= {{alignItems:'center'}} >
     <Text style={{color:'white', fontSize:40,fontWeight:'bold',marginTop:25}}>Glückwunsch</Text>
-    <Text style={{color:'white', fontSize:30,fontWeight:'bold',marginTop:25}}>it's a Deal!</Text>
+    <Text style={{color:'white', fontSize:30,fontWeight:'bold',marginTop:25}}>it's a Match!</Text>
     </View>
 
     <View style = {{alignItems:'center' , marginTop:25}}>
@@ -526,27 +532,34 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     </View>
 
 
-    <View style = {{flexDirection:'row', flex:1 ,justifyContent:'center' }}>
+    <View style = {{flexDirection:'row',marginTop:30,justifyContent:'center' }}>
     <View style = {{  flex:0.5 ,alignItems:'center' }}>
-    <Image  
+     <View style = {{  flex:0.5 ,alignItems:'center' }}>
+    <View  style={{height:100 , width:100 , borderRadius:50 ,borderWidth:1,borderColor:'white'}} >
+   
+   <Image  
     source={{uri:this.state.picOfWantedItem}}
-    style={{height:100 , width:100 , borderRadius:50}}                                
-    />
+     style={{height:98 , width:98 , borderRadius:49 }}                                
+   />
+     </View>
+    </View>
     </View>
     <View style = {{  flex:0.5 ,alignItems:'center' }}>
+    <View  style={{height:100 , width:100 , borderRadius:50 ,borderWidth:1,borderColor:'white'}} >
     <Image 
-
     source={{uri:this.state.picOfOfferedItem}}
-    style={{height:100 , width:100 , borderRadius:50}}                                
+    style={{height:98 , width:98 , borderRadius:49 }}                                
     />
     </View>
     </View>
-    <View style={{position:'absolute', bottom:30 ,flex:1,marginLeft:20,marginRight:20,flexDirection:'row',alignItems:'center', justifyContent:'center'}}>
+    </View>
+    <View style={{position:'absolute', bottom:30 ,flex:1,marginLeft:10,marginRight:10,flexDirection:'row', justifyContent:'center'}}>
 
+    <View style={{flexDirection:'row',flex:0.25  , alignItems:'flex-start'}}>
+    <Text style={{color:'white', fontSize:15 ,marginTop:18 }}>Abbrechen</Text>
+    </View>
 
-
-    <View style={{flexDirection:'row',flex:0.5 }}>
-    <Text style={{color:'white', fontSize:15 ,marginTop:18  }}>Abbrechen</Text>
+    <View style={{flexDirection:'row',flex:0.25 ,alignItems:'center' }}>
     <IcoButton
     onPress={this.back.bind(this)}
     source={require('funshare/src/img/dislike.png')}
@@ -554,13 +567,15 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     />
     </View>
 
-    <View style={{flexDirection:'row',flex:0.5 }}>
-
+    <View style={{flexDirection:'row',flex:0.25 ,alignItems:'center'}}>
     <IcoButton
     source={require('funshare/src/img/like.png')}
     onPress={this.finishDeal.bind(this,this.state.childKey,this.state.uidOfOfferingUser,this.state.snapVal,this.state.newRef,this.state.uidOfLikedItem)}
     icostyle={{width:60, height:60}}
     />
+    </View>
+
+   <View style={{flexDirection:'row',flex:0.25  , alignItems:'flex-start'}}>
     <Text style={{color:'white', fontSize:15 ,marginTop:18  }}>Bestätigen</Text>
     </View>
 
@@ -584,6 +599,7 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     renderRow={(rowData) => <View style = {{flex:1}} >{rowData}</View>}
     // renderSeparator={() => <View style={styles.separator} />}
     renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
+    renderFooter={(sectionId, rowId) => <View key={rowId} style={{alignSelf: 'center', borderBottomWidth:1 , borderBottomColor:'#dcdcdc', width: Dimensions.get("window").width-40,marginBottom:15,marginTop:15}} />}
     contentContainerStyle={{flex:1,paddingTop:20 ,backgroundColor:'white',}}/>
     </View>
     <View style= {{flex:1}}>

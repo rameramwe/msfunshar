@@ -265,7 +265,12 @@ renderCustomActions(props) {
     <View style={{ padding: 10, flexDirection: 'row', backgroundColor: '#FF5C7E' }}>
     <View style={{ flex:0.4 , justifyContent:'center' , margin:5  }}>
 
+     <IcoButton
 
+    source={require('funshare/src/img/swop.png')}
+    onPress={this.goTochatscren.bind(this)}
+    icostyle={{width:35, height:35}}
+    />
 
     </View>
 
@@ -278,12 +283,7 @@ renderCustomActions(props) {
     </View>
 
     <View style={{ flex:0.4 , alignItems:'flex-end', justifyContent:'center' , margin:5  }}>
-    <IcoButton
-
-    source={require('funshare/src/img/swop.png')}
-    onPress={this.goTochatscren.bind(this)}
-    icostyle={{width:35, height:35}}
-    />
+   
 
     </View>
 

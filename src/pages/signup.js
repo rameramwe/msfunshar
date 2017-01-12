@@ -91,28 +91,34 @@ return true;
 
   signup(){
 
-    this.setState({
-      modalVisible: true
-    });
-    var save = this;
-    firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(function() {
-      var user = firebase.auth().currentUser;
+    if (this.state.password && this.state.name &&this.state.email)
+    {
+        this.setState({
+          modalVisible: true
+        });
+        var save = this;
+        firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(function() {
+        var user = firebase.auth().currentUser;
 
-      user.updateProfile({
-        photoURL: "https://firebasestorage.googleapis.com/v0/b/funshare-c6017.appspot.com/o/default%2Fmale-user-shadow_318-34042.png?alt=media&token=2d4bf3a1-2fef-4aea-9b17-2cd471d4316e",
-        displayName: save.state.name,
+          user.updateProfile({
+            photoURL: "https://firebasestorage.googleapis.com/v0/b/funshare-c6017.appspot.com/o/default%2Fmale-user-shadow_318-34042.png?alt=media&token=2d4bf3a1-2fef-4aea-9b17-2cd471d4316e",
+            displayName: save.state.name,
 
-      }).then(function() {
-        save.goToHome1();
-      }, function(error) {
+          }).then(function() {
+            save.goToHome1();
+          }, function(error) {
 
-      });
-    }, function(error) {
-      alert("Signup failed")
-      save.setState({
-        modalVisible: false
-      });
-    });
+          });
+        }, function(error) {
+          alert("Signup failed")
+          save.setState({
+            modalVisible: false
+          });
+        });
+    }
+    else
+      alert("Füllen Sie alle die Felde")
+  
 
   }
   goBack(){
@@ -217,7 +223,7 @@ return true;
       style={styles.textinput}
       onChangeText={(text) => this.setState({password: text})} 
       secureTextEntry={true}
-      placeholder={"Passwort"}
+      placeholder={"Passwort (mindestens 6 Zeichen lang sein)"}
       returnKeyType="done"
       onSubmitEditing={ this.signup.bind(this)}  
       placeholderTextColor="white"
@@ -236,26 +242,8 @@ return true;
 
       </View>
 
-      <View style={{flex:0.1,justifyContent:'center',alignItems:'center'}}> 
-
-      <LoginButton
-      style={{ width:300 , height:35}}
-      publishPermissions={["publish_actions"]}
-      onLoginFinished={
-        (error, result) => {
-          if (error) {
-            alert("Login failed with error: " + result.error);
-          } else if (result.isCancelled) {
-            alert("Login was cancelled");
-          } else {
-
-            alert("Login was successful with permissions: " + result.grantedPermissions)
-          }
-        }
-      }
-      onLogoutFinished={() => alert("User logged out")}/>
-
-      </View>
+   
+      
 
       </ScrollView>  
       </Image>

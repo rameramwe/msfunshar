@@ -37,8 +37,7 @@ export default React.createClass({
       <View key= {x} style= {{flex:2}}>
       <View style={styles.card}>
       <TouchableOpacity
-      activeOpacity={ 0.7}
-      onPress={() => {this.props.goToDetails(x.description ,x.image,   x.title, x.uidOfLikedItem ,x.keyOfWantedItem , x.username )}}
+      onPress={() => this.goToDetails(currentLikedItem)}
       >
 
       <View style= {{width:deviceWidth, height:deviceheight-50 }} >
@@ -57,8 +56,7 @@ export default React.createClass({
       </View>
       <View style={{  height:25,marginLeft:10, marginRight:10, flexDirection:'row' , flex:1 }}>
       <View style = {{flex:1}} >
-      <Text numberOfLines={1} style={{fontSize:14, fontWeight:'300', color:'#444'}}>{x.description} </Text>
-      </View>
+       </View>
       <View style={{flex:1}}>
       <Text style={{fontSize:14, fontWeight:'300', color:'#444'}}>{""} </Text>
       </View>
