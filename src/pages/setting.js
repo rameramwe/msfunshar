@@ -14,9 +14,9 @@ import  {
   Dimensions,
   TouchableOpacity
 } from 'react-native';
-import IcoButton from 'funshare/src/components/icobutton';
 import Routes from 'funshare/Routes';
 import IcotextButton from 'funshare/src/components/icotextButton';
+import IcoButton from 'funshare/src/components/icobutton';
 import firebase from 'firebase';
 var deviceheight = Dimensions.get('window').height ;
 var devicewidth = Dimensions.get('window').width ;

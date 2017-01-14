@@ -16,7 +16,6 @@ import {
   TouchableHighlight
 } from 'react-native';
 
-import Button from '../components/button';
 import Reflux from 'reflux';
 import DataStore from 'funshare/DataStore';
 import Actions from 'funshare/Actions';
@@ -25,6 +24,7 @@ import Account from './account';
 import Routes from 'funshare/Routes';
 import firebase from 'firebase';
 import styles from '../styles/common-styles.js';
+import Button from '../components/button';
 var deviceheight = Dimensions.get('window').height ;
 var devicewidth = Dimensions.get('window').width ;
 
@@ -180,21 +180,18 @@ return true;
       );
   }
 
+  goToSignup(){
+    this.props.replaceRoute(Routes.signup());
+  }
 
+  
   login(){
-
     Actions.login({
       email: this.state.email,
       password: this.state.password
     }) 
-
-
-
   }
 
-  goToSignup(){
-    this.props.replaceRoute(Routes.signup());
-  }
   loginfb(){
 
 

@@ -16,12 +16,11 @@ import {
   ActivityIndicator,
   Modal,
 } from 'react-native';
-
-import Routes from 'funshare/Routes';
 import style from '../styles/common-styles.js';
 import IcoButton from 'funshare/src/components/icobutton';
 import Loading from 'funshare/src/components/Loading';
 import firebase from 'firebase';
+import Routes from 'funshare/Routes';
 var deviceWidth = Dimensions.get('window').width -6;
 var deviceheight = Dimensions.get('window').height -(deviceWidth/2) ;
 var piclinks=[];

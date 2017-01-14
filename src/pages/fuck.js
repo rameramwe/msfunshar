@@ -16,20 +16,18 @@ import {
   TouchableOpacity,
   TouchableHighlight
 } from'react-native';
-import IcoButton from 'funshare/src/components/icobutton';
 import Swiper from 'react-native-swiper';
 import Routes from 'funshare/Routes';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import fetchblob from 'funshare/src/components/fetchblob';
 import firebase from 'firebase';
+import IcoButton from 'funshare/src/components/icobutton';
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 var images=[];
 var dummypicms=null;
 const styles = StyleSheet.create({
-  wrapper: {
-
-  },
+ 
   slide1: {
     flex: 1,
     justifyContent: 'center',
@@ -94,14 +92,14 @@ export default class fuck extends Component {
     var visible = !this.state.visible
     this.setState({visible: visible});
   }
+
+
   renderImages(){
     var images ;
     var self =dummypicms;
 
     images=
     (
-
-
       <TouchableOpacity
       activeOpacity={1}  
       onPress = {() => this.setImage()}

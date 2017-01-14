@@ -491,9 +491,6 @@ style={{width:40, height:40}}
 <View style={{flex:1,alignItems:'center' , justifyContent:'flex-start'}}>
 <Tinder _setModalVisible={this._setModalVisible.bind(this, true)} goToDetails={this.goToDetails.bind(this)} />
 
-
-
-
 </View>
 </View>
 

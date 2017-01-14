@@ -34,16 +34,17 @@ export default React.createClass({
     currentLikedItem=x;
 
     return (
-      <View key= {x} style= {{flex:2}}>
+      <View key= {x} style= {{flex:1 , justifyContent:'center'}}>
       <View style={styles.card}>
       <TouchableOpacity
+      style= {{width:deviceWidth, height:deviceheight-50 }}
       onPress={() => this.goToDetails(currentLikedItem)}
       >
-
+      <View style = {{flex:1}}>
       <View style= {{width:deviceWidth, height:deviceheight-50 }} >
 
       <Image style={styles.thumbnail} resizeMode={Image.resizeMode.cover} source={{uri: x.image}} />
-
+      </View>
       </View>
       </TouchableOpacity>
       <View style={{marginLeft:10, marginRight:10,borderBottomWidth:1,borderColor:'#e3e3e3', height:25, flexDirection:'row' }}>
@@ -138,6 +139,7 @@ export default React.createClass({
 
 
               var im = {image:piclink ,title:title , description:desc , location:'9' , uidOfLikedItem:uidOfLikedItem,keyOfWantedItem:keyOfWantedItem , username:userofitem }
+              if(currentUserGlobal.uid != uidOfLikedItem)
               ar.push(im);
               
 
@@ -203,9 +205,7 @@ export default React.createClass({
       }
 
     },
-    gotToFuck(){
-      this.props.replaceRoute(Routes.addstuff())
-    },
+  
     addtofavorite (x){
       if(x)
       {
@@ -278,6 +278,7 @@ export default React.createClass({
 
       <View style = {{ flex:0.2 , justifyContent:'flex-end'}}>
       <View style={{flex : 1 ,flexDirection:'row' ,width:deviceWidth , alignItems:'flex-end'}}>
+       <View style={{position:'absolute', bottom:10,width:deviceWidth  ,flex:1,flexDirection:'row',alignItems:'center', justifyContent:'center'}}>
 
       <View style={{flex:0.25,alignItems:'center'}}>
       <IcoButton
@@ -311,7 +312,7 @@ export default React.createClass({
       icostyle={{width:45, height:45}}
       />
       </View>
-
+      </View>
       </View> 
 
       </View>

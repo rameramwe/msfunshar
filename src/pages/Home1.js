@@ -239,38 +239,27 @@ return true;
       <View
       style={styles.profilePictureContainer}
       >
-      <IconBadge
-      MainElement={
+       
+      <View style = {styles.profilePicture}>
 
         <Image
         source={this.state.dummypic}
         style={styles.profilePicture}
-        />
+        >
 
-      }
-      BadgeElement={
+        </Image>
 
-        <TouchableOpacity
-
-        onPress={this.uploadphoto.bind(this)}
+         <TouchableOpacity
+          style = {{ flex:1, width:28,height:28,borderRadius:14, backgroundColor: '#FF5C7E',position: 'absolute',alignItems:'center',justifyContent:'center', bottom:5 , right:5}}
+          onPress={this.uploadphoto.bind(this)}
         >
         <Image source={require('../img/edit.png')}
 
         style={{width:18,height:18}}/>
         </TouchableOpacity>
-
-      }
-
-      IconBadgeStyle={
-        {
-          width:28,
-          height:28,
-          justifyContent:'center',
-          alignItems:'center',
-          backgroundColor: '#FF5C7E'
-        }
-      }
-      />
+      </View>
+   
+     
       </View>
       <View>
       <Text
