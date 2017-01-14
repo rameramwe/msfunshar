@@ -129,90 +129,14 @@ export default class setting extends Component {
 
   }
   finish(){
-    if(this.state.category&&this.state.searchtext){
-      var text =this.state.searchtext;
-      var array = text.split(" ");
-      this.renderRow(array)
-
-                  
-    }
-
-    else alert("Bitte füllen Sie alle Felder");
+    if(this.state.category){
+      var category=this.state.category;
+      var search = this.state.searchtext;
+      this.props.replaceRoute(Routes.Home(category ,search));               
   }
-       
+ }     
 
-   renderRow(array) {
-    var searchItems=[];
-      var self = this ;
-      var ar = [];
-      return new Promise((next, error) => {
-        var i = 0;
-        var num=0;
-
-
-        firebase.database()
-        .ref('categories')
-        .child(self.state.category)
-        .once('value')
-        .then(function(snapshot) {
-          num =snapshot.numChildren();
-          //alert(num);
-     
-          snapshot.forEach(function(childSnapshot) {
-
-            firebase.database()
-            .ref('categories')
-            .child(self.state.category).child(childSnapshot.key).once('value').then(function(snapshot) {
-              var iteminfo = {
-                piclink: snapshot.val().itemPic,
-                desc :snapshot.val().description,
-                title: snapshot.val().title,
-                userofitem: snapshot.val().username,
-                keyOfWantedItem: snapshot.key,
-                uidOfLikedItem:snapshot.val().uid,
-              }
-           
-                var titlearray = iteminfo.title.split(" ");
-                  for(var j = 0 ; j<titlearray.length; j++)
-                    
-                  {     
-                        var result =false;
-                        var titleword = titlearray[j];
-                    
-                        for (var k = 0 ; k<array.length ; k++)
-                        {
-                         
-                          if(array[k] == titleword)
-                            {
-                                searchItems.push(iteminfo);
-                                result=true;
-                                 break;
-                                 
-                            }
-                            
-                        }
-                    if(result)break;
-              }
-
-
-  i++;
-  if (i==num){
-    
-    self.props.replaceRoute(Routes.searchresult(searchItems))
-     
-    
-    next(searchItems);
-  }
-
-});
-
-})
-
-
-});
-
-}); 
-}
+ 
 
   distance(lat1, lon1, lat2, lon2, unit) {
     var radlat1 = Math.PI * lat1/180

@@ -224,10 +224,13 @@ constructor(props) {
     username:this.props.username,
     uidOfLikedItem:this.props.uidOfLikedItem,
     keyOfWantedItem:this.props.keyOfWantedItem,
+    category:this.props.category,
     offerData:null,
     modalVisible:false
 //profilePicture:"http://domaingang.com/wp-content/uploads/2012/02/example.png"
 }
+alert(this.state.category);
+alert(this.state.search);
 
 
 

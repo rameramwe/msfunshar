@@ -61,11 +61,11 @@ class Routes {
  
     }
   }
-  Home() {
+  Home(category , search) {
     return {
       name: "Home",      
       component: Home,
- 
+      passProps: { category: category , search: search },
  
     }
   }
@@ -123,7 +123,7 @@ class Routes {
       name: "details",
  
       component: details,
-      passProps: { desc:desc , piclink :piclink,title:title, uidOfLikedItem:uidOfLikedItem ,keyOfWantedItem:keyOfWantedItem,username:username ,gback:gback,search:search},
+      passProps: { desc:desc , piclink :piclink,title:title, uidOfLikedItem:uidOfLikedItem ,keyOfWantedItem:keyOfWantedItem,username:username ,gback:gback},
  
     }
   }

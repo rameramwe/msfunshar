@@ -154,6 +154,7 @@ snapshot.forEach(function(childSnapshot) {
 
   constructor(props) {
     super(props);
+
     var save = this;
     firebase.auth().onAuthStateChanged(function(user1) {
       if (user1) {
@@ -248,8 +249,10 @@ else {
       transparent: true,
       unseenNotifNumberGlobal:null,
       token: "",
+      icategory:this.props.category ? this.props.category : "swiper-all" ,
+      search:this.props.search ? this.props.search : null ,
     };
-
+    
 //this.fuck = this.fuck.bind(this);
   this.renderRow = this.renderRow.bind(this)
 }
@@ -309,6 +312,7 @@ sendRemote(notif) {
     show_in_foreground: true,
     local: true,
   });
+
 }
 
 
@@ -489,7 +493,7 @@ style={{width:40, height:40}}
 </View>
 </View>
 <View style={{flex:1,alignItems:'center' , justifyContent:'flex-start'}}>
-<Tinder _setModalVisible={this._setModalVisible.bind(this, true)} goToDetails={this.goToDetails.bind(this)} />
+<Tinder search={this.state.search} event= {this.state.icategory}  _setModalVisible={this._setModalVisible.bind(this, true)} goToDetails={this.goToDetails.bind(this)} />
 
 </View>
 </View>

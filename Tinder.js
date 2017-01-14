@@ -31,6 +31,7 @@ const Cards2 = [
 export default React.createClass({
 
   Card(x) {
+
     currentLikedItem=x;
 
     return (
@@ -94,15 +95,16 @@ export default React.createClass({
     },
     componentWillUnmount() {
 
-      //Cards=[];
+      Cards=[];
     },
     rami(){
-      
+   
      this.setState({
       loading: true
     });
       var self = this ;
       var ar = [];
+       var result = self.props.event ? self.props.event : swiper-all;
       return new Promise((next, error) => {
         var i = 0;
         var num=0;
@@ -110,7 +112,7 @@ export default React.createClass({
 
         firebase.database()
         .ref('categories')
-        .child('swiper-all')
+        .child(result)
         .once('value')
         .then(function(snapshot) {
           num =snapshot.numChildren();
@@ -127,7 +129,7 @@ export default React.createClass({
 
             firebase.database()
             .ref('categories')
-            .child('swiper-all').child(childSnapshot.key).once('value').then(function(snapshot) {
+            .child(result).child(childSnapshot.key).once('value').then(function(snapshot) {
               var piclink = snapshot.val().itemPic;
               var desc = snapshot.val().description;
               var title = snapshot.val().title;
@@ -139,7 +141,37 @@ export default React.createClass({
 
 
               var im = {image:piclink ,title:title , description:desc , location:'9' , uidOfLikedItem:uidOfLikedItem,keyOfWantedItem:keyOfWantedItem , username:userofitem }
-              if(currentUserGlobal.uid != uidOfLikedItem)
+             // if(currentUserGlobal.uid != uidOfLikedItem)
+             if(self.props.search)
+             {
+              var array = self.props.search.split(" ");
+              
+                var titlearray = im.title.split(" ");
+                
+                  for(var j = 0 ; j<titlearray.length; j++)
+                    
+                  {     
+                        var result =false;
+                        var titleword = titlearray[j];
+                    
+                        for (var k = 0 ; k<array.length ; k++)
+                        {
+                         
+                          if(array[k] == titleword)
+                            {
+                                ar.push(im);
+                                global.indexArray= 0;
+                                result=true;
+                                 break;
+                                 
+                            }
+                            
+                        }
+                    if(result)break;
+              }
+
+             }
+             else
               ar.push(im);
               
 
