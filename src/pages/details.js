@@ -215,23 +215,22 @@ constructor(props) {
     dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
       }),
-    search:this.props.search,
     visible: false,
-    title:this.props.title,
-    desc:this.props.desc,
-    piclink:this.props.piclink,
-    gback:this.props.gback,
-    username:this.props.username,
-    uidOfLikedItem:this.props.uidOfLikedItem,
-    keyOfWantedItem:this.props.keyOfWantedItem,
-    category:this.props.category,
+    title:this.props.info.title,
+    desc:this.props.info.description,
+    piclink:this.props.info.image,
+    goback:this.props.info.goback,
+    username:this.props.info.username,
+    uidOfLikedItem:this.props.info.uidOfLikedItem,
+    keyOfWantedItem:this.props.info.keyOfWantedItem,
+    category:this.props.info.category,
+    search:this.props.info.search,
     offerData:null,
     modalVisible:false
 //profilePicture:"http://domaingang.com/wp-content/uploads/2012/02/example.png"
 }
-alert(this.state.category);
-alert(this.state.search);
-
+ 
+//alert(this.state.search) 
 
 
 }
@@ -405,15 +404,14 @@ renderImages(){
   }
   goBack(){
 
-    if(this.state.gback=="wishlist")
+    if(this.state.goback=="wishlist")
       this.props.replaceRoute(Routes.wishlist());
-    else if (this.state.gback=="searchresult")
-     {
-      var searchItems = this.state.search;
-       this.props.replaceRoute(Routes.search());
+   else
+      { 
+        var search=this.state.search;
+        var category=this.state.category;
+        this.props.replaceRoute(Routes.Home(category,search));
       }
-         else
-      this.props.replaceRoute(Routes.Home());
   }
 
   render() {

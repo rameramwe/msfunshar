@@ -132,11 +132,11 @@ export default class setting extends Component {
     if(this.state.category){
       var category=this.state.category;
       var search = this.state.searchtext;
-      this.props.replaceRoute(Routes.Home(category ,search));               
+      this.props.replaceRoute(Routes.Home(category ,search,1));               
   }
  }     
 
- 
+
 
   distance(lat1, lon1, lat2, lon2, unit) {
     var radlat1 = Math.PI * lat1/180

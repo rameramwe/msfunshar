@@ -98,13 +98,14 @@ export default React.createClass({
       Cards=[];
     },
     rami(){
-   
+    if(this.props.Startsearch)
+      global.indexArray= 0;
      this.setState({
       loading: true
     });
       var self = this ;
       var ar = [];
-       var result = self.props.event ? self.props.event : swiper-all;
+       var result = self.props.category ? self.props.category : swiper-all;
       return new Promise((next, error) => {
         var i = 0;
         var num=0;
@@ -142,12 +143,12 @@ export default React.createClass({
 
               var im = {image:piclink ,title:title , description:desc , location:'9' , uidOfLikedItem:uidOfLikedItem,keyOfWantedItem:keyOfWantedItem , username:userofitem }
              // if(currentUserGlobal.uid != uidOfLikedItem)
-             if(self.props.search)
+             if(self.props.search&&self.props.search!="")
              {
               var array = self.props.search.split(" ");
               
                 var titlearray = im.title.split(" ");
-                
+
                   for(var j = 0 ; j<titlearray.length; j++)
                     
                   {     
@@ -160,7 +161,7 @@ export default React.createClass({
                           if(array[k] == titleword)
                             {
                                 ar.push(im);
-                                global.indexArray= 0;
+                                
                                 result=true;
                                  break;
                                  
@@ -279,8 +280,21 @@ export default React.createClass({
     },
     goToDetails(currentLikedItem)
     { 
+      var category = this.props.category ? this.props.category : "swiper-all";
+      var search = this.props.search ? this.props.search : null ;
+        var info = 
+        {
+          username:currentLikedItem.username,
+          description:currentLikedItem.description,
+          image:currentLikedItem.image, 
+          title:currentLikedItem.title,
+          uidOfLikedItem:currentLikedItem.uidOfLikedItem ,
+          keyOfWantedItem:currentLikedItem.keyOfWantedItem ,
+          category: category,
+          search:search
+        };
       if (currentLikedItem) 
-      this.props.goToDetails(currentLikedItem.description ,currentLikedItem.image,   currentLikedItem.title, currentLikedItem.uidOfLikedItem ,currentLikedItem.keyOfWantedItem ,currentLikedItem.username );
+      this.props.goToDetails(info);
     },
     render() {
 

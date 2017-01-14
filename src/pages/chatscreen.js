@@ -335,8 +335,8 @@ renderRow() {
         /> 
         </View>
         <Image
-        style={{height:15 , width : 15 , margin:10}}
-        source={require('funshare/src/img/star.png')}
+        style={{height:30 , width : 30 , margin:10}}
+        source={require('funshare/src/img/sam.png')}
         /> 
           <View style = {{height:60,
     width: 60,

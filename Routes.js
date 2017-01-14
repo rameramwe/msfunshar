@@ -61,11 +61,11 @@ class Routes {
  
     }
   }
-  Home(category , search) {
+  Home(category , search ,Startsearch) {
     return {
       name: "Home",      
       component: Home,
-      passProps: { category: category , search: search },
+      passProps: { category: category , search: search , Startsearch:Startsearch },
  
     }
   }
@@ -118,12 +118,12 @@ class Routes {
     }
   }
   
-  details(desc,piclink,title,uidOfLikedItem,keyOfWantedItem,username,gback ) {
+  details(info) {
     return {
       name: "details",
  
       component: details,
-      passProps: { desc:desc , piclink :piclink,title:title, uidOfLikedItem:uidOfLikedItem ,keyOfWantedItem:keyOfWantedItem,username:username ,gback:gback},
+      passProps: { info:info },
  
     }
   }

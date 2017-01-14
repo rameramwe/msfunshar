@@ -251,8 +251,9 @@ else {
       token: "",
       icategory:this.props.category ? this.props.category : "swiper-all" ,
       search:this.props.search ? this.props.search : null ,
+      Startsearch:this.props.Startsearch ? this.props.Startsearch: null,
     };
-    
+
 //this.fuck = this.fuck.bind(this);
   this.renderRow = this.renderRow.bind(this)
 }
@@ -347,9 +348,9 @@ console.log(uidOfOfferingUser);
 handleNope () {
   Tinder._goToNextCard() 
 }
-goToDetails(desc,piclink,title,uidOfLikedItem ,keyOfWantedItem ,username){
-  if(keyOfWantedItem)
-  this.props.replaceRoute(Routes.details(desc ,piclink,title,uidOfLikedItem , keyOfWantedItem,username));
+goToDetails(info){
+  if(info.keyOfWantedItem)
+  this.props.replaceRoute(Routes.details(info));
 
 }
 
@@ -493,7 +494,7 @@ style={{width:40, height:40}}
 </View>
 </View>
 <View style={{flex:1,alignItems:'center' , justifyContent:'flex-start'}}>
-<Tinder search={this.state.search} event= {this.state.icategory}  _setModalVisible={this._setModalVisible.bind(this, true)} goToDetails={this.goToDetails.bind(this)} />
+<Tinder Startsearch={this.state.Startsearch} search={this.state.search} category= {this.state.icategory}  _setModalVisible={this._setModalVisible.bind(this, true)} goToDetails={this.goToDetails.bind(this)} />
 
 </View>
 </View>

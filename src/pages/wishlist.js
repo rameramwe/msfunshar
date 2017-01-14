@@ -73,8 +73,18 @@ var styles = StyleSheet.create({
 });
 
 export default class wishlist extends Component {
-goToDetails(desc,piclink,title,uidOfLikedItem ,keyOfWantedItem,username){
-   this.props.replaceRoute(Routes.details(desc ,piclink,title,uidOfLikedItem , keyOfWantedItem,username,"wishlist"));
+goToDetails(description,image,title,uidOfLikedItem ,keyOfWantedItem,username){
+   var info = 
+        {
+          username:username,
+          description:description,
+          image:image, 
+          title:title,
+          uidOfLikedItem:uidOfLikedItem ,
+          keyOfWantedItem:keyOfWantedItem ,
+          goback:"wishlist"
+        };
+   this.props.replaceRoute(Routes.details(info));
  
 }
 renderRow() {
