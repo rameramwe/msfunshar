@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 })
-const imagesViewer = [];
+var imagesViewer = [];
 export default class fuck extends Component {
 
   componentDidMount() {
@@ -67,6 +67,7 @@ export default class fuck extends Component {
       return true;
 
     });
+    //this.setImage();
 
   }
   constructor(props) {
@@ -82,7 +83,7 @@ export default class fuck extends Component {
       base64:null,
       itemkey:this.props.iteminfo.itemkey,
     }
-    this.setImage();
+    
   }
   setImage(){
 
@@ -140,7 +141,7 @@ export default class fuck extends Component {
     fetchblob.uploadphoto().then((picSetup) => {
       dummypicms=picSetup.source;
       this.setState({
-        piclink:picSetup.source,
+        //piclink:picSetup.source,
         dummypic:picSetup.source,  
         picPath1:picSetup.picPath,
         base64:picSetup.base64  
@@ -169,6 +170,7 @@ export default class fuck extends Component {
       else  alert("Bitte füllen Sie alle Felder");
 
   }
+
   remove(){
     var save=this;
     var uid=currentUserGlobal.uid;
@@ -200,20 +202,13 @@ export default class fuck extends Component {
       else alert("mother sharmootah go add a pic and a title and a description ot i'll come and fuck you"); 
     }
 
-    removeItem(){
-      var uid = firebase.auth().currentUser.uid;
-      firebase.database()
-      .ref('items')
-      .child(uid).child(this.state.key).remove();
-    }
+ 
 
     goBack(){
       this.props.replaceRoute(Routes.mystuff());
     }
 
-    _setModalVisible = (visible) => {
-      this.setState({modalVisible: visible});
-    }
+  
 
     render() {
       const TopNavigation = () => (
@@ -273,7 +268,7 @@ export default class fuck extends Component {
         >
         <TopNavigation/>
         <Modal visible={this.state.visible} 
-         onRequestClose={() => {this.setState({visible:false})}}
+        onRequestClose={() => {this.setState({visible:false})}}
         transparent={true}>
         <View style = {{ height:40,
           backgroundColor:   'rgba(0, 0, 0, 1)'}}>
@@ -284,7 +279,7 @@ export default class fuck extends Component {
 
           <IcoButton
           source={require('funshare/src/img/arrow.png')}
-          onPress={()=>this.setImage()}
+          onPress={()=>{ this.setState({visible:false})}}
           icostyle={{width:20, height:20}}
           />
           </View>

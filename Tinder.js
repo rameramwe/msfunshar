@@ -379,7 +379,9 @@ export default React.createClass({
     },
     thumbnail: {
       borderRadius:2,
-      flex:1,width:null, height:null
+      flex:1,
+      width:deviceWidth, 
+      height:deviceheight-50
     },
     text: {
       fontSize: 20,
