@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   }
 });
 
-class chatscreen extends React.Component {
+class PendingOffers extends React.Component {
   componentDidMount() {
     this.renderRow(); 
   var self=this;
@@ -172,20 +172,28 @@ class chatscreen extends React.Component {
     var newRefForOfferingUser=firebase.database()
     .ref('Notifications')
     .child(uidOfOfferingUser)
-    .child('Pending').child(childKey);
+    .child('Accepted').child(childKey);
+    var newRefForLikedItem=firebase.database()
+    .ref('Notifications')
+    .child(uidOfLikedItem)
+    .child('Accepted').child(childKey);
     var oldRefLikedItem=firebase.database()
     .ref('Notifications')
     .child(uidOfLikedItem)
-    .child('Unseen').child(childKey);
+    .child('Pending').child(childKey);
 
     newRefForOfferingUser.set( snapVal, function(error) {
-      if( !error ) {oldRefLikedItem.remove(); }
+      if( !error ) {   }
         else if( typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
     }).then(function(){
-        alert("Now we wait for the confirmation of the deal");
-        self.props.replaceRoute(Routes.chatscreen());
+      newRefForLikedItem.set( snapVal, function(error) {
+        if( !error ) {oldRefLikedItem.remove();   }
+        else if( typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
+      }).then(function(){
+        alert("Now You can chat");
+        self.props.replaceRoute(Routes.PendingOffers());
       });
-    
+    });
 }
 
 renderRow() {
@@ -204,7 +212,7 @@ renderRow() {
     firebase.database()
     .ref('Notifications')
     .child(uid)
-    .child('Unseen')
+    .child('Pending')
     .once('value')
     .then(function(snapshot) {
       num =snapshot.numChildren();
@@ -223,7 +231,7 @@ renderRow() {
         var oldRef=firebase.database()
         .ref('Notifications')
         .child(uid)
-        .child('Unseen').child(childSnapshot.key);
+        .child('Pending').child(childSnapshot.key);
         var newRef=firebase.database()
         .ref('Notifications')
         .child(uid)
@@ -233,7 +241,7 @@ renderRow() {
         firebase.database()
         .ref('Notifications')
         .child(uid)
-        .child('Unseen').child(childSnapshot.key).once('value').then(function(snapshot) {
+        .child('Pending').child(childSnapshot.key).once('value').then(function(snapshot) {
           snapVal=snapshot.val();
           firebase.database().ref('items').child(snapshot.val().uidOfOfferingUser)
           .child(snapshot.val().keyOfOfferedItem).once('value').then(function(snapshot1){
@@ -252,7 +260,7 @@ renderRow() {
                      firebase.database()
                     .ref('Notifications')
                     .child(uid)
-                    .child('Unseen').child(childKey).remove().then(function(){});
+                    .child('Pending').child(childKey).remove().then(function(){});
                   
                 }
             //console.log(snapshot1);
@@ -275,7 +283,7 @@ renderRow() {
                     firebase.database()
                     .ref('Notifications')
                     .child(uid)
-                    .child('Unseen').child(childKey).remove().then(function(){});
+                    .child('Pending').child(childKey).remove().then(function(){});
 
                     }
                     //console.log(snapshot2);
@@ -452,7 +460,7 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     firebase.database()
     .ref('Notifications')
         .child(uid)
-        .child('Unseen').child(iteminfo).remove().then(function(){
+        .child('Pending').child(iteminfo).remove().then(function(){
       alert("removed")
     });
 }
@@ -609,4 +617,4 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
 }
 
 
-export default chatscreen;
+export default PendingOffers;

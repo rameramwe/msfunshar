@@ -37,6 +37,7 @@ var image=[] ;
 global.indexArray=0;
 global.currentUserGlobal=null;
 global.unseenNotifNumberGlobal=null;
+global.PendingNotifNumberGlobal=null;
 global.currentLikedItem=null;
 const styles = StyleSheet.create({
   Mcontainer: {flex:1 ,  justifyContent: 'flex-end', }, 
@@ -170,6 +171,7 @@ snapshot.forEach(function(childSnapshot) {
       if (user) {
         var save1=save;
         var NotifRef = firebase.database().ref('Notifications/' + currentUserGlobal.uid+'/Unseen/');
+        var PendingRef = firebase.database().ref('Notifications/' + currentUserGlobal.uid+'/Pending/');
         NotifRef.once("value")
         .then(function(snapshot) {
 
@@ -200,12 +202,36 @@ snapshot.forEach(function(childSnapshot) {
               //console.log("TOKEN (refreshUnsubscribe)", token);
               save1.props.onChangeToken(token);
             });
+          }); 
+        });
+     PendingRef.once("value")
+      .then(function(snapshot) {
 
-
-
+        var PendingNotifNumber = snapshot.numChildren(); 
+        var PendingNotifNumberGlobal = snapshot.numChildren(); 
+        //console.log("unseenNotifNumber",unseenNotifNumber,unseenNotifNumberGlobal);
+        save1.setState({ PendingNotifNumberGlobal:PendingNotifNumber });
+      });
+      PendingRef.on('child_added', function(data) {
+        PendingRef.once("value")
+        .then(function(snapshot) {
+          var PendingNotifNumber = snapshot.numChildren(); 
+           if(global.PendingNotifNumberGlobal < PendingNotifNumber)
+           {
+            Vibration.vibrate();
+            global.PendingNotifNumberGlobal= PendingNotifNumber;
+           }
+          save1.setState({ PendingNotifNumberGlobal:PendingNotifNumber });
+          var body1="You have "+PendingNotifNumber+ " new offers ";
+          firebaseClient.sendNotification(save1.state.token,"Funshare",body1);
+          save1.refreshUnsubscribe = FCM.on("refreshToken", token => {
+            //console.log("TOKEN (refreshUnsubscribe)", token);
+            save1.props.onChangeToken(token);
 
           });
         });
+      });
+
 /*
 var newItems = false;
 var eventsList = firebase.database().ref('Notifications/' + "24IuFFFZ53aYfl8IIe1p36OJkA83");
@@ -248,6 +274,7 @@ else {
       modalVisible: false,
       transparent: true,
       unseenNotifNumberGlobal:null,
+      PendingNotifNumberGlobal:null,
       token: "",
       icategory:this.props.category ? this.props.category : "swiper-all" ,
       search:this.props.search ? this.props.search : null ,

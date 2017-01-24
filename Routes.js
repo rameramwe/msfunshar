@@ -19,6 +19,7 @@ import searchresult from 'funshare/src/pages/searchresult';
 import wishlist from 'funshare/src/pages/wishlist'; 
 import chatscreen from 'funshare/src/pages/chatscreen';
 import AcceptedOffers from 'funshare/src/pages/AcceptedOffers';
+import PendingOffers from 'funshare/src/pages/PendingOffers';
 import OfferChat from 'funshare/src/pages/OfferChat';
 
 
@@ -97,6 +98,12 @@ class Routes {
       name: "wishlist",
       component: wishlist,
   
+    }
+  }
+  PendingOffers() {
+    return {
+      name: "PendingOffers",
+      component: PendingOffers,
     }
   }
   onboarding(user) {

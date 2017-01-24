@@ -146,6 +146,24 @@ class Home1 extends React.Component {
 
           });
         });
+    var PendingRef = firebase.database().ref('Notifications/' + currentUserGlobal.uid+'/Pending/');
+        PendingRef.once("value")
+        .then(function(snapshot) {
+          var PendingNotifNumber = snapshot.numChildren(); 
+          var PendingNotifNumberGlobal = snapshot.numChildren(); 
+          //console.log("unseenNotifNumber",unseenNotifNumber,unseenNotifNumberGlobal);
+
+        });
+        PendingRef.on('child_added', function(data) {
+          //console.log(data.val());
+          PendingRef.once("value")
+          .then(function(snapshot) {
+            var PendingNotifNumber = snapshot.numChildren(); 
+            var PendingNotifNumberGlobal = snapshot.numChildren(); 
+            //console.log("unseenNotifNumber",unseenNotifNumber,unseenNotifNumberGlobal);
+
+          });
+        });
 /*
 var newItems = false;
 var eventsList = firebase.database().ref('Notifications/' + "24IuFFFZ53aYfl8IIe1p36OJkA83");
@@ -197,6 +215,10 @@ return true;
   goToWish()
   {
     this.props.replaceRoute(Routes.wishlist());
+  }
+  goToPendingOffers()
+  {
+    this.props.replaceRoute(Routes.PendingOffers());
   }
   render() {
     const TopNavigation = () => (
@@ -303,6 +325,16 @@ return true;
         value={"Wunschliste"}
         source={require('../img/wunsch.png')}
         onPress={this.goToWish.bind(this)}
+        />
+
+        </View>
+        <View style={styles.inputContainer}>
+        <IconButton
+        container={{  flex: 1 ,marginBottom:5, flexDirection: "row" }}
+
+        value={"Pending Offers"}
+        source={require('../img/wunsch.png')}
+        onPress={this.goToPendingOffers.bind(this)}
         />
 
         </View>
