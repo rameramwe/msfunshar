@@ -74,7 +74,7 @@ export default React.createClass({
       )
     },
     handleYup (card) {
-
+       this.goToDetails(currentLikedItem);
     },
     goBack (card) {
 
@@ -315,7 +315,7 @@ export default React.createClass({
       renderNoMoreCards={() => <NoMoreCards />}
       showYup={false}
       showNope={false}
-      handleYup={this.handleNope}
+      handleYup={this.handleYup}
       handleNope={this.handleNope}
       //cardRemoved={this.cardRemoved}
       />

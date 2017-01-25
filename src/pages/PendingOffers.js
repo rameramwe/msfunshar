@@ -177,17 +177,16 @@ class PendingOffers extends React.Component {
     .ref('Notifications')
     .child(uidOfLikedItem)
     .child('Accepted').child(childKey);
-    var oldRefLikedItem=firebase.database()
+    var oldRefForOfferingUser=firebase.database()
     .ref('Notifications')
-    .child(uidOfLikedItem)
+    .child(uidOfOfferingUser)
     .child('Pending').child(childKey);
-
     newRefForOfferingUser.set( snapVal, function(error) {
       if( !error ) {   }
         else if( typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
     }).then(function(){
       newRefForLikedItem.set( snapVal, function(error) {
-        if( !error ) {oldRefLikedItem.remove();   }
+        if( !error ) {oldRefForOfferingUser.remove();   }
         else if( typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
       }).then(function(){
         alert("Now You can chat");
