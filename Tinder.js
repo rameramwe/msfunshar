@@ -1,18 +1,56 @@
 'use strict';
-import React, {Modal,ActivityIndicator, Component } from 'react';
+import React , {Component} from 'react';
 
-import  {TouchableOpacity,StyleSheet,Dimensions, Text, View, Image} from 'react-native';
+import {
+  Platform,
+  Switch,
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TextInput,
+  BackAndroid,
+  Dimensions,
+  Modal,
+  ScrollView,
+  TouchableOpacity,
+  TouchableHighlight,
+  ListView
+} from'react-native';;
 import IcoButton from 'funshare/src/components/icobutton';
 import SwipeCards from 'react-native-swipe-cards';
+import Swiper from 'react-native-swiper';
 import firebase from 'firebase';
 import Routes from 'funshare/Routes';
 import Loading from 'funshare/src/components/Loading';
+import ModalExample from 'funshare/src/pages/ModalExample';
+import ImageViewer from 'react-native-image-zoom-viewer';
 var deviceheight = Dimensions.get('window').height/(3/2)  ;
 var deviceWidth = Dimensions.get('window').width-30  ;
-var Cards = []
+var modalheight = Dimensions.get('window').height/2 ;
+var Cards = [];
+const imagesViewer = [];
 var currentLikedItem = null;
 let NoMoreCards = React.createClass({
-  
+  getInitialState () {
+        return {
+          dataSource: new ListView.DataSource({
+            rowHasChanged: (row1, row2) => row1 !== row2,
+          }),
+          visible: false,
+          title:"this.props.info.title",
+          desc:"this.props.info.description",
+          piclink:"this.props.info.image",
+          goback:"this.props.info.goback",
+          username:"this.props.info.username",
+          uidOfLikedItem:"this.props.info.uidOfLikedItem",
+          keyOfWantedItem:"this.props.info.keyOfWantedItem",
+          category:"this.props.info.category",
+          search:"this.props.info.search",
+          offerData:null,
+          modalVisible:false
+        };
+      },
   render() {
 
     return (
@@ -22,6 +60,7 @@ let NoMoreCards = React.createClass({
       )
   }
 })
+
 
 
 const Cards2 = [
@@ -74,11 +113,46 @@ export default React.createClass({
       )
     },
     handleYup (card) {
-       this.goToDetails(currentLikedItem);
+      this.setModalVisible(true);
     },
     goBack (card) {
 
       this.refs['swiper']._goToPreviousCard()
+    },
+    uploadstart(){
+      var offerData= this.state.offerData;
+      var uidOfOfferingUser= this.state.uidOfOfferingUser;
+      var keyOfOfferedItem= this.state.keyOfOfferedItem;
+      if(offerData && keyOfOfferedItem && uidOfOfferingUser  )
+
+      { 
+        var uploadTask1 = firebase.database()
+        .ref('Offers')
+        .child(uidOfOfferingUser);
+        var offerKey = uploadTask1.push(offerData).key ;
+   
+        var notificationData = {
+          uidOfLikedItem: this.state.uidOfLikedItem,
+          keyOfWantedItem: this.state.keyOfWantedItem,
+          uidOfOfferingUser: uidOfOfferingUser,
+          keyOfOfferedItem: keyOfOfferedItem,
+          offerAccepted:0,
+          offerConfirmedByOfferingUser:0,
+          offerStatus:"pending approval",
+          offerKey:offerKey,
+          created:firebase.database.ServerValue.TIMESTAMP,
+          seen:0
+        }; 
+        var uploadTask2 = firebase.database()
+        .ref('Notifications')
+        .child(this.state.uidOfLikedItem)
+        .child('Unseen'); 
+        var notificationKey = uploadTask2.push(notificationData).key;
+        this.setState({modalVisible: false});
+        }
+        else
+          alert("Es wird kein Artikel angeboten")
+
     },
 
     handleNope (card) {
@@ -214,7 +288,8 @@ export default React.createClass({
       return {
         loading:false,
         cards: Cards,
-        outOfCards: false
+        outOfCards: false,
+        modalVisible:false
       }
     },
  
@@ -238,7 +313,9 @@ export default React.createClass({
       }
 
     },
-  
+    setModalVisible(visible) {
+    this.setState({modalVisible: visible});
+    },
     addtofavorite (x){
       if(x)
       {
@@ -296,12 +373,22 @@ export default React.createClass({
       if (currentLikedItem) 
       this.props.goToDetails(info);
     },
+
+    
     render() {
 
 
       return (
       <View style = {{flex:1, alignItems:'center'}} >
-
+        <Modal
+        animationType={"fade"}
+        transparent={true}
+        visible={this.state.modalVisible}
+        onRequestClose={() => {this.setModalVisible(false);}}
+        >
+          <ModalExample info={currentLikedItem} setModalVisible={this.setModalVisible.bind(this, false)} />
+          </Modal>
+      
       <View style= {{flex:1.1}} >
       <Loading loading = {this.state.loading} />
 
@@ -394,5 +481,56 @@ export default React.createClass({
       width:deviceWidth,
       justifyContent: 'center',
       alignItems: 'center',
-    }
+    },
+    isSellected:{ 
+    flex:1,position:'absolute', right:0
+  },
+  wrapper: {
+
+  },
+
+  slide1: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#9DD6EB'
+  },
+  Mcontainer: {flex:1 ,  justifyContent: 'flex-end', }, 
+  MinnerContainer: {flex:1,justifyContent:'flex-end' },
+
+  item: {
+
+    width:deviceWidth/4,
+    height: 80,
+    borderColor: '#efefef',
+    borderWidth: 1,
+    margin:8,
+    borderRadius:10,
+  },
+  image: {
+    flex:1,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius:10,
+    width:deviceWidth/4-2,
+    height: 78 ,
+  },
+  textinput: {
+    padding: 10,
+    fontWeight:'bold',
+    backgroundColor: 'white',
+    color: 'black',
+    fontSize: 13,
+    flex:1
+  },
+  description: {
+    padding: 10,
+    textAlignVertical:'top',
+    backgroundColor: 'white',
+    alignItems:'flex-start',
+    marginTop:0,
+    color: 'black',
+    fontSize: 13,
+    flex: 1,
+  },
   })

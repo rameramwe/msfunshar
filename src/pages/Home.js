@@ -380,6 +380,11 @@ goToDetails(info){
   this.props.replaceRoute(Routes.details(info));
 
 }
+goToOffer(info){
+  if(info.keyOfWantedItem)
+  this.props.replaceRoute(Routes.ModalExample(info));
+
+}
 
 render(){
   var modalBackgroundStyle = {
@@ -521,7 +526,7 @@ style={{width:40, height:40}}
 </View>
 </View>
 <View style={{flex:1,alignItems:'center' , justifyContent:'flex-start'}}>
-<Tinder Startsearch={this.state.Startsearch} search={this.state.search} category= {this.state.icategory}  _setModalVisible={this._setModalVisible.bind(this, true)} goToDetails={this.goToDetails.bind(this)} />
+<Tinder Startsearch={this.state.Startsearch} search={this.state.search} category= {this.state.icategory}  _setModalVisible={this._setModalVisible.bind(this, true)} goToDetails={this.goToDetails.bind(this)} goToOffer={this.goToOffer.bind(this)} />
 
 </View>
 </View>

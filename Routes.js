@@ -21,6 +21,8 @@ import chatscreen from 'funshare/src/pages/chatscreen';
 import AcceptedOffers from 'funshare/src/pages/AcceptedOffers';
 import PendingOffers from 'funshare/src/pages/PendingOffers';
 import OfferChat from 'funshare/src/pages/OfferChat';
+import Tinder from 'funshare/Tinder';
+import ModalExample from 'funshare/src/pages/ModalExample';
 
 
 
@@ -80,6 +82,14 @@ class Routes {
  
     }
   }
+  ModalExample(info) {
+    return {
+      name: "ModalExample",
+      component: ModalExample,
+      passProps: { info:info },
+    }
+  }
+
 
   setting() {
     return {
@@ -134,7 +144,13 @@ class Routes {
  
     }
   }
-  
+  Tinder() {
+    return {
+      name: "Tinder",
+      component: Tinder,
+ 
+    }
+  }
   fuck(iteminfo ) {
     return {
       name: "fuck", 

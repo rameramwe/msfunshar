@@ -153,6 +153,8 @@ class PendingOffers extends React.Component {
       uidOfLikedItem:null,
       newRef:null,
       childKey:null,
+      keyOfOfferedItem:null,
+      keyOfWantedItem:null,
       snapVal:null,
       dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
@@ -165,7 +167,7 @@ class PendingOffers extends React.Component {
   {
     this.props.replaceRoute(Routes.Home());
   }
-  finishDeal(childKey,uidOfOfferingUser,snapVal,oldRef,uidOfLikedItem){
+  finishDeal(childKey,uidOfOfferingUser,snapVal,oldRef,uidOfLikedItem,keyOfWantedItem,keyOfOfferedItem){
     var self=this;
     //alert(childKey);
     //send a notification that lets the other user know that his offer was accepted and activate chat 
@@ -177,6 +179,14 @@ class PendingOffers extends React.Component {
     .ref('Notifications')
     .child(uidOfLikedItem)
     .child('Accepted').child(childKey);
+    var PopupRefForOfferingUser=firebase.database()
+    .ref('Notifications')
+    .child(uidOfOfferingUser)
+    .child('Popup').child(childKey);
+    var PopupRefForLikedItem=firebase.database()
+    .ref('Notifications')
+    .child(uidOfLikedItem)
+    .child('Popup').child(childKey);
     var oldRefForOfferingUser=firebase.database()
     .ref('Notifications')
     .child(uidOfOfferingUser)
@@ -189,10 +199,39 @@ class PendingOffers extends React.Component {
         if( !error ) {oldRefForOfferingUser.remove();   }
         else if( typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
       }).then(function(){
+      PopupRefForOfferingUser.set( snapVal, function(error) {
+        if( !error ) {   }
+        else if( typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
+      }).then(function(){
+      PopupRefForLikedItem.set( snapVal, function(error) {
+        if ( !error ) {
+          firebase.database()
+          .ref('items').child(uidOfLikedItem).child(keyOfWantedItem).remove().then(function(){
+          });
+          firebase.database()
+          .ref('categories').child('swiper-all').child(keyOfWantedItem).remove().then(function(){
+          });
+          firebase.database()
+          .ref('categories').child(this.state.icategory).child(keyOfWantedItem).remove().then(function(){           
+          });
+          firebase.database()
+          .ref('items').child(uidOfOfferingUser).child(keyOfOfferedItem).remove().then(function(){
+          });
+          firebase.database()
+          .ref('categories').child('swiper-all').child(keyOfOfferedItem).remove().then(function(){
+          });
+          firebase.database()
+          .ref('categories').child(this.state.icategory).child(keyOfOfferedItem).remove().then(function(){
+          });
+        }
+        else if( typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
+      }).then(function(){
         alert("Now You can chat");
         self.props.replaceRoute(Routes.PendingOffers());
+        });
       });
     });
+  });
 }
 
 renderRow() {
@@ -360,7 +399,8 @@ renderRow() {
 
       <TouchableOpacity
       style = {{flex:0.5 , justifyContent:'center' , alignItems:'center'}}
-      onPress={self._setModalVisible.bind(self, true,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef,snapshot.val().uidOfOfferingUser,childKey,snapshot.val().uidOfLikedItem)}
+      onPress={self._setModalVisible.bind(self, true,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef,snapshot.val().uidOfOfferingUser,
+        childKey,snapshot.val().uidOfLikedItem,snapshot.val().keyOfWantedItem,snapshot.val().keyOfOfferedItem)}
       >
       <View style = {{flex:1 , alignItems:'center',justifyContent:'center'}} >
       <Image
@@ -434,7 +474,7 @@ goChat(iteminfo){
   //  alert(iteminfo.lastMessage)
   this.props.replaceRoute(Routes.OfferChat(iteminfo));
 }
-_setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef,uidOfOfferingUser,childKey,uidOfLikedItem ) => {
+_setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef,uidOfOfferingUser,childKey,uidOfLikedItem,keyOfWantedItem,keyOfOfferedItem ) => {
    /*
     if (newRef){
       newRef.set( snapVal, function(error) {
@@ -444,7 +484,8 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     }
   */
   this.setState({modalVisible: visible ,picOfOfferedItem:picOfOfferedItem , picOfWantedItem:picOfWantedItem,
-  uidOfOfferingUser:uidOfOfferingUser,newRef:newRef,snapVal:snapVal , childKey:childKey,uidOfLikedItem:uidOfLikedItem});
+  uidOfOfferingUser:uidOfOfferingUser,newRef:newRef,snapVal:snapVal , childKey:childKey,uidOfLikedItem:uidOfLikedItem
+  ,keyOfWantedItem:keyOfWantedItem,keyOfOfferedItem:keyOfOfferedItem});
   }
 
   back ()
@@ -560,7 +601,8 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     <View style={{flexDirection:'row',flex:0.25 ,alignItems:'center'}}>
     <IcoButton
     source={require('funshare/src/img/like.png')}
-    onPress={this.finishDeal.bind(this,this.state.childKey,this.state.uidOfOfferingUser,this.state.snapVal,this.state.newRef,this.state.uidOfLikedItem)}
+    onPress={this.finishDeal.bind(this,this.state.childKey,this.state.uidOfOfferingUser,this.state.snapVal,this.state.newRef,
+             this.state.uidOfLikedItem,this.state.keyOfWantedItem,this.state.keyOfOfferedItem)}
     icostyle={{width:60, height:60}}
     />
     </View>
