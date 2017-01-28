@@ -541,8 +541,8 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     <View style={{flexDirection:'row',flex:0.25  , alignItems:'flex-start'}}>
     <Text style={{color:'white', fontSize:15 ,marginTop:18 }}>Abbrechen</Text>
     </View>
-
-    <View style={{flexDirection:'row',flex:0.25 ,alignItems:'center' }}>
+    <View style={{flexDirection:'row',flex:0.5 ,alignItems:'center' }}>
+    <View style={{flexDirection:'row',flex:0.25 ,alignItems:'flex-start' }}>
     <IcoButton
     onPress={this.back.bind(this)}
     source={require('funshare/src/img/dislike.png')}
@@ -550,14 +550,14 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     />
     </View>
 
-    <View style={{flexDirection:'row',flex:0.25 ,alignItems:'center'}}>
+    <View style={{flexDirection:'row',flex:0.25 ,alignItems:'flex-end'}}>
     <IcoButton
     source={require('funshare/src/img/like.png')}
     onPress={this.finishDeal.bind(this,this.state.childKey,this.state.uidOfOfferingUser,this.state.snapVal,this.state.newRef,this.state.uidOfLikedItem)}
     icostyle={{width:60, height:60}}
     />
     </View>
-
+    </View>
    <View style={{flexDirection:'row',flex:0.25  , alignItems:'flex-start'}}>
     <Text style={{color:'white', fontSize:15 ,marginTop:18  }}>Bestätigen</Text>
     </View>

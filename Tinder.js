@@ -16,7 +16,7 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   ListView
-} from'react-native';;
+} from'react-native';
 import IcoButton from 'funshare/src/components/icobutton';
 import SwipeCards from 'react-native-swipe-cards';
 import Swiper from 'react-native-swiper';
@@ -73,36 +73,29 @@ export default React.createClass({
 
     currentLikedItem=x;
 
-    return (
+     return (
       <View key= {x} style= {{flex:1 , justifyContent:'center'}}>
       <View style={styles.card}>
       <TouchableOpacity
-      style= {{width:deviceWidth, height:deviceheight-50 }}
+      style= {{width:deviceWidth, height:deviceheight-40 }}
       onPress={() => this.goToDetails(currentLikedItem)}
       >
       <View style = {{flex:1}}>
-      <View style= {{width:deviceWidth, height:deviceheight-50 }} >
+      <View style= {{width:deviceWidth, height:deviceheight-40 }} >
 
       <Image style={styles.thumbnail} resizeMode={Image.resizeMode.cover} source={{uri: x.image}} />
       </View>
       </View>
       </TouchableOpacity>
-      <View style={{marginLeft:10, marginRight:10,borderBottomWidth:1,borderColor:'#e3e3e3', height:25, flexDirection:'row' }}>
-      <View style={{flex:1}}>
+      <View style={{marginLeft:10, marginRight:10,justifyContent:'center', height:40, flexDirection:'row' }}>
+      <View style={{flex:1 ,justifyContent:'center', }}>
       <Text numberOfLines={1} style={{fontSize:14, fontWeight:'bold', color:'#444'}}>{x.title} </Text>
       </View>
-      <View  style = {{flex:1,alignItems:"flex-end"}} >
+      <View  style = {{flex:1,alignItems:"flex-end" ,justifyContent:'center', }} >
       <Text style={{fontSize:14, fontWeight:'300', color:'#444'}}>{x.username} </Text>
       </View>
       </View>
-      <View style={{  height:25,marginLeft:10, marginRight:10, flexDirection:'row' , flex:1 }}>
-      <View style = {{flex:1}} >
-       </View>
-      <View style={{flex:1}}>
-      <Text style={{fontSize:14, fontWeight:'300', color:'#444'}}>{""} </Text>
-      </View>
-
-      </View>
+    
       </View>
       <View style={{marginLeft:7,borderRadius:2, marginRight:7,borderWidth:1,borderColor:'#e3e3e3', height:5}}>
 
@@ -481,56 +474,5 @@ export default React.createClass({
       width:deviceWidth,
       justifyContent: 'center',
       alignItems: 'center',
-    },
-    isSellected:{ 
-    flex:1,position:'absolute', right:0
-  },
-  wrapper: {
-
-  },
-
-  slide1: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#9DD6EB'
-  },
-  Mcontainer: {flex:1 ,  justifyContent: 'flex-end', }, 
-  MinnerContainer: {flex:1,justifyContent:'flex-end' },
-
-  item: {
-
-    width:deviceWidth/4,
-    height: 80,
-    borderColor: '#efefef',
-    borderWidth: 1,
-    margin:8,
-    borderRadius:10,
-  },
-  image: {
-    flex:1,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius:10,
-    width:deviceWidth/4-2,
-    height: 78 ,
-  },
-  textinput: {
-    padding: 10,
-    fontWeight:'bold',
-    backgroundColor: 'white',
-    color: 'black',
-    fontSize: 13,
-    flex:1
-  },
-  description: {
-    padding: 10,
-    textAlignVertical:'top',
-    backgroundColor: 'white',
-    alignItems:'flex-start',
-    marginTop:0,
-    color: 'black',
-    fontSize: 13,
-    flex: 1,
-  },
+    }
   })

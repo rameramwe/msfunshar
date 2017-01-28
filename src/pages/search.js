@@ -370,7 +370,7 @@ render() {
 
       <TopNavigation/>
       <ScrollView style={{ flex:1 }}>
-     <View style ={{ flex:1  , marginBottom:15 , marginTop:15}}>
+     <View style ={{ flex:1  , marginBottom:5 , marginTop:15}}>
       <Accordion
       style={{flex:1}}
       header={header}
@@ -381,7 +381,7 @@ render() {
       </View>
 
 
-      <View style ={{ flex:4 , marginBottom:30}}>
+      <View style= {{flex:5,marginBottom: 50 , backgroundColor:'#fff'}}>
       <Accordion
       style={{flex:1}}
       header={header1}

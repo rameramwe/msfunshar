@@ -97,7 +97,7 @@ export default class Home extends Component {
       var self = this; 
       var i = 0;
       var num=0;
-      var uid = firebase.auth().currentUser.uid;
+      var uid = currentUserGlobal.uid;
       firebase.database()
       .ref('items')
       .child(uid)

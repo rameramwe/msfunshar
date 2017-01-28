@@ -113,8 +113,8 @@
   var options = {
   title: 'Upload a new Picture ',
   quality:0.8,
-  maxWidth:600,
-  maxHeight:800,
+  maxWidth:800,
+  maxHeight:600,
   storageOptions: {
   skipBackup: true,
   path: 'images'
