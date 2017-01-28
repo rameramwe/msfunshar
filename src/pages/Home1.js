@@ -327,18 +327,7 @@ return true;
         onPress={this.goToWish.bind(this)}
         />
 
-        </View>
-        <View style={styles.inputContainer}>
-        <IconButton
-        container={{  flex: 1 ,marginBottom:5, flexDirection: "row" }}
-
-        value={"Pending Offers"}
-        source={require('../img/wunsch.png')}
-        onPress={this.goToPendingOffers.bind(this)}
-        />
-
-        </View>
-      
+        </View>      
         </View>
         </View>
 
