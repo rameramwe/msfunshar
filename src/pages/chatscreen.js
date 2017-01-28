@@ -30,7 +30,7 @@ import Actions from 'funshare/Actions';
 import SharedStyles from 'funshare/SharedStyles';
 import IconButton from 'funshare/src/components/icotextButton';
 import AcceptedOffers from 'funshare/src/pages/AcceptedOffers';
-
+import PendingOffers  from 'funshare/src/pages/PendingOffers';
 var piclinks=[];
 
 var deviceheight = Dimensions.get('window').height ;
@@ -585,12 +585,14 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     renderFooter={(sectionId, rowId) => <View key={rowId} style={{alignSelf: 'center', borderBottomWidth:1 , borderBottomColor:'#dcdcdc', width: Dimensions.get("window").width-40,marginBottom:15,marginTop:15}} />}
     contentContainerStyle={{flex:1,paddingTop:20 ,backgroundColor:'white',}}/>
     </View>
+      <PendingOffers />
     <View style= {{flex:1}}>
     <Text style = {{color:'#FF5C7E' ,fontSize:16  }}>  Messages </Text>
     </View>
     <View style = {{flex:1}}>
 
     <AcceptedOffers goChat={this.goChat.bind(this)}/>
+
     </View>
 
 

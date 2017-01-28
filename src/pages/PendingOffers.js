@@ -134,11 +134,7 @@ class PendingOffers extends React.Component {
     this.renderRow(); 
   var self=this;
   self.renderRow();
-  BackAndroid.addEventListener('hardwareBackPress', () => {
-    self.goToHome();
-    return true;
-
-  });
+ 
   } 
   constructor(props) {
     super(props);
@@ -163,10 +159,7 @@ class PendingOffers extends React.Component {
   }
 
 
-  goToHome()
-  {
-    this.props.replaceRoute(Routes.Home());
-  }
+ 
   finishDeal(childKey,uidOfOfferingUser,snapVal,oldRef,uidOfLikedItem,keyOfWantedItem,keyOfOfferedItem){
     var self=this;
     //alert(childKey);
@@ -533,8 +526,7 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     </View>
     );
     return (
-    <View style = {{flex:1, backgroundColor:'white',}}>  
-    <TopNavigation/>  
+    <View style = {{flex:1, backgroundColor:'white',}}> 
     <ScrollView style= {{flex:1}}>
     <Loading loading = {this.state.loading} />
 
@@ -619,7 +611,7 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     </View>
     </Modal>
     <View style= {{flex:1}}>
-    <Text style = {{color:'#FF5C7E' ,fontSize:16 }}>  New Offers </Text>
+    <Text style = {{color:'#FF5C7E' ,fontSize:16 }}>  New Match </Text>
     </View>
 
 
@@ -634,14 +626,7 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     renderFooter={(sectionId, rowId) => <View key={rowId} style={{alignSelf: 'center', borderBottomWidth:1 , borderBottomColor:'#dcdcdc', width: Dimensions.get("window").width-40,marginBottom:15,marginTop:15}} />}
     contentContainerStyle={{flex:1,paddingTop:20 ,backgroundColor:'white',}}/>
     </View>
-    <View style= {{flex:1}}>
-    <Text style = {{color:'#FF5C7E' ,fontSize:16  }}>  Messages </Text>
-    </View>
-    <View style = {{flex:1}}>
-
-    <AcceptedOffers goChat={this.goChat.bind(this)}/>
-    </View>
-
+ 
 
 
 
