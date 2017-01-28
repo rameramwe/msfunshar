@@ -38,32 +38,25 @@ export default React.createClass({
       <View key= {x} style= {{flex:1 , justifyContent:'center'}}>
       <View style={styles.card}>
       <TouchableOpacity
-      style= {{width:deviceWidth, height:deviceheight-50 }}
+      style= {{width:deviceWidth, height:deviceheight-40 }}
       onPress={() => this.goToDetails(currentLikedItem)}
       >
       <View style = {{flex:1}}>
-      <View style= {{width:deviceWidth, height:deviceheight-50 }} >
+      <View style= {{width:deviceWidth, height:deviceheight-40 }} >
 
       <Image style={styles.thumbnail} resizeMode={Image.resizeMode.cover} source={{uri: x.image}} />
       </View>
       </View>
       </TouchableOpacity>
-      <View style={{marginLeft:10, marginRight:10,borderBottomWidth:1,borderColor:'#e3e3e3', height:25, flexDirection:'row' }}>
-      <View style={{flex:1}}>
+      <View style={{marginLeft:10, marginRight:10,justifyContent:'center', height:40, flexDirection:'row' }}>
+      <View style={{flex:1 ,justifyContent:'center', }}>
       <Text numberOfLines={1} style={{fontSize:14, fontWeight:'bold', color:'#444'}}>{x.title} </Text>
       </View>
-      <View  style = {{flex:1,alignItems:"flex-end"}} >
+      <View  style = {{flex:1,alignItems:"flex-end" ,justifyContent:'center', }} >
       <Text style={{fontSize:14, fontWeight:'300', color:'#444'}}>{x.username} </Text>
       </View>
       </View>
-      <View style={{  height:25,marginLeft:10, marginRight:10, flexDirection:'row' , flex:1 }}>
-      <View style = {{flex:1}} >
-       </View>
-      <View style={{flex:1}}>
-      <Text style={{fontSize:14, fontWeight:'300', color:'#444'}}>{""} </Text>
-      </View>
-
-      </View>
+    
       </View>
       <View style={{marginLeft:7,borderRadius:2, marginRight:7,borderWidth:1,borderColor:'#e3e3e3', height:5}}>
 

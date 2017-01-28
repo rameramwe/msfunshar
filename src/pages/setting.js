@@ -301,53 +301,33 @@ render() {
     <ScrollView
     style={{flex:1}}
     >
-    <View style={{flex:1,marginBottom:deviceheight/15, marginTop:deviceheight/15 }}>
-
-
-    <Accordion
-    style={{flex:1}}
-    header={profileheader}
-    onPress={this.goToProfile.bind(this)}
-    easing="easeOutCubic"
-    />
+    <View style={{flex:1, marginTop:deviceheight/15 }}>
     <Accordion
     style={{flex:1}}
     header={sucheheader}
     onPress={this.goToSearch.bind(this)}
     easing="easeOutCubic"
     />
-
-
     </View>
 
-    <View style= {{flex:5,marginBottom: 10 , backgroundColor:'#fff'}}>
-     <Accordion
+    <View style= {{flex:5,marginBottom: deviceheight/3 , backgroundColor:'#fff'}}>
+    
+   <Accordion
     style={{flex:1}}
     header={header}
     //onPress={this.change.bind(this)}
     content={mit}
     easing="easeOutCubic"
     />
- 
+
      
- 
-    
-
     </View>
-     <View style= {{flex:5,marginBottom:10 , backgroundColor:'#fff'}}>
-    
-  
-    </View>
-     <View style= {{flex:5,marginBottom:10 , backgroundColor:'#fff'}}>
-    
- 
- </View>
+   
 
 
 
 
-
-    <View style = {{flex:1}}>
+    <View style = {{flex:5 , justifyContent:'flex-end'}}>
     <TouchableOpacity 
     style={styles.button} 
     onPress={this.logout.bind(this)}

@@ -275,7 +275,7 @@ return true;
 
       <View style={styles.inputContainer}>
       <IconButton     
-      container={{  flex: 1 ,marginBottom:5,flexDirection: "row" }}
+      container={{  flex: 1 ,marginBottom:0,flexDirection: "row" }}
 
       value={"Meine Objekte"}
       source={require('../img/box.png')}
@@ -288,7 +288,7 @@ return true;
         </View>
         <View style={styles.inputContainer}>
         <IconButton
-        container={{  flex: 1 ,marginBottom:5,flexDirection: "row" }}
+        container={{  flex: 1 ,marginBottom:0,flexDirection: "row" }}
 
         value={"Einstellungen"}
         source={require('../img/tools.png')}
@@ -298,7 +298,7 @@ return true;
         </View>
         <View style={styles.inputContainer}>
         <IconButton
-        container={{  flex: 1 ,marginBottom:5, flexDirection: "row" }}
+        container={{  flex: 1 ,marginBottom:0, flexDirection: "row" }}
 
         value={"Wunschliste"}
         source={require('../img/wunsch.png')}
