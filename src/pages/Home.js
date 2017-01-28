@@ -37,6 +37,7 @@ var image=[] ;
 global.indexArray=0;
 global.currentUserGlobal=null;
 global.unseenNotifNumberGlobal=null;
+global.PendingNotifNumberGlobal=null;
 global.currentLikedItem=null;
 const styles = StyleSheet.create({
   Mcontainer: {flex:1 ,  justifyContent: 'flex-end', }, 
@@ -96,7 +97,7 @@ export default class Home extends Component {
       var self = this; 
       var i = 0;
       var num=0;
-      var uid = firebase.auth().currentUser.uid;
+      var uid = currentUserGlobal.uid;
       firebase.database()
       .ref('items')
       .child(uid)
@@ -170,6 +171,7 @@ snapshot.forEach(function(childSnapshot) {
       if (user) {
         var save1=save;
         var NotifRef = firebase.database().ref('Notifications/' + currentUserGlobal.uid+'/Unseen/');
+        var PendingRef = firebase.database().ref('Notifications/' + currentUserGlobal.uid+'/Pending/');
         NotifRef.once("value")
         .then(function(snapshot) {
 
@@ -200,12 +202,36 @@ snapshot.forEach(function(childSnapshot) {
               //console.log("TOKEN (refreshUnsubscribe)", token);
               save1.props.onChangeToken(token);
             });
+          }); 
+        });
+     PendingRef.once("value")
+      .then(function(snapshot) {
 
-
-
+        var PendingNotifNumber = snapshot.numChildren(); 
+        var PendingNotifNumberGlobal = snapshot.numChildren(); 
+        //console.log("unseenNotifNumber",unseenNotifNumber,unseenNotifNumberGlobal);
+        save1.setState({ PendingNotifNumberGlobal:PendingNotifNumber });
+      });
+      PendingRef.on('child_added', function(data) {
+        PendingRef.once("value")
+        .then(function(snapshot) {
+          var PendingNotifNumber = snapshot.numChildren(); 
+           if(global.PendingNotifNumberGlobal < PendingNotifNumber)
+           {
+            Vibration.vibrate();
+            global.PendingNotifNumberGlobal= PendingNotifNumber;
+           }
+          save1.setState({ PendingNotifNumberGlobal:PendingNotifNumber });
+          var body1="You have "+PendingNotifNumber+ " new offers ";
+          firebaseClient.sendNotification(save1.state.token,"Funshare",body1);
+          save1.refreshUnsubscribe = FCM.on("refreshToken", token => {
+            //console.log("TOKEN (refreshUnsubscribe)", token);
+            save1.props.onChangeToken(token);
 
           });
         });
+      });
+
 /*
 var newItems = false;
 var eventsList = firebase.database().ref('Notifications/' + "24IuFFFZ53aYfl8IIe1p36OJkA83");
@@ -248,6 +274,7 @@ else {
       modalVisible: false,
       transparent: true,
       unseenNotifNumberGlobal:null,
+      PendingNotifNumberGlobal:null,
       token: "",
       icategory:this.props.category ? this.props.category : "swiper-all" ,
       search:this.props.search ? this.props.search : null ,
@@ -351,6 +378,11 @@ handleNope () {
 goToDetails(info){
   if(info.keyOfWantedItem)
   this.props.replaceRoute(Routes.details(info));
+
+}
+goToOffer(info){
+  if(info.keyOfWantedItem)
+  this.props.replaceRoute(Routes.ModalExample(info));
 
 }
 
@@ -494,7 +526,7 @@ style={{width:40, height:40}}
 </View>
 </View>
 <View style={{flex:1,alignItems:'center' , justifyContent:'flex-start'}}>
-<Tinder Startsearch={this.state.Startsearch} search={this.state.search} category= {this.state.icategory}  _setModalVisible={this._setModalVisible.bind(this, true)} goToDetails={this.goToDetails.bind(this)} />
+<Tinder Startsearch={this.state.Startsearch} search={this.state.search} category= {this.state.icategory}  _setModalVisible={this._setModalVisible.bind(this, true)} goToDetails={this.goToDetails.bind(this)} goToOffer={this.goToOffer.bind(this)} />
 
 </View>
 </View>

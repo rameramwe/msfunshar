@@ -8,9 +8,6 @@ import signup from 'funshare/src/pages/signup';
 import account from 'funshare/src/pages/account';
 import button from 'funshare/src/components/button';
 import Onboarding from 'funshare/Screens/Onboarding';
-import LogoutButton from 'funshare/Views/LogoutButton';
-import OnboardingButton from 'funshare/Views/OnboardingButton';
-import PostButton from 'funshare/Views/PostButton';
 import details from 'funshare/src/pages/details';
 import fuck from 'funshare/src/pages/fuck';
 import addstuff from 'funshare/src/pages/addstuff';
@@ -19,7 +16,10 @@ import searchresult from 'funshare/src/pages/searchresult';
 import wishlist from 'funshare/src/pages/wishlist'; 
 import chatscreen from 'funshare/src/pages/chatscreen';
 import AcceptedOffers from 'funshare/src/pages/AcceptedOffers';
+import PendingOffers from 'funshare/src/pages/PendingOffers';
 import OfferChat from 'funshare/src/pages/OfferChat';
+import Tinder from 'funshare/Tinder';
+import ModalExample from 'funshare/src/pages/ModalExample';
 
 
 
@@ -79,6 +79,14 @@ class Routes {
  
     }
   }
+  ModalExample(info) {
+    return {
+      name: "ModalExample",
+      component: ModalExample,
+      passProps: { info:info },
+    }
+  }
+
 
   setting() {
     return {
@@ -97,6 +105,12 @@ class Routes {
       name: "wishlist",
       component: wishlist,
   
+    }
+  }
+  PendingOffers() {
+    return {
+      name: "PendingOffers",
+      component: PendingOffers,
     }
   }
   onboarding(user) {
@@ -127,7 +141,13 @@ class Routes {
  
     }
   }
-  
+  Tinder() {
+    return {
+      name: "Tinder",
+      component: Tinder,
+ 
+    }
+  }
   fuck(iteminfo ) {
     return {
       name: "fuck", 
