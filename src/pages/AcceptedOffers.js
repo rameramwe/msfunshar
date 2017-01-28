@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   },
   separator: {
     alignSelf: 'flex-end',
-    
+
 
     width: Dimensions.get("window").width-100,
 
@@ -154,12 +154,10 @@ class AcceptedOffers extends React.Component {
   finishDeal(){
 
   }
-
   renderRow() {
     this.setState({loading:true});
     var images= [];
     return new Promise((next, error) => {
-
       var self = this; 
       var i = 0;
       var num=0;
@@ -171,17 +169,18 @@ class AcceptedOffers extends React.Component {
       .once('value')
       .then(function(snapshot) {
         num =snapshot.numChildren();
-            if(num == 0)
+        if(num == 0)
         {
-           self.setState({
-     
-              loading:false
-            });
-            
+          self.setState({
+
+            loading:false
+          });
+
         }
         snapshot.forEach(function(childSnapshot) {
           var picOfWantedItem= "http://orig01.deviantart.net/ace1/f/2010/227/4/6/png_test_by_destron23.png";
           var picOfOfferedItem="http://orig01.deviantart.net/ace1/f/2010/227/4/6/png_test_by_destron23.png";
+          var userNameChat=null;
           var lastMessage=null;
           var oldRef=firebase.database()
           .ref('Notifications')
@@ -206,8 +205,19 @@ picOfOfferedItem= snapshot1.val().itemPic;
   .child(snapshot.val().keyOfWantedItem).once('value').then(function(snapshot2){
 // console.log(snapshot2);
 picOfWantedItem= snapshot2.val().itemPic;
-
-
+}).then(function(){
+  var userNameOffering= null;
+  var userNameWanted=null;
+  firebase.database()
+  .ref('items').child(snapshot.val().uidOfOfferingUser).child(snapshot.val().keyOfOfferedItem).once('value').then(function(snapshot4){
+    userNameOffering=snapshot4.val().username;
+  });
+  firebase.database()
+  .ref('items').child(snapshot.val().uidOfLikedItem).child(snapshot.val().keyOfWantedItem).once('value').then(function(snapshot5){
+    userNameWanted=snapshot5.val().username;
+    if (currentUserGlobal.username ===userNameWanted)userNameChat=userNameOffering;
+    else userNameChat=userNameWanted;
+  });
 
 }).then(function(){
   firebase.database()
@@ -236,10 +246,11 @@ picOfWantedItem= snapshot2.val().itemPic;
       picOfOfferedItem:picOfOfferedItem,
       picOfWantedItem:picOfWantedItem,
       lastMessage:lastMessage,
+      username:userNameChat,
     }
 
 
-// alert(iteminfo.itemkey);
+//alert(iteminfo.username);
 // alert(item)
 piclinks.push(iteminfo);
 images.push(
@@ -261,12 +272,12 @@ source={{uri:picOfWantedItem}}
 </View>
 <View style = {{flex:1 , flexDirection:'row'}}>
 <View style= {{flex:0.9,justifyContent:'center' , marginLeft:10}} >
-<Text  numberOfLines={1} style ={{fontSize:15 , fontWeight:'bold'}}>username</Text> 
+<Text  numberOfLines={1} style ={{fontSize:15 , fontWeight:'bold'}}>{iteminfo.username}</Text> 
 
 <Text  numberOfLines={1}  style={{fontSize:13}}>{iteminfo.lastMessage}</Text>                       
 </View>
 <View style = {{flex:0.2, top:25 ,alignItems:'center', justifyContent:'center'}}>
- 
+
 </View>
 </View>
 </View>
@@ -305,7 +316,7 @@ if (i==num){
 
 });
 
-})
+        })
 
 
 });
@@ -325,38 +336,19 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
 
   this.setState({modalVisible: visible ,picOfOfferedItem:picOfOfferedItem , picOfWantedItem:picOfWantedItem });
 }
-
-
 render() {
-
   return (
-  <View style = {styles.container}>  
+    <View style = {styles.container}>  
+    <Loading loading = {this.state.loading} />
+    <ListView
+    dataSource={this.state.dataSource}
+    renderRow={(rowData) => <View>{rowData}</View>}
+// renderSeparator={() => <View style={styles.separator} />}
+renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
+contentContainerStyle={{flex:1,paddingTop:20 ,backgroundColor:'white',}}/>
+</View>
 
-
- <Loading loading = {this.state.loading} />
-
-
-
-  <ListView
-  dataSource={this.state.dataSource}
-  renderRow={(rowData) => <View>{rowData}</View>}
-  // renderSeparator={() => <View style={styles.separator} />}
-  renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
-  contentContainerStyle={{flex:1,paddingTop:20 ,backgroundColor:'white',}}/>
-
-
-
-
-
-
-
-
-
-
-
-  </View>
-
-  );
+);
 }
 
 }

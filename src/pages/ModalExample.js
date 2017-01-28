@@ -223,45 +223,7 @@ constructor(props) {
 
 
 }
-addtofavorite(){
 
-  var save = this ;
-  firebase.database()
-  .ref('profiles')
-  .child(currentUserGlobal.uid)
-  .child('favorite').once("value")
-  .then(function(snapshot) {
-    var hasName = snapshot.hasChild(save.state.keyOfWantedItem);
-    if (hasName){
-
-     
-      firebase.database()
-  .ref('profiles')
-  .child(currentUserGlobal.uid)
-  .child('favorite').child(save.state.keyOfWantedItem).remove().then(function(){
-     alert("Item removed from favorite Items");
-    });
- 
- 
-
-    }
-    else {
-          var favData = {
-            keyOfWantedItem: save.state.keyOfWantedItem,
-            uidOfLikedItem: save.state.uidOfLikedItem,   
-            created:firebase.database.ServerValue.TIMESTAMP
-          };        
-          var uploadTask = firebase.database()
-          .ref('profiles')
-          .child(currentUserGlobal.uid)
-          .child('favorite')
-          .child(save.state.keyOfWantedItem);
-          var favoriteKey = uploadTask.set(favData);
-          alert("Item has been added to favorite");
-         }
-  });
-
-}
 addtooffereditems(uidOfOfferingUser,keyOfOfferedItem,self){
  if(self.state.keyOfOfferedItem==keyOfOfferedItem)
      {
@@ -290,6 +252,7 @@ addtooffereditems(uidOfOfferingUser,keyOfOfferedItem,self){
 
 }
 uploadstart(){
+  this.props.setModalVisible(false);
   var offerData= this.state.offerData;
   var uidOfOfferingUser= this.state.uidOfOfferingUser;
   var keyOfOfferedItem= this.state.keyOfOfferedItem;
@@ -426,8 +389,9 @@ renderImages(){
       </View>
       </ScrollView>
       </View>
-      <View style={{position:'absolute', bottom:10 ,flex:1,marginLeft:20,marginRight:20,flexDirection:'row',alignItems:'center', justifyContent:'center'}}>
-      <View style={{flex:0.12,alignItems:'center'}}>
+     <View style={{position:'absolute', bottom:10,width:deviceWidth  ,flex:1,flexDirection:'row',alignItems:'center', justifyContent:'center'}}>
+
+      <View style={{flex:0.25,alignItems:'center'}}>
       </View>
       <View style={{flex:0.25,alignItems:'center'}}>
       <IcoButton
@@ -436,9 +400,7 @@ renderImages(){
       icostyle={{width:60, height:60}}
       />
       </View>
-      <View style={{flex:0.25,alignItems:'center' , marginTop:5}}>
-
-      </View>
+     
 
       <View style={{flex:0.25,alignItems:'center'}}>
       <IcoButton
@@ -447,7 +409,7 @@ renderImages(){
       icostyle={{width:60, height:60}}
       />
       </View>
-      <View style={{flex:0.12,alignItems:'center'}}>
+      <View style={{flex:0.25,alignItems:'center'}}>
       </View>
       </View>
       </View>

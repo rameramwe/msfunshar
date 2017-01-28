@@ -425,7 +425,7 @@ export default React.createClass({
       <View style={{flex:0.25,alignItems:'center'}}>
       <IcoButton
       source={require('funshare/src/img/like.png')}
-      onPress={() => {this.goToDetails(currentLikedItem)}}
+      onPress={() => {this.handleYup()}}
       icostyle={{width:60, height:60}}
       />
       </View>

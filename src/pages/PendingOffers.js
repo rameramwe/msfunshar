@@ -196,8 +196,11 @@ class PendingOffers extends React.Component {
       }).then(function(){
       PopupRefForLikedItem.set( snapVal, function(error) {
         if ( !error ) {
-          firebase.database()
+         /* firebase.database()
           .ref('items').child(uidOfLikedItem).child(keyOfWantedItem).remove().then(function(){
+          });
+          firebase.database()
+          .ref('items').child(uidOfOfferingUser).child(keyOfOfferedItem).remove().then(function(){
           });
           firebase.database()
           .ref('categories').child('swiper-all').child(keyOfWantedItem).remove().then(function(){
@@ -206,19 +209,15 @@ class PendingOffers extends React.Component {
           .ref('categories').child(this.state.icategory).child(keyOfWantedItem).remove().then(function(){           
           });
           firebase.database()
-          .ref('items').child(uidOfOfferingUser).child(keyOfOfferedItem).remove().then(function(){
-          });
-          firebase.database()
           .ref('categories').child('swiper-all').child(keyOfOfferedItem).remove().then(function(){
           });
           firebase.database()
           .ref('categories').child(this.state.icategory).child(keyOfOfferedItem).remove().then(function(){
-          });
+          });*/
         }
         else if( typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
       }).then(function(){
         alert("Now You can chat");
-        self.props.replaceRoute(Routes.PendingOffers());
         });
       });
     });
@@ -430,25 +429,14 @@ renderRow() {
        i++;
 
       if (i==num){
-
         self.setState({
           dataSource: self.state.dataSource.cloneWithRows(images),
           loading:false
-        });
-        
+        }); 
         next(images);
-      }
-            
+      }       
     }
-             
-
 });
-
-
-
-
-
-
 });
 
 })
@@ -458,8 +446,6 @@ renderRow() {
 
 }); 
 }
-
-
 goChat(iteminfo){
   //alert(this.state.animationType);
   //  alert(iteminfo.lastMessage)
