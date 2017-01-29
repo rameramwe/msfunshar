@@ -180,8 +180,10 @@ class AcceptedOffers extends React.Component {
         snapshot.forEach(function(childSnapshot) {
           var picOfWantedItem= "http://orig01.deviantart.net/ace1/f/2010/227/4/6/png_test_by_destron23.png";
           var picOfOfferedItem="http://orig01.deviantart.net/ace1/f/2010/227/4/6/png_test_by_destron23.png";
-          var userNameChat=null;
+          var ChatUsername=null;
           var lastMessage=null;
+          var userNameOffering= null;
+          var userNameWanted=null;
           var oldRef=firebase.database()
           .ref('Notifications')
           .child(uid)
@@ -206,19 +208,18 @@ picOfOfferedItem= snapshot1.val().itemPic;
 // console.log(snapshot2);
 picOfWantedItem= snapshot2.val().itemPic;
 }).then(function(){
-  var userNameOffering= null;
-  var userNameWanted=null;
   firebase.database()
   .ref('items').child(snapshot.val().uidOfOfferingUser).child(snapshot.val().keyOfOfferedItem).once('value').then(function(snapshot4){
     userNameOffering=snapshot4.val().username;
   });
-  firebase.database()
+    firebase.database()
   .ref('items').child(snapshot.val().uidOfLikedItem).child(snapshot.val().keyOfWantedItem).once('value').then(function(snapshot5){
     userNameWanted=snapshot5.val().username;
-    if (currentUserGlobal.username ===userNameWanted)userNameChat=userNameOffering;
-    else userNameChat=userNameWanted;
+    if (currentUserGlobal.displayName == userNameWanted)ChatUsername=userNameOffering;
+    else ChatUsername=userNameWanted;
   });
-
+   
+ 
 }).then(function(){
   firebase.database()
   .ref('Offers')
@@ -246,7 +247,7 @@ picOfWantedItem= snapshot2.val().itemPic;
       picOfOfferedItem:picOfOfferedItem,
       picOfWantedItem:picOfWantedItem,
       lastMessage:lastMessage,
-      username:userNameChat,
+      username:ChatUsername,
     }
 
 
