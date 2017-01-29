@@ -10,10 +10,8 @@ import  {
   ActivityIndicator,
   BackAndroid,
   Modal,
-  Dimensions
-  
+  Dimensions 
 } from 'react-native';
-
 import Button from '../components/button';
 import Routes from 'funshare/Routes';
 import Login from './login';
@@ -22,8 +20,6 @@ import Actions from 'funshare/Actions';
 import IcoButton from 'funshare/src/components/icobutton';
 var deviceheight = Dimensions.get('window').height ;
 var devicewidth = Dimensions.get('window').width ;
-
-
 import styles from '../styles/common-styles.js';
 const FBSDK = require('react-native-fbsdk');
 const {
@@ -57,23 +53,18 @@ export default class signup extends Component {
 
  
  
-    componentDidMount() {
-            var self=this;
+componentDidMount() {
+  var self=this;
   BackAndroid.addEventListener('hardwareBackPress', () => {
-// console.log("did",currentUserGlobal);
-self.exit();
-return true;
-
+  // console.log("did",currentUserGlobal);
+  self.exit();
+  return true;
 });
   }
-
   exit(){
-
     this.props.replaceRoute(Routes.login());
     return true;
   }
-
-
   constructor(props){
     super(props);
     this.goBack = this.goBack.bind(this);
@@ -84,13 +75,10 @@ return true;
       modalVisible: false
     };
   }
-
   _setModalVisible = (visible) => {
     this.setState({modalVisible: visible});
   };
-
   signup(){
-
     if (this.state.password && this.state.name &&this.state.email)
     {
         this.setState({
@@ -99,15 +87,12 @@ return true;
         var save = this;
         firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(function() {
         var user = firebase.auth().currentUser;
-
           user.updateProfile({
             photoURL: "https://firebasestorage.googleapis.com/v0/b/funshare-c6017.appspot.com/o/default%2Fmale-user-shadow_318-34042.png?alt=media&token=2d4bf3a1-2fef-4aea-9b17-2cd471d4316e",
             displayName: save.state.name,
-
           }).then(function() {
             save.goToHome1();
           }, function(error) {
-
           });
         }, function(error) {
           alert("Signup failed")
@@ -118,37 +103,27 @@ return true;
     }
     else
       alert("Füllen Sie alle die Felde")
-  
-
   }
   goBack(){
     this.props.replaceRoute(Routes.login())
   }
-
   goToHome1(){
     Actions.login({
       email: this.state.email,
       password: this.state.password
     });
-
   }
-
   render() {
     var spinner =  
     ( <ActivityIndicator
-
       size="large" 
       color="white"/> ) 
     return (
-
-
-
       <Image
       resizeMode={Image.resizeMode.cover}
       source={require('../img/background.png')}
       style = {styles.backgroundImage}
       >
-
       <ScrollView style= {{flex:1}} >  
       <Modal
       animationType={'fade'}
@@ -173,21 +148,17 @@ return true;
       />
       </View>
       <View style={styles.LogoComponent}>
-
       <Image 
       resizeMode={Image.resizeMode.contain}
       source={require('../img/font-logo.png')}
       style={styles.fLogo}                                
       />
-
       <Image 
       resizeMode={Image.resizeMode.contain}
       source={require('../img/Logo.png')}
       style={styles.Logo}                                
       />
       </View>
-
-
       <View style={{flex:0.4,justifyContent:'flex-end',marginTop:deviceheight/16}}>
       <View style = {styles.textinputcontainer}>
       <TextInput
@@ -223,14 +194,13 @@ return true;
       style={styles.textinput}
       onChangeText={(text) => this.setState({password: text})} 
       secureTextEntry={true}
-      placeholder={"Passwort (mindestens 6 Zeichen lang sein)"}
+      placeholder={"Passwort (Mindestens 6 Zeichen)"}
       returnKeyType="done"
       onSubmitEditing={ this.signup.bind(this)}  
       placeholderTextColor="white"
       underlineColorAndroid="transparent"     
       />       
       </View>
-
       <View style={{ margin:5,flexDirection: 'row'}}>
       <Button
       ref={(ref) => this.btn = ref}
@@ -239,12 +209,7 @@ return true;
       button_styles={styles.primary_button}
       button_text_styles={styles.primary_button_text} />
       </View>
-
       </View>
-
-   
-      
-
       </ScrollView>  
       </Image>
       );

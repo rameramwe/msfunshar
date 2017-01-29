@@ -292,12 +292,12 @@ return true;
 
 
 
-      <View style= {{flex:0.5,marginTop:30,alignItems:'center' , justifyContent:'center' }}>
+      <View style= {{flex:0.3,marginTop:30,alignItems:'center' , }}>
       <View style = {styles.buttongrop} >
 
-      <View style={styles.inputContainer}>
+    
       <IconButton     
-      container={{  flex: 1 ,marginBottom:5,flexDirection: "row" }}
+      container={{  flex: 1 ,flexDirection: "row" }}
 
       value={"Meine Objekte"}
       source={require('../img/box.png')}
@@ -307,27 +307,28 @@ return true;
         onPress={this.goTomysuff.bind(this)}
         />
 
-        </View>
-        <View style={styles.inputContainer}>
         <IconButton
-        container={{  flex: 1 ,marginBottom:5,flexDirection: "row" }}
+        container={{  flex: 1 ,flexDirection: "row" }}
 
         value={"Einstellungen"}
         source={require('../img/tools.png')}
         onPress={this.goToSetting.bind(this)}
         />
 
-        </View>
-        <View style={styles.inputContainer}>
+     
+     
         <IconButton
-        container={{  flex: 1 ,marginBottom:5, flexDirection: "row" }}
+        container={{  flex: 1 , flexDirection: "row" }}
 
         value={"Wunschliste"}
         source={require('../img/wunsch.png')}
         onPress={this.goToWish.bind(this)}
         />
 
-        </View>      
+       
+ 
+
+      
         </View>
         </View>
 

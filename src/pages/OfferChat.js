@@ -258,37 +258,44 @@ renderCustomActions(props) {
   }
 
   render() {
+
+const TopNavigation = () => (
+  <View style={{ padding: 10, flexDirection: 'row', backgroundColor: '#FF5C7E' }}>
+  <View style={{ flex:0.4 , justifyContent:'center' , margin:3  }}>
+  <TouchableOpacity
+  onPress={this.goTochatscren.bind(this)}
+  style={{flex:1, justifyContent:'center'}}
+  >
+  <Image 
+  source={require('funshare/src/img/swop.png')}
+  style={{width:35, height:35}}
+  />
+
+  </TouchableOpacity>
+  </View>
+ 
+  <View style={{ flex:0.2 , alignItems:'center', justifyContent:'center' , margin:3  }}>
+  <Image
+  resizeMode={Image.resizeMode.contain}
+  source={require('funshare/src/img/offerchat.png')}
+  style={{width:40, height:40}}
+  />
+  </View>
+
+  <View style={{ flex:0.4 , alignItems:'flex-end', justifyContent:'center' , margin:3  }}>
+ 
+
+  </View>
+
+  </View>
+  );
     return (
-    <View style = {{flex:1}}>
-    <View style = {{flex:.2}}>
 
-    <View style={{ padding: 10, flexDirection: 'row', backgroundColor: '#FF5C7E' }}>
-    <View style={{ flex:0.4 , justifyContent:'center' , margin:5  }}>
-
-     <IcoButton
-
-    source={require('funshare/src/img/swop.png')}
-    onPress={this.goTochatscren.bind(this)}
-    icostyle={{width:35, height:35}}
-    />
-
-    </View>
-
-    <View style={{ flex:0.2 , alignItems:'center', justifyContent:'center'   }}>
-    <Image
-    resizeMode={Image.resizeMode.contain}
-    source={require('funshare/src/img/f.png')}
-    style={{width:45, height:45}}
-    />
-    </View>
-
-    <View style={{ flex:0.4 , alignItems:'flex-end', justifyContent:'center' , margin:5  }}>
+ 
    
-
-    </View>
-
-    </View>
-    </View>
+ 
+    <View style = {{flex:1}}>
+     <TopNavigation/>
     <View style = {{flex:1 }}>
     <GiftedChat
     messages={this.state.messages}
