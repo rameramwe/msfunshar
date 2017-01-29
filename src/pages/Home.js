@@ -29,6 +29,7 @@ import SharedStyles from 'funshare/SharedStyles';
 import StyleVars from 'funshare/StyleVars';
 import Tinder from 'funshare/Tinder';
 import FCM from 'react-native-fcm';
+import Modalpop from "funshare/src/pages/Modalpop";
 var deviceWidth = Dimensions.get('window').width -6;
 var deviceheight = Dimensions.get('window').height -(deviceWidth/2) ;
 var modalheight = Dimensions.get('window').height/2 ;
@@ -271,6 +272,7 @@ else {
       failed: false,
       animationType: 'fade',
       modalVisible: false,
+      popVisible:true,
       transparent: true,
       unseenNotifNumberGlobal:null,
       PendingNotifNumberGlobal:null,
@@ -278,6 +280,7 @@ else {
       icategory:this.props.category ? this.props.category : "swiper-all" ,
       search:this.props.search ? this.props.search : null ,
       Startsearch:this.props.Startsearch ? this.props.Startsearch: null,
+
     };
 
 //this.fuck = this.fuck.bind(this);
@@ -376,7 +379,9 @@ goToOffer(info){
   this.props.replaceRoute(Routes.ModalExample(info));
 
 }
-
+hidePopvisible(){
+  this.setState({popVisible:false});
+}
 render(){
   var modalBackgroundStyle = {
     backgroundColor:   'rgba(0, 0, 0, 0.5)' ,
@@ -407,6 +412,7 @@ render(){
 
     <View>
 
+    <Modalpop popVisible = {this.state.popVisible}   hidePop = {()=>this.hidePopvisible()}  finishDeal={()=>this.finishDeal()} /> 
     <Modal
     animationType={this.state.animationType}
     transparent={this.state.transparent}
