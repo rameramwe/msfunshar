@@ -36,6 +36,13 @@ componentDidMount() {
     });
     self.renderRow(); 
   }
+componentWillUnmount(){
+  var uid = currentUserGlobal.uid;
+      firebase.database()
+      .ref('items')
+      .child(uid)
+      .off('value');
+}
   goToAddstuff()
   {
     this.props.replaceRoute(Routes.addstuff())
@@ -50,7 +57,7 @@ componentDidMount() {
       var self = this; 
       var i = 0;
       var num=null;
-      var uid = firebase.auth().currentUser.uid;
+      var uid = currentUserGlobal.uid;
       firebase.database()
       .ref('items')
       .child(uid)
@@ -71,12 +78,19 @@ componentDidMount() {
             var ds = self.state.dataSource.cloneWithRows(piclinks);
             self.setState({dataSource: ds,
             isloading:false});
-            },function(error){
-            alert("Connectin error");
-         });
+            });      
+
+    });
+      self.setState({
+      isloading: false
     });
     return piclinks;
     });
+
+
+
+
+
 }
 
 fuck(desc,piclink,title,key){
@@ -94,11 +108,9 @@ constructor(props) {
   this.fuck = this.fuck.bind(this);
   var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
   this.state = {
-    dataSource: ds.cloneWithRows(['row 1', 'row 2']),
+    dataSource: ds.cloneWithRows([]),
     isloading:false,
   };
-
- 
 }
 goToHome1()
 { 

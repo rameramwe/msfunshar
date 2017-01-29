@@ -394,11 +394,9 @@ render(){
   var Notification = () => 
   (
 
-    <View style = {this.state.unseenNotifNumberGlobal >0? noti : none } >
+    <View style = {(this.state.unseenNotifNumberGlobal || this.state.PendingNotifNumberGlobal>0)? noti : none } >
     </View>
     )
-
-
   return (
 
     <View style={{  backgroundColor:'white', flex:1 , width: null,height: null }}>

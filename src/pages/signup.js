@@ -88,7 +88,7 @@ componentDidMount() {
         firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(function() {
         var user = firebase.auth().currentUser;
           user.updateProfile({
-            photoURL: "https://firebasestorage.googleapis.com/v0/b/funshare-c6017.appspot.com/o/default%2Fmale-user-shadow_318-34042.png?alt=media&token=2d4bf3a1-2fef-4aea-9b17-2cd471d4316e",
+            photoURL: "https://firebasestorage.googleapis.com/v0/b/funshare-c6017.appspot.com/o/profiles%2Fdefault%2Fdefault_user-884fcb1a70325256218e78500533affb.jpg?alt=media&token=36955131-29cc-40a8-9db5-2511ed6a39ce",
             displayName: save.state.name,
           }).then(function() {
             save.goToHome1();

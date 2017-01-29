@@ -140,11 +140,26 @@ class chatscreen extends React.Component {
     ref.on('child_added', function(childSnapshot, prevChildKey) {
       self.renderRow(); 
     });
+    ref.on('child_removed', function(childSnapshot, prevChildKey) {
+      self.renderRow(); 
+    });
+     ref.on('child_added', function(childSnapshot, prevChildKey) {
+      self.renderRow(); 
+    });
     BackAndroid.addEventListener('hardwareBackPress', () => {
       self.goToHome();
       return true;
     });
     } 
+    componentWillUnmount(){
+      var ref = firebase.database()
+          .ref('Notifications')
+          .child(currentUserGlobal.uid)
+          .child('Unseen');
+      ref.off('child_removed');
+      ref.off('child_added');
+
+}
   constructor(props) {
     super(props);
     this.state = {
@@ -242,10 +257,6 @@ renderRow() {
           .child(snapshot.val().keyOfOfferedItem).once('value').then(function(snapshot1){
           if (snapshot1.val())
           {
-                       firebase.database()
-                    .ref('Notifications')
-                    .child(uid)
-                    .child('Accepted').child(childKey).remove().then(function(){}); 
             picOfOfferedItem= snapshot1.val().itemPic;
             checker1=1;
           }
