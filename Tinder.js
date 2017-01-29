@@ -154,7 +154,6 @@ export default React.createClass({
     componentDidMount() {
 
       this.rami().then((rm) => {
-        console.log("re");
         this.setState({
           outOfCards: false
         })

@@ -130,16 +130,21 @@ const styles = StyleSheet.create({
 });
 
 class chatscreen extends React.Component {
-  componentDidMount() {
-    this.renderRow(); 
-  var self=this;
-  self.renderRow();
-  BackAndroid.addEventListener('hardwareBackPress', () => {
-    self.goToHome();
-    return true;
-
-  });
-  } 
+    componentDidMount() {
+    var self=this;
+    self.renderRow(); 
+    var ref = firebase.database()
+          .ref('Notifications')
+          .child(currentUserGlobal.uid)
+          .child('Unseen');
+    ref.on('child_added', function(childSnapshot, prevChildKey) {
+      self.renderRow(); 
+    });
+    BackAndroid.addEventListener('hardwareBackPress', () => {
+      self.goToHome();
+      return true;
+    });
+    } 
   constructor(props) {
     super(props);
     this.state = {
@@ -167,8 +172,6 @@ class chatscreen extends React.Component {
   }
   finishDeal(childKey,uidOfOfferingUser,snapVal,oldRef,uidOfLikedItem){
     var self=this;
-    //alert(childKey);
-    //send a notification that lets the other user know that his offer was accepted and activate chat 
     var newRefForOfferingUser=firebase.database()
     .ref('Notifications')
     .child(uidOfOfferingUser)
@@ -183,7 +186,7 @@ class chatscreen extends React.Component {
         else if( typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
     }).then(function(){
         alert("Now we wait for the confirmation of the deal");
-        self.props.replaceRoute(Routes.chatscreen());
+        self.back();
       });
     
 }
@@ -237,23 +240,35 @@ renderRow() {
           snapVal=snapshot.val();
           firebase.database().ref('items').child(snapshot.val().uidOfOfferingUser)
           .child(snapshot.val().keyOfOfferedItem).once('value').then(function(snapshot1){
-
           if (snapshot1.val())
           {
+                       firebase.database()
+                    .ref('Notifications')
+                    .child(uid)
+                    .child('Accepted').child(childKey).remove().then(function(){}); 
             picOfOfferedItem= snapshot1.val().itemPic;
             checker1=1;
           }
             else{
                   checker1=0;
                   firebase.database()
-                  .ref('Offers').child(snapshot.val().uidOfOfferingUser).child(snapshot.val().offerKey).remove().then(function(){
-                  
-                  });
+                  .ref('Offers').child(snapshot.val().uidOfOfferingUser).child(snapshot.val().offerKey).remove().then(function(){});
+                     firebase.database()
+                    .ref('Notifications')
+                    .child(uid)
+                    .child('Accepted').child(childKey).remove().then(function(){}); 
+                    firebase.database()
+                    .ref('Notifications')
+                    .child(uid)
+                    .child('Popup').child(childKey).remove().then(function(){});
                      firebase.database()
                     .ref('Notifications')
                     .child(uid)
                     .child('Unseen').child(childKey).remove().then(function(){});
-                  
+                     firebase.database()
+                    .ref('Notifications')
+                    .child(uid)
+                    .child('Pending').child(childKey).remove().then(function(){});
                 }
             //console.log(snapshot1);
           }).then(function(){
@@ -266,16 +281,26 @@ renderRow() {
                       checker2=1;
                     }
                     else {
-
-                      checker2=0;
-                      firebase.database()
-                      .ref('Offers').child(snapshot.val().uidOfOfferingUser).child(snapshot.val().offerKey).remove().then(function(){
-                       
-                      });
+                    checker2=0;
+                    firebase.database()
+                    .ref('Notifications')
+                    .child(uid)
+                    .child('Accepted').child(childKey).remove().then(function(){});
+                    firebase.database()
+                    .ref('Notifications')
+                    .child(uid)
+                    .child('Popoup').child(childKey).remove().then(function(){});
+                    firebase.database()
+                    .ref('Offers').child(snapshot.val().uidOfOfferingUser).child(snapshot.val().offerKey).remove().then(function(){
+                    });
                     firebase.database()
                     .ref('Notifications')
                     .child(uid)
                     .child('Unseen').child(childKey).remove().then(function(){});
+                    firebase.database()
+                    .ref('Notifications')
+                    .child(uid)
+                    .child('Pending').child(childKey).remove().then(function(){});
 
                     }
                     //console.log(snapshot2);
@@ -299,9 +324,6 @@ renderRow() {
                       picOfOfferedItem:picOfOfferedItem,
                       picOfWantedItem:picOfWantedItem
                     }
-
-                    //console.log(iteminfo);
-      // alert(itemcategory)
       piclinks.push(iteminfo);
       images.push(
 
@@ -423,8 +445,6 @@ renderRow() {
 
 
 goChat(iteminfo){
-  //alert(this.state.animationType);
-  //  alert(iteminfo.lastMessage)
   this.props.replaceRoute(Routes.OfferChat(iteminfo));
 }
 _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef,uidOfOfferingUser,childKey,uidOfLikedItem ) => {

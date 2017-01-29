@@ -104,7 +104,6 @@ export default class Home extends Component {
       .once('value')
       .then(function(snapshot) {
         num =snapshot.numChildren();
-// alert(num);
 snapshot.forEach(function(childSnapshot) {
 
   firebase.database()
@@ -351,12 +350,9 @@ _setModalVisible = (visible) => {
 };
 logout(){
   firebase.auth().signOut().then(function() {
-// alert("Sign-out successful");
 }, function(error) {
-//alert("Sign-out failed");
 });
   this.props.replaceRoute(Routes.login());
-// Actions.logout();
 
 }
 connfirm(){
@@ -364,12 +360,7 @@ connfirm(){
 }
 
 handleOffereditems (desc,piclink,title,uidOfOfferingUser) {
-// alert(desc);
-/*console.log(desc);
-console.log(piclink);
-console.log(title);
-console.log(uidOfOfferingUser);
-*/
+
 }
 
 handleNope () {
@@ -552,7 +543,6 @@ _onLogout() {
 }
 
 mystuff(){
-  alert("hi")
   this.props.replaceRoute(Routes.addstuff());
 
 }

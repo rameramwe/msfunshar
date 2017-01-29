@@ -131,10 +131,16 @@ const styles = StyleSheet.create({
 
 class PendingOffers extends React.Component {
   componentDidMount() {
-    this.renderRow(); 
-  var self=this;
-  self.renderRow();
-  } 
+    var self=this;
+    self.renderRow(); 
+    var ref = firebase.database()
+          .ref('Notifications')
+          .child(currentUserGlobal.uid)
+          .child('Pending');
+    ref.on('child_added', function(childSnapshot, prevChildKey) {
+      self.renderRow(); 
+    });
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -160,7 +166,6 @@ class PendingOffers extends React.Component {
 
   finishDeal(childKey,uidOfOfferingUser,snapVal,oldRef,uidOfLikedItem,keyOfWantedItem,keyOfOfferedItem){
     var self=this;
-    //alert(childKey);
     //send a notification that lets the other user know that his offer was accepted and activate chat 
     var newRefForOfferingUser=firebase.database()
     .ref('Notifications')
@@ -218,6 +223,7 @@ class PendingOffers extends React.Component {
         else if( typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
       }).then(function(){
         alert("Now You can chat");
+        self.back();
         });
       });
     });
@@ -337,7 +343,7 @@ renderRow() {
                     }
 
                     //console.log(iteminfo);
-      // alert(itemcategory)
+  
       piclinks.push(iteminfo);
       images.push(
 
@@ -447,8 +453,6 @@ renderRow() {
 }); 
 }
 goChat(iteminfo){
-  //alert(this.state.animationType);
-  //  alert(iteminfo.lastMessage)
   this.props.replaceRoute(Routes.OfferChat(iteminfo));
 }
 _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef,uidOfOfferingUser,childKey,uidOfLikedItem,keyOfWantedItem,keyOfOfferedItem ) => {

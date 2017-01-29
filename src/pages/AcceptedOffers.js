@@ -128,9 +128,17 @@ const styles = StyleSheet.create({
 });
 
 class AcceptedOffers extends React.Component {
-  componentDidMount() {
-    this.renderRow(); 
-  } 
+componentDidMount() {
+    var self=this;
+    self.renderRow(); 
+    var ref = firebase.database()
+          .ref('Notifications')
+          .child(currentUserGlobal.uid)
+          .child('Accepted');
+    ref.on('child_added', function(childSnapshot, prevChildKey) {
+      self.renderRow(); 
+    });
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -249,10 +257,6 @@ picOfWantedItem= snapshot2.val().itemPic;
       lastMessage:lastMessage,
       username:ChatUsername,
     }
-
-
-//alert(iteminfo.username);
-// alert(item)
 piclinks.push(iteminfo);
 images.push(
   <View style = {{flex:1}}>
@@ -261,7 +265,6 @@ images.push(
   style={{flex:1}}
   activeOpacity={ 0.75 }
   onPress= {() => {self.props.goChat(iteminfo);
-//  alert(iteminfo.offerKey);
 } }
 >
 <View style = {{flex:1,paddingTop:8, paddingBottom:12, paddingLeft:20, flexDirection:'row' ,backgroundColor:'white'}} >

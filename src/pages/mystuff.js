@@ -23,7 +23,7 @@ import firebase from 'firebase';
 import Routes from 'funshare/Routes';
 var deviceWidth = Dimensions.get('window').width -6;
 var deviceheight = Dimensions.get('window').height -(deviceWidth/2) ;
-var piclinks=[];
+
 
 export default class mystuff extends Component {
 
@@ -35,15 +35,6 @@ componentDidMount() {
 
     });
     self.renderRow(); 
-    var ref = firebase.database()
-          .ref('items')
-          .child(currentUserGlobal.uid);
-    ref.on('child_added', function(childSnapshot, prevChildKey) {
-      self.renderRow(); 
-      
-    });
-   
-
   }
   goToAddstuff()
   {
@@ -55,7 +46,6 @@ componentDidMount() {
       isloading: true
     });
     var images= [];
-    return new Promise((next, error) => {
 
       var self = this; 
       var i = 0;
@@ -64,18 +54,8 @@ componentDidMount() {
       firebase.database()
       .ref('items')
       .child(uid)
-      .once('value')
-      .then(function(snapshot) {
-
-        num =snapshot.numChildren();
-        if(num == 0)
-        {
-           self.setState({
-     
-              isloading:false
-            });
-            
-        }
+      .on('value', function(snapshot){
+        var piclinks=[];
         snapshot.forEach(function(childSnapshot) {
 
           firebase.database()
@@ -87,45 +67,16 @@ componentDidMount() {
               title: snapshot.val().title ,  
               itemkey: snapshot.key ,
               itemcategory: snapshot.val().category }
-// alert(itemcategory)
-piclinks.push(iteminfo);
-images.push(
-  <View>
-  <TouchableOpacity
-  key = {iteminfo}
-  activeOpacity={ 0.75 }
-  onPress={self.fuck.bind(this,iteminfo)}
-  >
-  <View>
-  <Image
-  style={ styles.image }
-  source={{uri: iteminfo.piclink}}
-  /> 
-
-  <Text numberOfLines={1} style ={{margin:5 , marginLeft:10}}>{iteminfo.title}</Text>  
-  </View>
-  </TouchableOpacity>
-  </View>);
-
-  i++;
-  if (i==num){
-
-    self.setState({
-      dataSource: self.state.dataSource.cloneWithRows(images),
-      isloading:false
+            piclinks.push(iteminfo);
+            var ds = self.state.dataSource.cloneWithRows(piclinks);
+            self.setState({dataSource: ds,
+            isloading:false});
+            },function(error){
+            alert("Connectin error");
+         });
     });
-    
-    next(images);
-  }
-
-});
-
-})
-
-
-});
-
-}); 
+    return piclinks;
+    });
 }
 
 fuck(desc,piclink,title,key){
@@ -141,12 +92,13 @@ constructor(props) {
 
   this.goToHome1 = this.goToHome1.bind(this);
   this.fuck = this.fuck.bind(this);
+  var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
   this.state = {
-    dataSource: new ListView.DataSource({
-      rowHasChanged: (row1, row2) => row1 !== row2,
-    }),
+    dataSource: ds.cloneWithRows(['row 1', 'row 2']),
     isloading:false,
   };
+
+ 
 }
 goToHome1()
 { 
@@ -154,6 +106,25 @@ goToHome1()
       isloading: true
     });
   this.props.replaceRoute(Routes.Home1(currentUserGlobal));
+}
+renderItem(piclinks){
+  //alert(piclinks);
+  return (
+    <View style = {styles.item} >
+    <TouchableOpacity
+    activeOpacity={ 0.75 }
+    onPress={this.fuck.bind(this,piclinks)}
+    >
+    <View>
+    <Image
+    style={ styles.image }
+    source={{uri: piclinks.piclink}}
+    /> 
+    <Text numberOfLines={1} style ={{margin:5 , marginLeft:10}}>{piclinks.title}</Text>  
+    </View>
+    </TouchableOpacity>
+    </View>
+    );
 }
 render(){
    var spinner =  
@@ -220,8 +191,9 @@ render(){
 
   <ListView
   initialListSize={2}
+  enableEmptySections={true}
   dataSource={this.state.dataSource}
-  renderRow={(rowData) => <View style = {styles.item} >{rowData}</View>}
+  renderRow={this.renderItem.bind(this)}
   contentContainerStyle={{flex:1, flexWrap:'wrap',flexDirection: 'row',}}/>
 
   </View>
@@ -238,6 +210,7 @@ render(){
   );
 }
 }
+
 
 var styles = StyleSheet.create({
   container: {
