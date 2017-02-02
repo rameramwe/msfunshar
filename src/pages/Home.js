@@ -159,12 +159,10 @@ snapshot.forEach(function(childSnapshot) {
     var save = this;
     firebase.auth().onAuthStateChanged(function(user1) {
       if (user1) {
-
         currentUserGlobal=user1;
       }
       else {
         save.logout();
-
       }
     });
     firebase.auth().onAuthStateChanged(function(user) {
@@ -409,8 +407,7 @@ render(){
 
 
     <View>
-
-    <Modalpop popVisible = {this.state.popVisible}   hidePop = {()=>this.hidePopvisible()}  finishDeal={()=>this.finishDeal()} /> 
+    
     <Modal
     animationType={this.state.animationType}
     transparent={this.state.transparent}
@@ -532,13 +529,10 @@ style={{width:40, height:40}}
 
 
 _onLoadUserCompleted(user) {
-  var currentUser = currentUserGlobal;
-
-
-  if (currentUser.onboarded) {
+  if (currentUserGlobal.onboarded) {
     this.setState({ loaded: true });
   } else {
-    this.props.replaceRoute(Routes.Home1(currentUser));
+    this.props.replaceRoute(Routes.Home1(currentUserGlobal));
   }
 }
 

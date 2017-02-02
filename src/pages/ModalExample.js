@@ -97,7 +97,7 @@ export default class ModalExample extends Component {
       var self = this; 
       var i = 0;
       var num=0;
-      var uid = firebase.auth().currentUser.uid;
+      var uid = currentUserGlobal.uid;
       firebase.database()
       .ref('items')
       .child(uid)
@@ -193,9 +193,8 @@ componentDidMount() {
   FCM.unsubscribeFromTopic('/topics/foo-bar');
 }
 componentWillUnmount() {
-// prevent leaking
-this.refreshUnsubscribe();
-this.notificationUnsubscribe();
+  this.refreshUnsubscribe();
+  this.notificationUnsubscribe();
 }
 constructor(props) {
   super(props);
@@ -216,12 +215,7 @@ constructor(props) {
     //search:this.props.info.search,
     offerData:null,
     modalVisible:false
-//profilePicture:"http://domaingang.com/wp-content/uploads/2012/02/example.png"
 }
- 
-//alert(this.state.search) 
-
-
 }
 
 addtooffereditems(uidOfOfferingUser,keyOfOfferedItem,self){

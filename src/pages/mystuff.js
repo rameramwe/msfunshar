@@ -32,7 +32,6 @@ componentDidMount() {
     BackAndroid.addEventListener('hardwareBackPress', () => {
       self.goToHome1();
       return true;
-
     });
     self.renderRow(); 
   }
@@ -68,42 +67,33 @@ componentWillUnmount(){
           firebase.database()
           .ref('items')
           .child(uid).child(childSnapshot.key).once('value').then(function(snapshot) {
-            var iteminfo = {
-              piclink: snapshot.val().itemPic ,
-              desc: snapshot.val().description ,
-              title: snapshot.val().title ,  
-              itemkey: snapshot.key ,
-              itemcategory: snapshot.val().category }
+            var iteminfo ={
+              piclink: snapshot.val().itemPic,
+              desc: snapshot.val().description,
+              title: snapshot.val().title,  
+              itemkey: snapshot.key,
+              itemcategory: snapshot.val().category}
             piclinks.push(iteminfo);
             var ds = self.state.dataSource.cloneWithRows(piclinks);
             self.setState({dataSource: ds,
             isloading:false});
             });      
-
     });
       self.setState({
       isloading: false
     });
     return piclinks;
     });
-
-
-
-
-
 }
 
 fuck(desc,piclink,title,key){
   this.props.replaceRoute(Routes.fuck(desc,piclink,title,key));
-  // alert(desc + title + piclink);
 }
-
 loading = (visible) => {
   this.setState({loading: visible});
 }
 constructor(props) {
   super(props);
-
   this.goToHome1 = this.goToHome1.bind(this);
   this.fuck = this.fuck.bind(this);
   var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});

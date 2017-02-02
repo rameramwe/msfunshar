@@ -141,6 +141,14 @@ class PendingOffers extends React.Component {
       self.renderRow(); 
     });
   }
+  componentWillUnmount(){
+      var ref = firebase.database()
+          .ref('Notifications')
+          .child(currentUserGlobal.uid)
+          .child('Unseen');
+      ref.off('child_removed');
+      ref.off('child_added');
+  }
   constructor(props) {
     super(props);
     this.state = {

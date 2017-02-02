@@ -143,9 +143,6 @@ class chatscreen extends React.Component {
     ref.on('child_removed', function(childSnapshot, prevChildKey) {
       self.renderRow(); 
     });
-     ref.on('child_added', function(childSnapshot, prevChildKey) {
-      self.renderRow(); 
-    });
     BackAndroid.addEventListener('hardwareBackPress', () => {
       self.goToHome();
       return true;
@@ -195,7 +192,6 @@ class chatscreen extends React.Component {
     .ref('Notifications')
     .child(uidOfLikedItem)
     .child('Unseen').child(childKey);
-
     newRefForOfferingUser.set( snapVal, function(error) {
       if( !error ) {oldRefLikedItem.remove(); }
         else if( typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
@@ -203,7 +199,6 @@ class chatscreen extends React.Component {
         alert("Now we wait for the confirmation of the deal");
         self.back();
       });
-    
 }
 
 renderRow() {
