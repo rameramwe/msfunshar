@@ -152,15 +152,18 @@ export default React.createClass({
       this.refs['swiper']._goToNextCard() 
     },
     componentDidMount() {
-
+      this._mounted = true;
       this.rami().then((rm) => {
-        this.setState({
+        if (this._mounted){
+          this.setState({
           outOfCards: false
-        })
+        }) 
+        }
+
       });
     },
     componentWillUnmount() {
-
+      this._mounted = false;
       Cards=[];
     },
     rami(){
@@ -263,9 +266,9 @@ export default React.createClass({
     },
 
     reflectArray(array)
-    {
-      this.setState({loading:false
-                });
+    { if (this._mounted){
+        this.setState({loading:false});
+      }
        return new Promise((next, error) => {
       let reflect = [];
       for(var i=array.length-1 ; i>= 0 ; i --)

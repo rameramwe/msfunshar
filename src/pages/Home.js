@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
 export default class Home extends Component {
 
   renderRow() {
-
+  if (currentUserGlobal !== null){
     var images= [];
     return new Promise((next, error) => {
 
@@ -136,7 +136,7 @@ snapshot.forEach(function(childSnapshot) {
       </TouchableHighlight>
       </View> );
 
-    i++;
+    i++; 
     if (i==num){
       self.setState({
         dataSource: self.state.dataSource.cloneWithRows(images)
@@ -150,6 +150,7 @@ snapshot.forEach(function(childSnapshot) {
 })
 });
     }); 
+      }
   }
 
 
@@ -157,16 +158,9 @@ snapshot.forEach(function(childSnapshot) {
     super(props);
 
     var save = this;
-    firebase.auth().onAuthStateChanged(function(user1) {
-      if (user1) {
-        currentUserGlobal=user1;
-      }
-      else {
-        save.logout();
-      }
-    });
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
+        currentUserGlobal=user;
         var save1=save;
         var NotifRef = firebase.database().ref('Notifications/' + currentUserGlobal.uid+'/Unseen/');
         var PendingRef = firebase.database().ref('Notifications/' + currentUserGlobal.uid+'/Pending/');
@@ -176,7 +170,9 @@ snapshot.forEach(function(childSnapshot) {
           var unseenNotifNumber = snapshot.numChildren(); 
           var unseenNotifNumberGlobal = snapshot.numChildren(); 
           //console.log("unseenNotifNumber",unseenNotifNumber,unseenNotifNumberGlobal);
+          if(save._mounted){
           save1.setState({ unseenNotifNumberGlobal:unseenNotifNumber });
+        }
         });
         NotifRef.on('child_added', function(data) {
 
@@ -191,7 +187,9 @@ snapshot.forEach(function(childSnapshot) {
              }
                  
            // console.log("unseenNotifNumber",unseenNotifNumber,unseenNotifNumberGlobal);
+           if(save._mounted){
             save1.setState({ unseenNotifNumberGlobal:unseenNotifNumber });
+          }
             var body1="You have "+unseenNotifNumber+ " new offers ";
             firebaseClient.sendNotification(save1.state.token,"Funshare",body1);
 
@@ -208,7 +206,9 @@ snapshot.forEach(function(childSnapshot) {
         var PendingNotifNumber = snapshot.numChildren(); 
         var PendingNotifNumberGlobal = snapshot.numChildren(); 
         //console.log("unseenNotifNumber",unseenNotifNumber,unseenNotifNumberGlobal);
+        if(save._mounted){
         save1.setState({ PendingNotifNumberGlobal:PendingNotifNumber });
+      }
       });
       PendingRef.on('child_added', function(data) {
         PendingRef.once("value")
@@ -219,7 +219,9 @@ snapshot.forEach(function(childSnapshot) {
             Vibration.vibrate();
             global.PendingNotifNumberGlobal= PendingNotifNumber;
            }
+           if(save._mounted){
           save1.setState({ PendingNotifNumberGlobal:PendingNotifNumber });
+        }
           var body1="You have "+PendingNotifNumber+ " new offers ";
           firebaseClient.sendNotification(save1.state.token,"Funshare",body1);
           save1.refreshUnsubscribe = FCM.on("refreshToken", token => {
@@ -230,30 +232,10 @@ snapshot.forEach(function(childSnapshot) {
         });
       });
 
-/*
-var newItems = false;
-var eventsList = firebase.database().ref('Notifications/' + "24IuFFFZ53aYfl8IIe1p36OJkA83");
-
-eventsList.on('child_added', function(message) {
-if (!newItems) return;
-var message = message.val();
-console.log(message.offerKey);
-});
-eventsList.once('value', function(messages) {
-newItems = true;
-});
-
-var queryRef = eventsList.orderBy('created').startAt(firebase.database.ServerValue.TIMESTAMP);
-
-queryRef.on('child_added', function(snap) {
-console.log(snap.val());
-});
-
-*/
 
 }
 else {
-// No user is signed in.
+  save.logout();
 }
 });
 
@@ -293,11 +275,13 @@ componentWillMount() {
 }
 componentWillUnmount() {
 // prevent leaking
+this._mounted = false;
 this.refreshUnsubscribe();
 this.notificationUnsubscribe();
 }
 
 componentDidMount() {
+  this._mounted = true;
   this.renderRow();
   var self=this;
   BackAndroid.addEventListener('hardwareBackPress', () => {
@@ -311,7 +295,9 @@ return true;
 FCM.requestPermissions(); // for iOS
 FCM.getFCMToken().then(token => {
   //console.log("TOKEN (getFCMToken)", token);
+  if(self._mounted){
   this.setState({token: token || ""});
+}
 //  firebaseClient.sendNotification(token);
 //firebaseClient.sendData(token);
 //firebaseClient.sendNotificationWithData(token);
@@ -347,7 +333,9 @@ sendRemote(notif) {
 
 
 _setModalVisible = (visible) => {
+  if(this._mounted){
   this.setState({modalVisible: visible});
+}
 };
 logout(){
   firebase.auth().signOut().then(function() {

@@ -400,7 +400,6 @@ renderRow() {
       /> 
       </View>
       </TouchableOpacity>
-
       <TouchableOpacity
       style = {{flex:0.5 , justifyContent:'center' , alignItems:'center'}}
       onPress={self._setModalVisible.bind(self, true,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef,snapshot.val().uidOfOfferingUser,
@@ -413,28 +412,20 @@ renderRow() {
       /> 
       </View>
       </TouchableOpacity>
-
       </View>
-
       </View>
       </View>
 
       );
-                    }
- 
+      }
        i++;
-
       if (i==num){
-
         self.setState({
           dataSource: self.state.dataSource.cloneWithRows(images),
           loading:false
         });
-        
         next(images);
       }
-          
-      
       });
 
                 }

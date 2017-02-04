@@ -120,14 +120,13 @@ class Home1 extends React.Component {
   }
   componentWillMount() {
 
-    Actions.auth();
+    //Actions.auth();
     Actions.onboard.started.listen(this.onOnboardStarted.bind(this));
     Actions.onboard.completed.listen(this.onOnboardCompleted.bind(this));
-
-
     firebase.auth().onAuthStateChanged(function(user) {
+      var save = this;
       if (user) {
-
+        currentUserGlobal=user;
         var NotifRef = firebase.database().ref('Notifications/' + currentUserGlobal.uid+'/Unseen/');
         NotifRef.once("value")
         .then(function(snapshot) {
@@ -164,30 +163,10 @@ class Home1 extends React.Component {
 
           });
         });
-/*
-var newItems = false;
-var eventsList = firebase.database().ref('Notifications/' + "24IuFFFZ53aYfl8IIe1p36OJkA83");
-
-eventsList.on('child_added', function(message) {
-if (!newItems) return;
-var message = message.val();
-console.log(message.offerKey);
-});
-eventsList.once('value', function(messages) {
-newItems = true;
-});
-
-var queryRef = eventsList.orderBy('created').startAt(firebase.database.ServerValue.TIMESTAMP);
-
-queryRef.on('child_added', function(snap) {
-console.log(snap.val());
-});
-
-*/
 
 }
 else {
-// No user is signed in.
+  save.logout();
 }
 });
   }
