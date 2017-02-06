@@ -93,7 +93,7 @@ export default class setting extends Component {
   }
   watchID: ?number = null;
   componentWillUnmount() {
-    navigator.geolocation.clearWatch(this.watchID);
+    //navigator.geolocation.clearWatch(this.watchID);
   }
 
   constructor(props) {

@@ -17,7 +17,7 @@ import{
   Modal,
   Text,
   BackAndroid,
-} from 'react-native';
+}from 'react-native';
 import Loading from 'funshare/src/components/Loading';
 import IcoButton from 'funshare/src/components/icobutton';
 import IconBadge from 'react-native-icon-badge';
@@ -32,7 +32,6 @@ import IconButton from 'funshare/src/components/icotextButton';
 import AcceptedOffers from 'funshare/src/pages/AcceptedOffers';
 import PendingOffers  from 'funshare/src/pages/PendingOffers';
 var piclinks=[];
-
 var deviceheight = Dimensions.get('window').height ;
 const styles = StyleSheet.create({
   li: {
@@ -52,18 +51,11 @@ const styles = StyleSheet.create({
     flex:1,
     alignSelf: 'flex-end',
     width: Dimensions.get("window").width-100,
-
   },
-
-
   item: {
-
-
     flex:1,
     marginBottom:5,
-
   },
-
   container: {
     flex:1,
   },
@@ -128,15 +120,14 @@ const styles = StyleSheet.create({
     borderRadius:30
   }
 });
-
 class chatscreen extends React.Component {
-    componentDidMount() {
+  componentDidMount() {
     var self=this;
-    self.renderRow(); 
+    this.renderRow(); 
     var ref = firebase.database()
-          .ref('Notifications')
-          .child(currentUserGlobal.uid)
-          .child('Unseen');
+    .ref('Notifications')
+    .child(currentUserGlobal.uid)
+    .child('Unseen');
     ref.on('child_added', function(childSnapshot, prevChildKey) {
       self.renderRow(); 
     });
@@ -147,16 +138,15 @@ class chatscreen extends React.Component {
       self.goToHome();
       return true;
     });
-    } 
-    componentWillUnmount(){
-      var ref = firebase.database()
-          .ref('Notifications')
-          .child(currentUserGlobal.uid)
-          .child('Unseen');
-      ref.off('child_removed');
-      ref.off('child_added');
-
-}
+  } 
+  componentWillUnmount(){
+    var ref = firebase.database()
+    .ref('Notifications')
+    .child(currentUserGlobal.uid)
+    .child('Unseen');
+    ref.off('child_removed');
+    ref.off('child_added');
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -176,8 +166,6 @@ class chatscreen extends React.Component {
       }) 
     };
   }
-
-
   goToHome()
   {
     this.props.replaceRoute(Routes.Home());
@@ -194,307 +182,260 @@ class chatscreen extends React.Component {
     .child('Unseen').child(childKey);
     newRefForOfferingUser.set( snapVal, function(error) {
       if( !error ) {oldRefLikedItem.remove(); }
-        else if( typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
+      else if( typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
     }).then(function(){
-        alert("Now we wait for the confirmation of the deal");
-        self.back();
-      });
-}
-
-renderRow() {
+      alert("Now we wait for the confirmation of the deal");
+      self.back();
+    });
+  }
+  renderRow() {
     this.setState({
       loading: true
     });
-  var images= [];
-  return new Promise((next, error) => {
-
-    var self = this; 
-    var i = 0;
-    var num=0;
-    var checker1=0;
-    var checker2=0;
-    var uid = firebase.auth().currentUser.uid;
-    firebase.database()
-    .ref('Notifications')
-    .child(uid)
-    .child('Unseen')
-    .once('value')
-    .then(function(snapshot) {
-      num =snapshot.numChildren();
-          if(num == 0)
+    var images= [];
+    return new Promise((next, error) => {
+      var self = this; 
+      var i = 0;
+      var num=0;
+      var checker1=0;
+      var checker2=0;
+      var uid = firebase.auth().currentUser.uid;
+      firebase.database()
+      .ref('Notifications')
+      .child(uid)
+      .child('Unseen')
+      .once('value')
+      .then(function(snapshot) {
+        num =snapshot.numChildren();
+        if(num == 0)
         {
-           self.setState({
-     
-              loading:false
-            });
-            
+          self.setState({
+            loading:false
+          });
         }
-      snapshot.forEach(function(childSnapshot) {
-        var picOfWantedItem= "h";
-        var picOfOfferedItem="h";
-        var childKey = childSnapshot.key;
-        var oldRef=firebase.database()
-        .ref('Notifications')
-        .child(uid)
-        .child('Unseen').child(childSnapshot.key);
-        var newRef=firebase.database()
-        .ref('Notifications')
-        .child(uid)
-        .child('Seen').child(childSnapshot.key);
-
-        var snapVal=null;
+        snapshot.forEach(function(childSnapshot) {
+          var picOfWantedItem= "h";
+          var picOfOfferedItem="h";
+          var childKey = childSnapshot.key;
+          var oldRef=firebase.database()
+          .ref('Notifications')
+          .child(uid)
+          .child('Unseen').child(childSnapshot.key);
+          var newRef=firebase.database()
+          .ref('Notifications')
+          .child(uid)
+          .child('Seen').child(childSnapshot.key);
+          var snapVal=null;
+          firebase.database()
+          .ref('Notifications')
+          .child(uid)
+          .child('Unseen').child(childSnapshot.key).once('value').then(function(snapshot) {
+            snapVal=snapshot.val();
+            firebase.database().ref('items').child(snapshot.val().uidOfOfferingUser)
+            .child(snapshot.val().keyOfOfferedItem).once('value').then(function(snapshot1){
+              if (snapshot1.val())
+              {
+                picOfOfferedItem= snapshot1.val().itemPic;
+                checker1=1;
+              }
+              else{
+                checker1=0;
+                firebase.database()
+                .ref('Offers').child(snapshot.val().uidOfOfferingUser).child(snapshot.val().offerKey).remove().then(function(){});
+                firebase.database()
+                .ref('Notifications')
+                .child(uid)
+                .child('Accepted').child(childKey).remove().then(function(){}); 
+                firebase.database()
+                .ref('Notifications')
+                .child(uid)
+                .child('Popup').child(childKey).remove().then(function(){});
+                firebase.database()
+                .ref('Notifications')
+                .child(uid)
+                .child('Unseen').child(childKey).remove().then(function(){});
+                firebase.database()
+                .ref('Notifications')
+                .child(uid)
+                .child('Pending').child(childKey).remove().then(function(){});
+              }
+//console.log(snapshot1);
+}).then(function(){
+  if (checker1)
+  {
+    firebase.database().ref('items').child(snapshot.val().uidOfLikedItem)
+    .child(snapshot.val().keyOfWantedItem).once('value').then(function(snapshot2){
+      if (snapshot2.val()){
+        picOfWantedItem= snapshot2.val().itemPic;
+        checker2=1;
+      }
+      else {
+        checker2=0;
         firebase.database()
         .ref('Notifications')
         .child(uid)
-        .child('Unseen').child(childSnapshot.key).once('value').then(function(snapshot) {
-          snapVal=snapshot.val();
-          firebase.database().ref('items').child(snapshot.val().uidOfOfferingUser)
-          .child(snapshot.val().keyOfOfferedItem).once('value').then(function(snapshot1){
-          if (snapshot1.val())
-          {
-            picOfOfferedItem= snapshot1.val().itemPic;
-            checker1=1;
-          }
-            else{
-                  checker1=0;
-                  firebase.database()
-                  .ref('Offers').child(snapshot.val().uidOfOfferingUser).child(snapshot.val().offerKey).remove().then(function(){});
-                     firebase.database()
-                    .ref('Notifications')
-                    .child(uid)
-                    .child('Accepted').child(childKey).remove().then(function(){}); 
-                    firebase.database()
-                    .ref('Notifications')
-                    .child(uid)
-                    .child('Popup').child(childKey).remove().then(function(){});
-                     firebase.database()
-                    .ref('Notifications')
-                    .child(uid)
-                    .child('Unseen').child(childKey).remove().then(function(){});
-                     firebase.database()
-                    .ref('Notifications')
-                    .child(uid)
-                    .child('Pending').child(childKey).remove().then(function(){});
-                }
-            //console.log(snapshot1);
-          }).then(function(){
-             if (checker1)
-                {
-                  firebase.database().ref('items').child(snapshot.val().uidOfLikedItem)
-                  .child(snapshot.val().keyOfWantedItem).once('value').then(function(snapshot2){
-                    if (snapshot2.val()){
-                      picOfWantedItem= snapshot2.val().itemPic;
-                      checker2=1;
-                    }
-                    else {
-                    checker2=0;
-                    firebase.database()
-                    .ref('Notifications')
-                    .child(uid)
-                    .child('Accepted').child(childKey).remove().then(function(){});
-                    firebase.database()
-                    .ref('Notifications')
-                    .child(uid)
-                    .child('Popoup').child(childKey).remove().then(function(){});
-                    firebase.database()
-                    .ref('Offers').child(snapshot.val().uidOfOfferingUser).child(snapshot.val().offerKey).remove().then(function(){
-                    });
-                    firebase.database()
-                    .ref('Notifications')
-                    .child(uid)
-                    .child('Unseen').child(childKey).remove().then(function(){});
-                    firebase.database()
-                    .ref('Notifications')
-                    .child(uid)
-                    .child('Pending').child(childKey).remove().then(function(){});
-
-                    }
-                    //console.log(snapshot2);
-                    
-                  }).then(function(){
-                    
-                    if (checker2)
-                    {
-                      var iteminfo = {
-                      created: snapshot.val().created ,
-                      keyOfOfferedItem: snapshot.val().keyOfOfferedItem ,
-                      keyOfWantedItem: snapshot.val().keyOfWantedItem ,  
-                      itemkey: snapshot.key ,
-                      offerAccepted: snapshot.val().offerAccepted,
-                      offerConfirmedByOfferingUser: snapshot.val().offerConfirmedByOfferingUser,
-                      offerKey: snapshot.val().offerKey,
-                      offerStatus: snapshot.val().offerStatus,
-                      seen: snapshot.val().seen,
-                      uidOfLikedItem: snapshot.val().uidOfLikedItem,
-                      uidOfOfferingUser: snapshot.val().uidOfOfferingUser,
-                      picOfOfferedItem:picOfOfferedItem,
-                      picOfWantedItem:picOfWantedItem
-                    }
-      piclinks.push(iteminfo);
-      images.push(
-
-        <View key= {iteminfo} style={{flex:1}}>
-
-        <View style = {{paddingTop:8, paddingBottom:12, paddingLeft:20, flexDirection:'row' ,backgroundColor:'white'}} >
-
-        <View style = {{flex:0.6 , flexDirection:'row', justifyContent:'flex-start' , alignItems:'center'}}>
-       <View style = {{height:60,
-    width: 60,
-    borderRadius: 30}}>
-        <Image
-        style={{
-          height:60,
-          width:60,
-          borderRadius:30}}
-        source={{uri:picOfWantedItem}}
-        /> 
-        </View>
-        <Image
-        style={{height:30 , width : 30 , margin:10}}
-        source={require('funshare/src/img/sam.png')}
-        /> 
-          <View style = {{height:60,
-    width: 60,
-    borderRadius: 30}}>
-        <Image
-        style={{
-          height:60,
-          width:60,
-          borderRadius:30}}
-        source={{uri:picOfOfferedItem}}
-        /> 
-        </View>
-        </View>
-
-        <View style = {{flex:0.4 , flexDirection:'row', justifyContent:'center'}}>
-        <TouchableOpacity
-        style = {{flex:0.5 , justifyContent:'center' , alignItems:'center'}}
-        onPress={self.remove.bind(self,childKey)}
-      >
-      <View style= {{flex:1  , alignItems:'center',justifyContent:'center'}}>
-      <Image
-      style={{height:40 , width:40}}
-      source={require('funshare/src/img/dislike.png')}
-      /> 
-      </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-      style = {{flex:0.5 , justifyContent:'center' , alignItems:'center'}}
-      onPress={self._setModalVisible.bind(self, true,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef,snapshot.val().uidOfOfferingUser,childKey,snapshot.val().uidOfLikedItem)}
-      >
-      <View style = {{flex:1 , alignItems:'center',justifyContent:'center'}} >
-      <Image
-      style={{height:40 , width:40}}
-      source={require('funshare/src/img/like.png')}
-      /> 
-      </View>
-      </TouchableOpacity>
-
-      </View>
-
-      </View>
-      </View>
-
-      );
-                    }
- 
-       i++;
-
-      if (i==num){
-
-        self.setState({
-          dataSource: self.state.dataSource.cloneWithRows(images),
-          loading:false
+        .child('Accepted').child(childKey).remove().then(function(){});
+        firebase.database()
+        .ref('Notifications')
+        .child(uid)
+        .child('Popoup').child(childKey).remove().then(function(){});
+        firebase.database()
+        .ref('Offers').child(snapshot.val().uidOfOfferingUser).child(snapshot.val().offerKey).remove().then(function(){
         });
-        
-        next(images);
+        firebase.database()
+        .ref('Notifications')
+        .child(uid)
+        .child('Unseen').child(childKey).remove().then(function(){});
+        firebase.database()
+        .ref('Notifications')
+        .child(uid)
+        .child('Pending').child(childKey).remove().then(function(){});
       }
-          
-      
-      });
-
-                }
-    else {
-
-       i++;
-
-      if (i==num){
-
-        self.setState({
-          dataSource: self.state.dataSource.cloneWithRows(images),
-          loading:false
-        });
-        
-        next(images);
-      }
-            
+//console.log(snapshot2);
+}).then(function(){
+  if (checker2)
+  {
+    var iteminfo = {
+      created: snapshot.val().created ,
+      keyOfOfferedItem: snapshot.val().keyOfOfferedItem ,
+      keyOfWantedItem: snapshot.val().keyOfWantedItem ,  
+      itemkey: snapshot.key ,
+      offerAccepted: snapshot.val().offerAccepted,
+      offerConfirmedByOfferingUser: snapshot.val().offerConfirmedByOfferingUser,
+      offerKey: snapshot.val().offerKey,
+      offerStatus: snapshot.val().offerStatus,
+      seen: snapshot.val().seen,
+      uidOfLikedItem: snapshot.val().uidOfLikedItem,
+      uidOfOfferingUser: snapshot.val().uidOfOfferingUser,
+      picOfOfferedItem:picOfOfferedItem,
+      picOfWantedItem:picOfWantedItem
     }
-             
-
+    piclinks.push(iteminfo);
+    images.push(
+      <View key= {iteminfo} style={{flex:1}}>
+      <View style = {{paddingTop:8, paddingBottom:12, paddingLeft:20, flexDirection:'row' ,backgroundColor:'white'}} >
+      <View style = {{flex:0.6 , flexDirection:'row', justifyContent:'flex-start' , alignItems:'center'}}>
+      <View style = {{height:60,
+        width: 60,
+        borderRadius: 30}}>
+        <Image
+        style={{
+          height:60,
+          width:60,
+          borderRadius:30}}
+          source={{uri:picOfWantedItem}}
+          /> 
+          </View>
+          <Image
+          style={{height:30 , width : 30 , margin:10}}
+          source={require('funshare/src/img/sam.png')}
+          /> 
+          <View style = {{height:60,
+            width: 60,
+            borderRadius: 30}}>
+            <Image
+            style={{
+              height:60,
+              width:60,
+              borderRadius:30}}
+              source={{uri:picOfOfferedItem}}
+              /> 
+              </View>
+              </View>
+              <View style = {{flex:0.4 , flexDirection:'row', justifyContent:'center'}}>
+              <TouchableOpacity
+              style = {{flex:0.5 , justifyContent:'center' , alignItems:'center'}}
+              onPress={self.remove.bind(self,childKey)}
+              >
+              <View style= {{flex:1  , alignItems:'center',justifyContent:'center'}}>
+              <Image
+              style={{height:40 , width:40}}
+              source={require('funshare/src/img/dislike.png')}
+              /> 
+              </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+              style = {{flex:0.5 , justifyContent:'center' , alignItems:'center'}}
+              onPress={self._setModalVisible.bind(self, true,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef,snapshot.val().uidOfOfferingUser,childKey,snapshot.val().uidOfLikedItem)}
+              >
+              <View style = {{flex:1 , alignItems:'center',justifyContent:'center'}} >
+              <Image
+              style={{height:40 , width:40}}
+              source={require('funshare/src/img/like.png')}
+              /> 
+              </View>
+              </TouchableOpacity>
+              </View>
+              </View>
+              </View>
+              );
+  }
+  i++;
+  if (i==num){
+    self.setState({
+      dataSource: self.state.dataSource.cloneWithRows(images),
+      loading:false
+    });
+    next(images);
+  }
 });
-
-
-
-
-
-
+}
+else {
+  i++;
+  if (i==num){
+    self.setState({
+      dataSource: self.state.dataSource.cloneWithRows(images),
+      loading:false
+    });
+    next(images);
+  }
+}
 });
-
+});
 })
-
-
 });
-
 }); 
 }
-
-
 goChat(iteminfo){
   this.props.replaceRoute(Routes.OfferChat(iteminfo));
 }
 _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef,uidOfOfferingUser,childKey,uidOfLikedItem ) => {
-   /*
-    if (newRef){
-      newRef.set( snapVal, function(error) {
-        if( !error ) {  oldRef.remove(); }
-        else if( typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
-      });
-    }
-  */
-  this.setState({modalVisible: visible ,picOfOfferedItem:picOfOfferedItem , picOfWantedItem:picOfWantedItem,
-  uidOfOfferingUser:uidOfOfferingUser,newRef:newRef,snapVal:snapVal , childKey:childKey,uidOfLikedItem:uidOfLikedItem});
-  }
-
-  back ()
-    {
-      var save=this;
-      save.setState({modalVisible:false});
-      
-    }
-  remove(iteminfo){
-    var save=this;
-    var uid=currentUserGlobal.uid;
-    firebase.database()
-    .ref('Notifications')
-        .child(uid)
-        .child('Unseen').child(iteminfo).remove().then(function(){
-      alert("removed")
-    });
+/*
+if (newRef){
+newRef.set( snapVal, function(error) {
+if( !error ) {  oldRef.remove(); }
+else if( typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
+});
 }
-
-  render() {
-    const TopNavigation = () => (
+*/
+this.setState({modalVisible: visible ,picOfOfferedItem:picOfOfferedItem , picOfWantedItem:picOfWantedItem,
+  uidOfOfferingUser:uidOfOfferingUser,newRef:newRef,snapVal:snapVal , childKey:childKey,uidOfLikedItem:uidOfLikedItem});
+}
+back ()
+{
+  var save=this;
+  save.setState({modalVisible:false});
+}
+remove(iteminfo){
+  var save=this;
+  var uid=currentUserGlobal.uid;
+  firebase.database()
+  .ref('Notifications')
+  .child(uid)
+  .child('Unseen').child(iteminfo).remove().then(function(){
+    alert("removed")
+  });
+}
+render() {
+  const TopNavigation = () => (
     <View style={{ padding: 10, flexDirection: 'row', backgroundColor: '#FF5C7E' }}>
     <View style={{ flex:0.4 , justifyContent:'center' , margin:5  }}>  
-      <IcoButton
-
+    <IcoButton
     source={require('funshare/src/img/swop.png')}
     onPress={this.goToHome.bind(this)}
     icostyle={{width:35, height:35}}
     />
     </View>
-
     <View style={{ flex:0.2 , alignItems:'center', justifyContent:'center'   }}>
     <Image
     resizeMode={Image.resizeMode.contain}
@@ -502,55 +443,43 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     style={{width:45, height:45}}
     />
     </View>
-
     <View style={{ flex:0.4 , alignItems:'flex-end', justifyContent:'center' , margin:5  }}>
-  
-
     </View>
-
     </View>
     );
-    return (
+  return (
     <View style = {{flex:1, backgroundColor:'white',}}>  
     <TopNavigation/>  
     <ScrollView style= {{flex:1}}>
     <Loading loading = {this.state.loading} />
-
     <Modal
     animationType={this.state.animationType}
     transparent={this.state.transparent}
     visible={this.state.modalVisible}
     onRequestClose={() => {this._setModalVisible(false)}}
     >
-
     <View style={ {flex:1} }>
-
     <View style= {{ height:deviceheight, backgroundColor:   'rgba(0, 0, 0, 0.9)'}} >
     <View style= {{alignItems:'center'}} >
     <Text style={{color:'white', fontSize:40,fontWeight:'bold',marginTop:25}}>Glückwunsch</Text>
     <Text style={{color:'white', fontSize:30,fontWeight:'bold',marginTop:25}}>it's a Match!</Text>
     </View>
-
     <View style = {{alignItems:'center' , marginTop:25}}>
     <Image 
     resizeMode={Image.resizeMode.contain}
     source={require('../img/Logo.png')}
     style={{height:40, width:40}}                                
     />
-
     </View>
-
-
     <View style = {{flexDirection:'row',marginTop:30,justifyContent:'center' }}>
     <View style = {{  flex:0.5 ,alignItems:'center' }}>
-     <View style = {{  flex:0.5 ,alignItems:'center' }}>
+    <View style = {{  flex:0.5 ,alignItems:'center' }}>
     <View  style={{height:100 , width:100 , borderRadius:50 ,borderWidth:1,borderColor:'white'}} >
-   
-   <Image  
+    <Image  
     source={{uri:this.state.picOfWantedItem}}
-     style={{height:98 , width:98 , borderRadius:49 }}                                
-   />
-     </View>
+    style={{height:98 , width:98 , borderRadius:49 }}                                
+    />
+    </View>
     </View>
     </View>
     <View style = {{  flex:0.5 ,alignItems:'center' }}>
@@ -563,76 +492,50 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
     </View>
     </View>
     <View style={{position:'absolute', bottom:30 ,flex:1,flexDirection:'row', justifyContent:'center'}}>
-
     <View style={{flex:0.25,alignItems:'center',marginLeft:5}}>
     <Text style={{color:'white', fontSize:15 ,marginTop:18 }}>Abbrechen</Text>
     </View>
-   <View style={{flex:0.25,alignItems:'center'}}>
+    <View style={{flex:0.25,alignItems:'center'}}>
     <IcoButton
     onPress={this.back.bind(this)}
     source={require('funshare/src/img/dislike.png')}
     icostyle={{width:60, height:60}}
     />
     </View>
-
-   <View style={{flex:0.25,alignItems:'center'}}>
+    <View style={{flex:0.25,alignItems:'center'}}>
     <IcoButton
     source={require('funshare/src/img/like.png')}
     onPress={this.finishDeal.bind(this,this.state.childKey,this.state.uidOfOfferingUser,this.state.snapVal,this.state.newRef,this.state.uidOfLikedItem)}
     icostyle={{width:60, height:60}}
     />
     </View>
-  <View style={{flex:0.25,alignItems:'center',marginRight:5}}>
+    <View style={{flex:0.25,alignItems:'center',marginRight:5}}>
     <Text style={{color:'white', fontSize:15 ,marginTop:18  }}>Bestätigen</Text>
     </View>
-
-
-
     </View>
-
     </View>
     </View>
     </Modal>
     <View style= {{flex:1}}>
     <Text style = {{color:'#FF5C7E' ,fontSize:16 }}>  New Offers </Text>
     </View>
-
-
-
     <View style = {{flex:1}}>
     <ListView
-
     dataSource={this.state.dataSource}
     renderRow={(rowData) => <View style = {{flex:1}} >{rowData}</View>}
-    // renderSeparator={() => <View style={styles.separator} />}
-    renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
-    renderFooter={(sectionId, rowId) => <View key={rowId} style={{alignSelf: 'center', borderBottomWidth:1 , borderBottomColor:'#dcdcdc', width: Dimensions.get("window").width-40,marginBottom:15,marginTop:15}} />}
-    contentContainerStyle={{flex:1,paddingTop:20 ,backgroundColor:'white',}}/>
-    </View>
-      <PendingOffers />
-    <View style= {{flex:1}}>
-    <Text style = {{color:'#FF5C7E' ,fontSize:16  }}>  Messages </Text>
-    </View>
-    <View style = {{flex:1}}>
-
-    <AcceptedOffers goChat={this.goChat.bind(this)}/>
-
-    </View>
-
-
-
-
-
-
-
-
-    </ScrollView>
-    </View>
-
-    );
-  }
-
+// renderSeparator={() => <View style={styles.separator} />}
+renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
+renderFooter={(sectionId, rowId) => <View key={rowId} style={{alignSelf: 'center', borderBottomWidth:1 , borderBottomColor:'#dcdcdc', width: Dimensions.get("window").width-40,marginBottom:15,marginTop:15}} />}
+contentContainerStyle={{flex:1,paddingTop:20 ,backgroundColor:'white',}}/>
+</View>
+<View style= {{flex:1}}>
+<Text style = {{color:'#FF5C7E' ,fontSize:16  }}>  Messages </Text>
+</View>
+<View style = {{flex:1}}>
+</View>
+</ScrollView>
+</View>
+);
 }
-
-
+}
 export default chatscreen;

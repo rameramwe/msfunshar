@@ -29,7 +29,7 @@ import DataStore from 'funshare/DataStore';
 import Actions from 'funshare/Actions';
 import SharedStyles from 'funshare/SharedStyles';
 import IconButton from 'funshare/src/components/icotextButton';
-var piclinks=[];
+
 
 var deviceheight = Dimensions.get('window').height ;
 const styles = StyleSheet.create({
@@ -48,23 +48,14 @@ const styles = StyleSheet.create({
   },
   separator: {
     alignSelf: 'flex-end',
-
-
     width: Dimensions.get("window").width-100,
 
   },
-
-
   item: {
-
-
     flex:1,
     marginBottom:5,
-
   },
-
   container: {
-
   },
   inputContainer: {
     margin:20, 
@@ -126,7 +117,6 @@ const styles = StyleSheet.create({
     borderRadius:30
   }
 });
-
 class AcceptedOffers extends React.Component {
 componentDidMount() {
     var self=this;
@@ -141,6 +131,7 @@ componentDidMount() {
   }
   constructor(props) {
     super(props);
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
       loading:false,
       animationType: 'fade',
@@ -148,24 +139,52 @@ componentDidMount() {
       transparent: true,
       picOfWantedItem:null,
       picOfOfferedItem:null,
-      dataSource: new ListView.DataSource({
-        rowHasChanged: (row1, row2) => row1 !== row2,
-      }) 
+      dataSource: ds.cloneWithRows(['row 1', 'row 2']),
     };
   }
+renderItem(iteminfo){
+    return(
+ <View style = {{flex:1}}>
 
+  <TouchableOpacity  
+  style={{flex:1}}
+  activeOpacity={ 0.75 }
+  onPress= {() => {this.props.goChat(iteminfo);
+} }
+>
+<View style = {{flex:1,paddingTop:8, paddingBottom:12, paddingLeft:20, flexDirection:'row' ,backgroundColor:'white'}} >
+<View style = {{flex:0.3 , justifyContent:'center' , alignItems:'center'}}>
+<Image
+style={ styles.image }
+source={{uri:iteminfo.picOfWantedItem}}
+/>  
+</View>
+<View style = {{flex:1 , flexDirection:'row'}}>
+<View style= {{flex:0.9,justifyContent:'center' , marginLeft:10}} >
+<Text  numberOfLines={1} style ={{fontSize:15 , fontWeight:'bold'}}>{iteminfo.username}</Text> 
 
+<Text  numberOfLines={1}  style={{fontSize:13}}>{iteminfo.lastMessage}</Text>                       
+</View>
+<View style = {{flex:0.2, top:25 ,alignItems:'center', justifyContent:'center'}}>
+
+</View>
+</View>
+</View>
+</TouchableOpacity>
+
+</View>
+
+      )
+  }
   goToHome()
   {
     this.props.replaceRoute(Routes.Home());
   }
   finishDeal(){
-
   }
   renderRow() {
     this.setState({loading:true});
-    var images= [];
-    return new Promise((next, error) => {
+    var piclinks=[];
       var self = this; 
       var i = 0;
       var num=0;
@@ -174,16 +193,13 @@ componentDidMount() {
       .ref('Notifications')
       .child(uid)
       .child('Accepted')
-      .once('value')
-      .then(function(snapshot) {
+      .on('value', function(snapshot){
         num =snapshot.numChildren();
         if(num == 0)
         {
           self.setState({
-
             loading:false
           });
-
         }
         snapshot.forEach(function(childSnapshot) {
           var picOfWantedItem= "http://orig01.deviantart.net/ace1/f/2010/227/4/6/png_test_by_destron23.png";
@@ -258,77 +274,20 @@ picOfWantedItem= snapshot2.val().itemPic;
       username:ChatUsername,
     }
 piclinks.push(iteminfo);
-images.push(
-  <View style = {{flex:1}}>
 
-  <TouchableOpacity  
-  style={{flex:1}}
-  activeOpacity={ 0.75 }
-  onPress= {() => {self.props.goChat(iteminfo);
-} }
->
-<View style = {{flex:1,paddingTop:8, paddingBottom:12, paddingLeft:20, flexDirection:'row' ,backgroundColor:'white'}} >
-<View style = {{flex:0.3 , justifyContent:'center' , alignItems:'center'}}>
-<Image
-style={ styles.image }
-source={{uri:picOfWantedItem}}
-/>  
-</View>
-<View style = {{flex:1 , flexDirection:'row'}}>
-<View style= {{flex:0.9,justifyContent:'center' , marginLeft:10}} >
-<Text  numberOfLines={1} style ={{fontSize:15 , fontWeight:'bold'}}>{iteminfo.username}</Text> 
-
-<Text  numberOfLines={1}  style={{fontSize:13}}>{iteminfo.lastMessage}</Text>                       
-</View>
-<View style = {{flex:0.2, top:25 ,alignItems:'center', justifyContent:'center'}}>
-
-</View>
-</View>
-</View>
-</TouchableOpacity>
-
-</View>
-
-
-);
-i++;
-if (i==num){
-
-  self.setState({
-    dataSource: self.state.dataSource.cloneWithRows(images),
-    loading:false,
-  });
-
-  next(images);
-}
-
-});
-
+  var ds = self.state.dataSource.cloneWithRows(piclinks);
+              i++;
+              if(i==num)
+              self.setState({dataSource: ds,
+                loading:false});
 })
-
-
-
-
-
-
 });
-
-
-
-
-
-
 });
-
-        })
-
-
+})
 });
-
+ return piclinks;
 }); 
 }
-
-
 _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldRef) => {
   if (newRef){
     newRef.set( snapVal, function(error) {
@@ -336,26 +295,22 @@ _setModalVisible = (visible,picOfOfferedItem,picOfWantedItem,newRef,snapVal,oldR
       else if( typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
     });
   }
-
-
   this.setState({modalVisible: visible ,picOfOfferedItem:picOfOfferedItem , picOfWantedItem:picOfWantedItem });
 }
 render() {
   return (
     <View style = {styles.container}>  
     <Loading loading = {this.state.loading} />
-    <ListView
-    dataSource={this.state.dataSource}
-    renderRow={(rowData) => <View>{rowData}</View>}
-// renderSeparator={() => <View style={styles.separator} />}
-renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
-contentContainerStyle={{flex:1,paddingTop:20 ,backgroundColor:'white',}}/>
+     <ListView
+        enableEmptySections={true}
+        dataSource={this.state.dataSource}
+        renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator}/>}
+        renderRow={this.renderItem.bind(this)}
+        contentContainerStyle={{flex:1,paddingTop:20 ,backgroundColor:'white',}}/>
+  
 </View>
 
 );
 }
-
 }
-
-
 export default AcceptedOffers;
